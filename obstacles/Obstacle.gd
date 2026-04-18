@@ -49,3 +49,12 @@ func _on_area_entered(other: Area3D):
 
 func on_hit(_body: Node3D):
 	pass
+
+func _make_mat(color: Color) -> StandardMaterial3D:
+	var mat = StandardMaterial3D.new()
+	mat.albedo_color = color
+	mat.emission_enabled = true
+	mat.emission = color
+	mat.emission_energy_multiplier = 1.5
+	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	return mat

@@ -1,19 +1,22 @@
 extends Node3D
+class_name Player
 
 @export var rotate_speed: float = 3.5
-@export var tunnel_radius: float = 1.7
-@export var smoothing: float = 8.0
-@export var inertia_friction: float = 5.0  # трение при отсутствии ввода
-@export var inertia_strength: float = 8.0  # сила инерции от ввода
+@export var tunnel_radius := 1.7
+@export var inertia_friction: float = 5.0
+@export var inertia_strength: float = 8.0
+@export var free_move_speed: float = 5.0   # скорость в свободном режиме
 
 @export var health: int = 3
 
 var angular_velocity: float = 0.0
 var current_angle: float = 0.0
 
-var body: StaticBody3D
+var free_control: bool = false   # режим свободного полёта (Alt)
+
 @onready var camera: Camera3D = $Camera3D
 @onready var shader := $Camera3D/CanvasLayer/ColorRect
+
 
 func _ready():
 	add_to_group("player")
@@ -27,23 +30,67 @@ func _ready():
 	shape.shape = sphere
 	area.add_child(shape)
 
+
 func _process(delta):
-	var input = Input.get_axis("ui_left", "ui_right")
+	# Проверяем, удерживается ли Alt (можно заменить на action "free_control")
+	var alt_pressed = Input.is_key_pressed(KEY_ALT)
 	
-	if input != 0:
-		angular_velocity += input * rotate_speed * inertia_strength * delta
+	if alt_pressed and not free_control:
+		# Переключились в свободный режим
+		free_control = true
+		angular_velocity = 0.0  # сбрасываем инерцию вращения
+	elif not alt_pressed and free_control:
+		# Вернулись к орбитальному движению – проецируем игрока на окружность
+		free_control = false
+		var angle = atan2(position.y, position.x)
+		current_angle = angle
+		position.x = cos(angle) * tunnel_radius * 0.8
+		position.y = sin(angle) * tunnel_radius * 0.8
+		angular_velocity = 0.0
+	
+	if free_control:
+		# --- СВОБОДНОЕ УПРАВЛЕНИЕ WASD ---
+		# Получаем ввод с клавиш W, A, S, D
+		var move_input := Vector2(
+			Input.get_axis("ui_left", "ui_right"),
+			Input.get_axis("ui_down", "ui_up")
+		)
+		
+		if move_input.length() > 0.0:
+			move_input = move_input.normalized()
+		
+		var move_delta = move_input * free_move_speed * delta
+		position.x += move_delta.x
+		position.y += move_delta.y
+		
+		# Ограничиваем радиус – нельзя выходить за пределы туннеля
+		var current_radius = Vector2(position.x, position.y).length()
+		if current_radius > tunnel_radius:
+			var limited_pos = Vector2(position.x, position.y).normalized() * tunnel_radius
+			position.x = limited_pos.x
+			position.y = limited_pos.y
+		
+		# Обновляем угол для правильной ориентации (но current_angle не используется в движении)
+		# Поворот игрока всегда вдоль касательной к окружности
 	else:
-		angular_velocity = lerp(angular_velocity, 0.0, inertia_friction * delta)
+		# --- ОРБИТАЛЬНОЕ ДВИЖЕНИЕ (СТРЕЛКИ) ---
+		var input = Input.get_axis("ui_left", "ui_right")
+		
+		if input != 0:
+			angular_velocity += input * rotate_speed * inertia_strength * delta
+		else:
+			angular_velocity = lerp(angular_velocity, 0.0, inertia_friction * delta)
+		
+		var max_velocity = rotate_speed * 1.5
+		angular_velocity = clamp(angular_velocity, -max_velocity, max_velocity)
+		
+		current_angle += angular_velocity * delta
+		
+		position.x = cos(current_angle) * tunnel_radius * 0.8
+		position.y = sin(current_angle) * tunnel_radius * 0.8
 	
-	var max_velocity = rotate_speed * 1.5
-	angular_velocity = clamp(angular_velocity, -max_velocity, max_velocity)
-	
-	current_angle += angular_velocity * delta
-	
-	position.x = cos(current_angle) * tunnel_radius
-	position.y = sin(current_angle) * tunnel_radius
-	
-	var to_center = Vector2(cos(current_angle), sin(current_angle))
+	# --- ОРИЕНТАЦИЯ ИГРОКА (всегда по касательной к окружности) ---
+	var to_center = Vector2(position.x, position.y)
 	rotation.z = atan2(to_center.y, to_center.x) + PI / 2.0
 
 var tween: Tween

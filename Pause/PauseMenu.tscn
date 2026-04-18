@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://bxrrp825ar6yu"]
+
+[ext_resource type="Script" uid="uid://d02fb73jjhb6o" path="res://Pause/Pause.gd" id="1_sxqcf"]
+[ext_resource type="Script" uid="uid://cdwjdk0guhhy5" path="res://Scaling/ScalingButton.gd" id="2_euall"]
+
+[node name="PauseMenu" type="Control" unique_id=1272836891]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_sxqcf")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1479700478]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.9079791, 0.84712726, 0.08111106, 0.17254902)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=778121829]
+layout_mode = 0
+offset_left = 381.0
+offset_top = 114.0
+offset_right = 653.0
+offset_bottom = 410.0
+
+[node name="ResumeButton" type="Button" parent="VBoxContainer" unique_id=2084225745]
+layout_mode = 2
+text = "resume"
+script = ExtResource("2_euall")
+
+[node name="RestartButton" type="Button" parent="VBoxContainer" unique_id=1430459986]
+layout_mode = 2
+text = "restart"
+script = ExtResource("2_euall")
+
+[node name="QuitButton" type="Button" parent="VBoxContainer" unique_id=1108079375]
+layout_mode = 2
+text = "quit"
+script = ExtResource("2_euall")

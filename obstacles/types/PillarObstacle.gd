@@ -10,7 +10,7 @@ func _build_mesh(tunnel_radius: float):
 	var mesh_instance = MeshInstance3D.new()
 	add_child(mesh_instance)
 	var box = BoxMesh.new()
-	box.size = Vector3(0.4, tunnel_radius * 2, 0.5)
+	box.size = Vector3(tunnel_radius*0.8, tunnel_radius * 2, 0.5)
 	mesh_instance.mesh = box
 	# Смещение только у меша — origin ноды остаётся в центре трубы
 	var mat = StandardMaterial3D.new()
@@ -24,7 +24,7 @@ func _build_mesh(tunnel_radius: float):
 func _build_collider(tunnel_radius: float):
 	var shape = CollisionShape3D.new()
 	var box = BoxShape3D.new()
-	box.size = Vector3(0.4, tunnel_radius * 2, 0.5)
+	box.size = Vector3(tunnel_radius*0.8, tunnel_radius * 2, 0.5)
 	shape.shape = box
 	# Коллайдер тоже смещён как меш
 	area.add_child(shape)

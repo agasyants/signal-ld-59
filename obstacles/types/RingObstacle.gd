@@ -76,7 +76,7 @@ func _build_collider(tunnel_radius: float):
 		var mid = a + step * 0.5
 		var shape = CollisionShape3D.new()
 		var box = BoxShape3D.new()
-		box.size = Vector3(tunnel_radius - inner, 0.3, 0.5)
+		box.size = Vector3(tunnel_radius - inner, 0.6, 0.5)
 		shape.shape = box
 		shape.position = Vector3(
 			cos(mid) * (inner + (tunnel_radius - inner) * 0.5),
