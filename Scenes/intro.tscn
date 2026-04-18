@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://bwoatb7ojru75"]
+
+[ext_resource type="Shader" uid="uid://bx0ew0a85fy1r" path="res://Scenes/intro.gdshader" id="1_alxvg"]
+[ext_resource type="Script" uid="uid://e2hxu1x65fg5" path="res://Scenes/mesh_instance_3d.gd" id="2_rsiac"]
+[ext_resource type="Script" uid="uid://t7w1kpbpdbq5" path="res://Scenes/animated_label.gd" id="3_geirw"]
+[ext_resource type="Script" uid="uid://dsia4aideqckd" path="res://Scenes/start_btn.gd" id="4_hwjxs"]
+[ext_resource type="Script" uid="uid://x8fjagobuo4w" path="res://Scenes/settings_btn.gd" id="5_hwjxs"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hwjxs"]
+sky_top_color = Color(0, 0, 0, 1)
+sky_horizon_color = Color(0.7647059, 0, 0.9411765, 1)
+ground_bottom_color = Color(0, 0, 0, 1)
+ground_horizon_color = Color(0, 0.87058824, 0.7882353, 1)
+
+[sub_resource type="Sky" id="Sky_rsiac"]
+sky_material = SubResource("ProceduralSkyMaterial_hwjxs")
+
+[sub_resource type="Environment" id="Environment_hwjxs"]
+background_mode = 2
+sky = SubResource("Sky_rsiac")
+glow_enabled = true
+glow_intensity = 1.6
+glow_bloom = 0.39
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_geirw"]
+render_priority = 0
+shader = ExtResource("1_alxvg")
+shader_parameter/speed = 0.3
+shader_parameter/strength = 3.0
+shader_parameter/frequency = 10.0
+shader_parameter/color = Vector3(0, 0.78, 0.99)
+
+[sub_resource type="SphereMesh" id="SphereMesh_hwjxs"]
+radial_segments = 7
+rings = 9
+
+[node name="Intro" type="Control" unique_id=282098064]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1176851743]
+environment = SubResource("Environment_hwjxs")
+
+[node name="sphere" type="MeshInstance3D" parent="." unique_id=2136361292]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.560573)
+material_override = SubResource("ShaderMaterial_geirw")
+mesh = SubResource("SphereMesh_hwjxs")
+script = ExtResource("2_rsiac")
+
+[node name="Label" type="Label" parent="." unique_id=1512955140]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.97400004
+offset_left = 21.0
+offset_top = 24.0
+offset_right = -164.0
+offset_bottom = -431.15204
+theme_override_font_sizes/font_size = 150
+text = "PLACEHOLDER"
+script = ExtResource("3_geirw")
+
+[node name="start_btn" type="Button" parent="." unique_id=893268362]
+layout_mode = 0
+offset_left = 436.0
+offset_top = 275.0
+offset_right = 538.0
+offset_bottom = 302.0
+text = "START GAME"
+script = ExtResource("4_hwjxs")
+
+[node name="settings_btn" type="Button" parent="." unique_id=1020677495]
+layout_mode = 0
+offset_left = 41.0
+offset_top = 544.0
+offset_right = 124.0
+offset_bottom = 571.0
+text = "SETTINGS"
+script = ExtResource("5_hwjxs")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1323682445]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.196446)
+light_energy = 12.023
+light_size = 0.56

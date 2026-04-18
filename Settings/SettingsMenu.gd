@@ -130,7 +130,7 @@ func _input(event: InputEvent) -> void:
 		_on_back_button_pressed()
 
 func _on_back_button_pressed():
-	get_tree().change_scene_to_file("res://menu/Menu.tscn")
+	get_tree().change_scene_to_file("res://Scenes/intro.tscn")
 
 func _on_save_and_apply_pressed():
 	# Обновляем настройки на основе элементов управления
