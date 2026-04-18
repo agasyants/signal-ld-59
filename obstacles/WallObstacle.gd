@@ -4,7 +4,6 @@ extends Obstacle
 func build(tunnel_radius: float, params: Dictionary = {}):
 	var gap_start: float = params.get("gap_start", randf() * TAU)
 	
-	# Поворачиваем всю ноду — куб всегда закрывает "верх", вращением выбираем где дырка
 	rotation.z = gap_start
 	
 	_build_mesh(tunnel_radius)
@@ -18,7 +17,6 @@ func _build_mesh(tunnel_radius: float):
 	box.size = Vector3(tunnel_radius * 2, tunnel_radius, 0.5)
 	mesh_instance.mesh = box
 	
-	# Смещаем вниз — закрываем нижнюю половину
 	mesh_instance.position.y = -tunnel_radius * 0.5
 	
 	var mat = StandardMaterial3D.new()
