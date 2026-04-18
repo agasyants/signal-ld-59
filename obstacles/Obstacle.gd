@@ -3,11 +3,7 @@ extends Node3D
 
 signal hit(damage: float)
 
-enum BehaviorMode {
-	STATIC,
-	ROTATING,
-	SLIDING
-}
+enum BehaviorMode { STATIC, ROTATING, SLIDING }
 
 @export var damage: float = 20.0
 
@@ -18,6 +14,7 @@ var amplitude: float = 1.0
 
 var _time: float = 0.0
 var _start_position: Vector3
+var _position_initialized: bool = false
 
 func _ready():
 	area = Area3D.new()
@@ -25,18 +22,25 @@ func _ready():
 	area.area_entered.connect(_on_area_entered)
 
 func _process(delta):
+	# Берём start_position в первом кадре — после того как спавнер установил transform
+	if not _position_initialized:
+		_start_position = global_position
+		_position_initialized = true
+		return
+
 	_time += delta
 	match mode:
 		BehaviorMode.ROTATING:
 			rotation.z += behavior_speed * delta
 		BehaviorMode.SLIDING:
-			position = _start_position + Vector3(0, sin(_time * behavior_speed) * amplitude, 0)
+			# Двигаем в локальном пространстве по Y
+			var offset = sin(_time * behavior_speed) * amplitude
+			global_position = _start_position + global_transform.basis.y * offset
 
 func build(tunnel_radius: float, params: Dictionary = {}):
 	mode = params.get("mode", BehaviorMode.STATIC)
 	behavior_speed = params.get("speed", 1.0)
 	amplitude = params.get("amplitude", tunnel_radius * 0.5)
-	_start_position = position  # запоминаем после того как transform установлен спавнером
 
 func _on_area_entered(other: Area3D):
 	if other.get_parent().is_in_group("player"):

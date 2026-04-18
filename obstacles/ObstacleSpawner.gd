@@ -53,7 +53,7 @@ func _random_params(obstacle: Obstacle, mode: Obstacle.BehaviorMode) -> Dictiona
 	return base
 
 func _random_mode() -> Obstacle.BehaviorMode:
-	match rng.randi() % 3:
+	match rng.randi() % 2:
 		0: return Obstacle.BehaviorMode.STATIC
 		1: return Obstacle.BehaviorMode.ROTATING
 		2: return Obstacle.BehaviorMode.SLIDING
