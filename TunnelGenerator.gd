@@ -2,7 +2,7 @@ extends Node3D
 
 @export var segment_count: int = 20
 @export var segment_length: float = 30.0
-@export var curve_strength: float = 2.0
+@export var curve_strength: float = 3.0
 @export var tunnel_radius: float = 2.0
 @export var tunnel_seed: int = 42
 @export var sides: int = 24
@@ -22,6 +22,8 @@ func _ready():
 	rng = RandomNumberGenerator.new()
 	rng.seed = tunnel_seed
 	generate()
+	
+var spawner: ObstacleSpawner
 
 func generate():
 	# Чистим старое
@@ -64,6 +66,11 @@ func generate():
 	if player_scene:
 		var player = player_scene.instantiate()
 		follow.add_child(player)
+		
+		spawner = ObstacleSpawner.new()
+		spawner.tunnel_radius = tunnel_radius
+		add_child(spawner)
+		spawner.setup(curve, player)
 
 func _build_mesh():
 	var baked = curve.get_baked_points()
