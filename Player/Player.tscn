@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cjfvc7ibo14e1" path="res://Player/Player.gd" id="1_xhfnw"]
 [ext_resource type="Shader" uid="uid://c8xhpvw10heje" path="res://Player/Hit.gdshader" id="2_q3lat"]
-[ext_resource type="Script" uid="uid://ddhdscuohvcm0" path="res://Player/HitEffect.gd" id="3_tok1r"]
+[ext_resource type="Script" path="res://Player/HitEffect.gd" id="3_tok1r"]
 [ext_resource type="PackedScene" uid="uid://bxrrp825ar6yu" path="res://Pause/PauseMenu.tscn" id="4_ddoul"]
 
 [sub_resource type="Environment" id="Environment_tok1r"]

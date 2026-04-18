@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://bqug0pcaq7aj8"]
+
+[ext_resource type="PackedScene" uid="uid://daflcilyswsne" path="res://Scenes/pc.glb" id="1_vv6sj"]
+[ext_resource type="Shader" uid="uid://bx0ew0a85fy1r" path="res://Scenes/intro.gdshader" id="2_wfqe0"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_104nj"]
+render_priority = 0
+shader = ExtResource("2_wfqe0")
+shader_parameter/speed = 1.0
+shader_parameter/strength = 0.06
+shader_parameter/frequency = 9.39
+shader_parameter/color = Vector3(1, 1, 1)
+
+[node name="pc" unique_id=1779973646 instance=ExtResource("1_vv6sj")]
+
+[node name="Cube" parent="." index="0" unique_id=947342645]
+surface_material_override/0 = SubResource("ShaderMaterial_104nj")
+
+[node name="Cube_001" parent="." index="1" unique_id=65099118]
+surface_material_override/0 = SubResource("ShaderMaterial_104nj")
+
+[node name="Cube_002" parent="." index="2" unique_id=32369149]
+surface_material_override/0 = SubResource("ShaderMaterial_104nj")

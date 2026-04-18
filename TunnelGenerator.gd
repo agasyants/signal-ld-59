@@ -4,12 +4,13 @@ class_name TunnelGenerator
 @export var segment_count: int = 60
 @export var segment_length: float = 30.0
 @export var curve_strength: float = 0.8
+@export var tunnel_radius: float = 2.0
 @export var sides: int = 12
 @export var bake_interval: float = 3.0
 
 # 1. Адекватные размеры
 @export var radius_min: float = 2.0
-@export var radius_max: float = 2.0
+@export var radius_max: float = 20.0
 
 # 2. Больше циклов — чаще меняется
 @export var noise_cycles: float = 2.0
@@ -37,6 +38,7 @@ var _baked_radii: PackedFloat32Array
 
 func _ready():
 	rng = RandomNumberGenerator.new()
+	rng.randomize()
 	generate()
 
 @export var speed: float = 15.0
@@ -89,7 +91,7 @@ func generate():
 		if i > 0 and i < points.size() - 1:
 			var diff = points[i + 1] - points[i - 1]
 			out_handle = diff * 0.25
-			in_handle = -out_handle
+			in_handle = - out_handle
 		elif i == 0:
 			out_handle = (points[i + 1] - p) * 0.25
 		elif i == points.size() - 1:
@@ -114,7 +116,7 @@ func generate():
 
 		var spawner = ObstacleSpawner.new()
 		add_child(spawner)
-		spawner.setup(curve, player, self)
+		spawner.setup(curve, player, self )
 
 # Считаем радиус для каждой запечённой точки один раз при генерации
 func _cache_radii():
@@ -122,7 +124,7 @@ func _cache_radii():
 	_baked_radii.resize(_baked_points.size())
 	var total = float(_baked_points.size())
 	
-	print("Baked points: ", _baked_points.size())  # должно быть > 100
+	print("Baked points: ", _baked_points.size()) # должно быть > 100
 	
 	var min_r = 9999.0
 	var max_r = 0.0
@@ -133,7 +135,7 @@ func _cache_radii():
 		min_r = min(min_r, r)
 		max_r = max(max_r, r)
 	
-	print("Radius range: ", min_r, " → ", max_r)  # если одно число — шум не работает
+	print("Radius range: ", min_r, " → ", max_r) # если одно число — шум не работает
 
 func _build_mesh():
 	var surface = SurfaceTool.new()
@@ -156,9 +158,21 @@ func _build_mesh():
 
 		for s in sides:
 			var angle = TAU * s / sides
-			var direction_to_wall = right * cos(angle) + up * sin(angle)
+			# 1. Вычисляем направление от центра к данной вершине в сечении
+			var direction_to_wall = (right * cos(angle) + up * sin(angle))
+			# 2. Позиция вершины (центр + направление * радиус)
+
+			# ВАЖНО: Устанавливаем UV
+			# x - по кругу (от 0 до 1)
+			# y - по длине туннеля (от 0 до 1)
+			var uv = Vector2(float(s) / sides, float(i) / float(_baked_points.size() - 1))
+			surface.set_uv(uv)
+
 			var vertex = point + direction_to_wall * current_radius
-			surface.set_normal(-direction_to_wall.normalized())
+			# 3. НОРМАЛЬ: инвертируем направление, чтобы она смотрела ВНУТРЬ тоннеля
+			# Именно по этому вектору шейдер будет "выдавливать" иголки
+			var normal = direction_to_wall.normalized()
+			surface.set_normal(normal)
 			surface.add_vertex(vertex)
 
 	for i in _baked_points.size() - 1:
@@ -174,7 +188,9 @@ func _build_mesh():
 	add_child(mesh_instance)
 	mesh_instance.mesh = surface.commit()
 
-	var shader = load("res://shaders/tunnel.gdshader")
+	var tunnel_shaders = ["res://shaders/tunnel.gdshader", "res://shaders/tunnel2.gdshader"]
+
+	var shader = load(tunnel_shaders[rng.randi_range(0, tunnel_shaders.size() - 1)])
 	var mat = ShaderMaterial.new()
 	mat.shader = shader
 	mesh_instance.material_override = mat
@@ -185,7 +201,7 @@ func _build_wireframe(baked: PackedVector3Array):
 
 	for i in baked.size():
 		var point = baked[i]
-		var current_radius = _baked_radii[i]  # берём из кеша
+		var current_radius = _baked_radii[i] # берём из кеша
 		var forward: Vector3
 		if i < baked.size() - 1:
 			forward = (baked[i + 1] - point).normalized()
@@ -199,11 +215,21 @@ func _build_wireframe(baked: PackedVector3Array):
 		up = right.cross(forward).normalized()
 
 		for s in sides:
-			var angle_a = TAU * s / sides
-			var angle_b = TAU * ((s + 1) % sides) / sides
-			var va = point + (right * cos(angle_a) + up * sin(angle_a)) * current_radius
-			var vb = point + (right * cos(angle_b) + up * sin(angle_b)) * current_radius
+			var angle_a = float(s) / sides
+			var angle_b = float(s + 1) / sides
+			
+			var va = point + (right * cos(angle_a * TAU) + up * sin(angle_a * TAU)) * current_radius
+			var vb = point + (right * cos(angle_b * TAU) + up * sin(angle_b * TAU)) * current_radius
+
+			# Прогресс вдоль пути (V-координата)
+			var v_coord = float(i) / (baked.size() - 1)
+
+			# Вершина A
+			wire_surface.set_uv(Vector2(angle_a, v_coord))
 			wire_surface.add_vertex(va)
+			
+			# Вершина B
+			wire_surface.set_uv(Vector2(angle_b, v_coord))
 			wire_surface.add_vertex(vb)
 
 		if i < baked.size() - 1:
@@ -232,6 +258,9 @@ func _build_wireframe(baked: PackedVector3Array):
 	add_child(wire_instance)
 	wire_instance.mesh = wire_surface.commit()
 
-	var wire_mat = StandardMaterial3D.new()
-	wire_mat.albedo_color = Color(0.0, 0.8, 0.957, 1.0)
+	var wire_tunnel_shaders = ["res://shaders/wire.gdshader", "res://shaders/wire2.gdshader"]
+
+	var shader = load(wire_tunnel_shaders[rng.randi_range(0, wire_tunnel_shaders.size() - 1)])
+	var wire_mat = ShaderMaterial.new()
+	wire_mat.shader = shader
 	wire_instance.material_override = wire_mat

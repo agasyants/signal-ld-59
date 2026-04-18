@@ -18,10 +18,15 @@ config/icon="res://icon.svg"
 [autoload]
 
 Settings="*uid://bt8bg1f0qtibp"
+GameGraph="*uid://dngkoeuuqsvar"
 
 [display]
 
 window/size/mode=3
+
+[filesystem]
+
+import/blender/enabled=false
 
 [gui]
 

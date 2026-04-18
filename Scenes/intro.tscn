@@ -1,11 +1,13 @@
 [gd_scene format=3 uid="uid://bwoatb7ojru75"]
 
 [ext_resource type="Shader" uid="uid://bx0ew0a85fy1r" path="res://Scenes/intro.gdshader" id="1_alxvg"]
-[ext_resource type="Script" uid="uid://dpf66glm1ulsm" path="res://Scenes/intro.gd" id="1_rsiac"]
 [ext_resource type="Script" uid="uid://e2hxu1x65fg5" path="res://Scenes/mesh_instance_3d.gd" id="2_rsiac"]
 [ext_resource type="Script" uid="uid://t7w1kpbpdbq5" path="res://Scenes/animated_label.gd" id="3_geirw"]
 [ext_resource type="Script" uid="uid://dsia4aideqckd" path="res://Scenes/start_btn.gd" id="4_hwjxs"]
 [ext_resource type="Script" uid="uid://x8fjagobuo4w" path="res://Scenes/settings_btn.gd" id="5_hwjxs"]
+[ext_resource type="PackedScene" uid="uid://bqug0pcaq7aj8" path="res://Scenes/pc2.tscn" id="7_3bmuq"]
+
+[sub_resource type="GDScript" id="GDScript_hwjxs"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hwjxs"]
 sky_top_color = Color(0, 0, 0, 1)
@@ -42,13 +44,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_rsiac")
+script = SubResource("GDScript_hwjxs")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1176851743]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0024471283, 1.1920929e-07, 0.19213152)
 environment = SubResource("Environment_hwjxs")
 
 [node name="sphere" type="MeshInstance3D" parent="." unique_id=2136361292]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.560573)
+transform = Transform3D(0.22737242, 0, 0, 0, 0.17355445, 0, 0, 0, 0.19341879, -0.07457948, 0.14947104, -3.585297)
 material_override = SubResource("ShaderMaterial_geirw")
 mesh = SubResource("SphereMesh_hwjxs")
 script = ExtResource("2_rsiac")
@@ -85,6 +88,9 @@ text = "SETTINGS"
 script = ExtResource("5_hwjxs")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1323682445]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.196446)
-light_energy = 12.023
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.105367, -0.32001185)
+light_energy = 2.439
 light_size = 0.56
+
+[node name="pc2" parent="." unique_id=1910662151 instance=ExtResource("7_3bmuq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1520474, -0.71871823, -3.5839117)
