@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://djysdog6injw8"]
+
+[ext_resource type="Script" uid="uid://b6yxqhnvdxrjp" path="res://TunnelGenerator.gd" id="1_0xm2m"]
+[ext_resource type="Script" uid="uid://cmilmgh7j85w" path="res://BaseLevel.gd" id="1_h2yge"]
+[ext_resource type="PackedScene" uid="uid://b4sffb4e62mfp" path="res://Player.tscn" id="2_h2yge"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_0xm2m"]
+
+[node name="Node3D" type="Node3D" unique_id=899153843]
+script = ExtResource("1_h2yge")
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="." unique_id=1077233709]
+mesh = SubResource("CylinderMesh_0xm2m")
+
+[node name="Node3D" type="Node3D" parent="." unique_id=1281959232]
+script = ExtResource("1_0xm2m")
+player_scene = ExtResource("2_h2yge")
