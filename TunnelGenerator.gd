@@ -2,11 +2,11 @@ extends Node3D
 
 @export var segment_count: int = 20
 @export var segment_length: float = 30.0
-@export var curve_strength: float = 3.0
+@export var curve_strength: float = 0.3
 @export var tunnel_radius: float = 2.0
 @export var tunnel_seed: int = 42
-@export var sides: int = 24
-@export var bake_interval: float = 0.8  # чем меньше, тем плавнее
+@export var sides: int = 12
+@export var bake_interval: float = 4.0
 
 var curve: Curve3D
 var mesh_instance: MeshInstance3D
@@ -26,29 +26,47 @@ func _ready():
 var spawner: ObstacleSpawner
 
 func generate():
-	# Чистим старое
-	for child in get_children():
-		child.queue_free()
-	await get_tree().process_frame
-
-	# Строим кривую
+	# ... (очистка как у тебя)
 	curve = Curve3D.new()
 	curve.bake_interval = bake_interval
 
+	var points = []
 	var pos = Vector3.ZERO
 	var dir = Vector3(0, 0, -1)
-	curve.add_point(pos)
+	points.append(pos)
 
+	# Шаг 1: Генерируем только позиции (скелет пути)
 	for i in segment_count:
 		var bend = Vector3(
 			rng.randf_range(-curve_strength, curve_strength),
 			rng.randf_range(-curve_strength, curve_strength),
 			0
 		)
-		dir = (dir + bend * 0.1).normalized()
+		dir = (dir + bend).normalized() # bend без 0.1, т.к. сгладим позже
 		pos += dir * segment_length
-		var tangent = dir * segment_length * 0.5
-		curve.add_point(pos, -tangent, tangent)
+		points.append(pos)
+
+	# Шаг 2: Расставляем точки в Curve3D с плавными касательными
+	for i in range(points.size()):
+		var p = points[i]
+		var in_handle = Vector3.ZERO
+		var out_handle = Vector3.ZERO
+
+		if i > 0 and i < points.size() - 1:
+			# Главный секрет плавности: касательная параллельна вектору между соседями
+			var diff = points[i + 1] - points[i - 1]
+			# 0.35 — коэффициент "мягкости". 
+			# Чем меньше, тем более "натянутая" кривая. 0.5 — очень свободная.
+			out_handle = diff * 0.25
+			in_handle = - out_handle
+		elif i == 0:
+			# Для первой точки смотрим только вперед
+			out_handle = (points[i + 1] - p) * 0.25
+		elif i == points.size() - 1:
+			# Для последней — только назад
+			in_handle = (points[i - 1] - p) * 0.25
+
+		curve.add_point(p, in_handle, out_handle)
 
 	# Path3D создаём и добавляем в дерево
 	var path = Path3D.new()
@@ -94,9 +112,13 @@ func _build_mesh():
 
 		for s in sides:
 			var angle = TAU * s / sides
-			var vertex = point + (right * cos(angle) + up * sin(angle)) * tunnel_radius
-			# Нормаль смотрит внутрь — от стенки к центру
-			var normal = (right * cos(angle) + up * sin(angle))
+			# 1. Вычисляем направление от центра к данной вершине в сечении
+			var direction_to_wall = (right * cos(angle) + up * sin(angle))
+			# 2. Позиция вершины (центр + направление * радиус)
+			var vertex = point + direction_to_wall * tunnel_radius
+			# 3. НОРМАЛЬ: инвертируем направление, чтобы она смотрела ВНУТРЬ тоннеля
+			# Именно по этому вектору шейдер будет "выдавливать" иголки
+			var normal = - direction_to_wall.normalized()
 			surface.set_normal(normal)
 			surface.add_vertex(vertex)
 
@@ -116,18 +138,15 @@ func _build_mesh():
 	add_child(mesh_instance)
 	mesh_instance.mesh = surface.commit()
 
-	var mat = StandardMaterial3D.new()
-	mat.cull_mode = BaseMaterial3D.CULL_FRONT
-	mat.albedo_color = Color(0.0, 0.8, 1.0)
-	mat.emission_enabled = true
-	mat.emission = Color(0.0, 0.5, 1.0)
-	mat.emission_energy_multiplier = 2.0
+	var shader = load("res://shaders/tunnel.gdshader")
+	var mat = ShaderMaterial.new()
+	mat.shader = shader
 	mesh_instance.material_override = mat
 	
 	# Wireframe поверх
 	var wire_instance = MeshInstance3D.new()
 	add_child(wire_instance)
-	wire_instance.mesh = mesh_instance.mesh  # тот же меш
+	wire_instance.mesh = mesh_instance.mesh # тот же меш
 	
 	_build_wireframe(baked)
 
@@ -174,7 +193,7 @@ func _build_wireframe(baked: Array):
 			var nright = next_forward.cross(nup).normalized()
 			nup = nright.cross(next_forward).normalized()
 			
-			for s in range(0, sides, 4):  # каждое 4-е ребро продольно
+			for s in range(0, sides, 4): # каждое 4-е ребро продольно
 				var angle = TAU * s / sides
 				var va = point + (right * cos(angle) + up * sin(angle)) * tunnel_radius
 				var vb = next_point + (nright * cos(angle) + nup * sin(angle)) * tunnel_radius
@@ -186,9 +205,5 @@ func _build_wireframe(baked: Array):
 	wire_instance.mesh = wire_surface.commit()
 	
 	var wire_mat = StandardMaterial3D.new()
-	wire_mat.albedo_color = Color(0.0, 1.0, 0.8)
-	wire_mat.emission_enabled = true
-	wire_mat.emission = Color(0.0, 1.0, 0.8)
-	wire_mat.emission_energy_multiplier = 2.0
-	wire_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	wire_mat.albedo_color = Color(0.0, 0.8, 0.957, 1.0)
 	wire_instance.material_override = wire_mat

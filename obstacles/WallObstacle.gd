@@ -19,11 +19,8 @@ func _build_mesh(tunnel_radius: float):
 	# rotation.z ноды поворачивает всё вместе
 	mesh_instance.position.y = -tunnel_radius * 0.5
 	var mat = StandardMaterial3D.new()
-	mat.albedo_color = Color(1.0, 0.2, 0.1)
+	mat.albedo_color = Color(0.796, 0.0, 0.474, 1.0)
 	mat.emission_enabled = true
-	mat.emission = Color(1.0, 0.1, 0.0)
-	mat.emission_energy_multiplier = 1.5
-	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	mesh_instance.material_override = mat
 
 func _build_collider(tunnel_radius: float):

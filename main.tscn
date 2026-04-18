@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://djysdog6injw8"]
 
 [ext_resource type="Script" uid="uid://b6yxqhnvdxrjp" path="res://TunnelGenerator.gd" id="1_0xm2m"]
-[ext_resource type="Script" uid="uid://cmilmgh7j85w" path="res://BaseLevel.gd" id="1_h2yge"]
+[ext_resource type="Script" path="res://BaseLevel.gd" id="1_h2yge"]
 [ext_resource type="PackedScene" uid="uid://b4sffb4e62mfp" path="res://Player/Player.tscn" id="2_h2yge"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_0xm2m"]

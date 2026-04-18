@@ -1,8 +1,17 @@
 [gd_scene format=3 uid="uid://b4sffb4e62mfp"]
 
 [ext_resource type="Script" uid="uid://cjfvc7ibo14e1" path="res://Player/Player.gd" id="1_xhfnw"]
-[ext_resource type="Shader" uid="uid://c8xhpvw10heje" path="res://Player/Hit.gdshader" id="2_q3lat"]
-[ext_resource type="Script" uid="uid://ddhdscuohvcm0" path="res://Player/HitEffect.gd" id="3_tok1r"]
+[ext_resource type="Shader" path="res://Player/Hit.gdshader" id="2_q3lat"]
+[ext_resource type="Script" path="res://Player/HitEffect.gd" id="3_tok1r"]
+
+[sub_resource type="Environment" id="Environment_tok1r"]
+background_mode = 1
+background_color = Color(1, 1, 1, 1)
+glow_enabled = true
+glow_normalized = true
+glow_intensity = 2.61
+glow_bloom = 0.25
+fog_light_energy = 5.38
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tok1r"]
 shader = ExtResource("2_q3lat")
@@ -13,6 +22,7 @@ shader_parameter/glitch_intensity = 0.0
 script = ExtResource("1_xhfnw")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=86636411]
+environment = SubResource("Environment_tok1r")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="Camera3D" unique_id=2007247693]
 
@@ -24,3 +34,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("3_tok1r")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1399031586]
+light_energy = 11.011
+light_size = 0.495
+omni_range = 2.642

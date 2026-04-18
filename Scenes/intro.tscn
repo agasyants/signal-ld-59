@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bwoatb7ojru75"]
 
 [ext_resource type="Shader" uid="uid://bx0ew0a85fy1r" path="res://Scenes/intro.gdshader" id="1_alxvg"]
+[ext_resource type="Script" uid="uid://dpf66glm1ulsm" path="res://Scenes/intro.gd" id="1_rsiac"]
 [ext_resource type="Script" uid="uid://e2hxu1x65fg5" path="res://Scenes/mesh_instance_3d.gd" id="2_rsiac"]
 [ext_resource type="Script" uid="uid://t7w1kpbpdbq5" path="res://Scenes/animated_label.gd" id="3_geirw"]
 [ext_resource type="Script" uid="uid://dsia4aideqckd" path="res://Scenes/start_btn.gd" id="4_hwjxs"]
@@ -41,6 +42,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_rsiac")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1176851743]
 environment = SubResource("Environment_hwjxs")
