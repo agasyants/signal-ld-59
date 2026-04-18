@@ -1,19 +1,18 @@
 extends Node3D
 
 @export var segment_count: int = 20
-@export var segment_length: float = 10.0
-@export var curve_strength: float = 3.0
-@export var tunnel_radius: float = 3.0
+@export var segment_length: float = 30.0
+@export var curve_strength: float = 2.0
+@export var tunnel_radius: float = 2.0
 @export var tunnel_seed: int = 42
 @export var sides: int = 24
-@export var bake_interval: float = 0.5  # чем меньше, тем плавнее
+@export var bake_interval: float = 0.8  # чем меньше, тем плавнее
 
 var curve: Curve3D
 var mesh_instance: MeshInstance3D
 var rng: RandomNumberGenerator
 @export var player_scene: PackedScene
 var follow := PathFollow3D.new()
-
 
 @export var speed: float = 15.0
 func _process(delta):
