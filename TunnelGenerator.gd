@@ -161,10 +161,13 @@ func _cache_radii() -> void:
 	var total := float(_baked_points.size())
 	var baked_len := curve.get_baked_length()
 	
+	# Используем фиксированный сид из сессии для детерминизма
+	_sampler.setup(track, session, session.get("seed", 0))
+	
 	for i in _baked_points.size():
-		# Переводим позицию точки в время через скорость
 		var dist := (float(i) / total) * baked_len
-		var time := dist / _current_speed
+		var speed: float = session["speed"]
+		var time := track.get_time_at_dist(dist, speed)
 		var params := _sampler.sample(time)
 		_baked_radii[i] = params["radius_min"]
 

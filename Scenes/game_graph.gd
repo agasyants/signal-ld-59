@@ -78,6 +78,10 @@ func generate_planar_graph(num_middle_levels: int):
 				var complexity = randf_range(1.0, 5.0)
 				var track_name = "Track " + str(node.id) + "-" + str(target_node.id)
 				var connection = MyGraphConnection.new(node, target_node, complexity, track_name)
+				
+				# Временно назначаем один и тот же трек всем соединениям
+				connection.track = load("res://Tracks/Delux2/Delux2.tres")
+				
 				node.connections.append(connection)
 			
 			# Обновляем границу, чтобы следующий узел не "залезал" выше текущих связей

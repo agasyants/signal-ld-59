@@ -19,7 +19,7 @@ func setup(t: TrackData, s: Dictionary) -> void:
 	track = t
 	session = s
 	_sampler = TrackSampler.new()
-	_sampler.setup(track, session)
+	_sampler.setup(track, session, session.get("seed", 0))
 
 func start() -> void:
 	# Аудио

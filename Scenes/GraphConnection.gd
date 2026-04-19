@@ -23,15 +23,17 @@ func _init(_from: MyGraphNode, _to: MyGraphNode, _complexity: float = 1.0, _trac
 func _generate_session(c: float) -> Dictionary:
 	# Нормализуем complexity в [0, 1]
 	var t := clampf((c - 1.0) / 4.0, 0.0, 1.0)
-	return {
+	var s = {
 		"speed":          lerpf(100.0,  100.0, t),
 		"density":        lerpf(0.4,  0.8,  t),
 		"difficulty":     lerpf(0.1,  1.0,  t),
-		"radius":         lerpf(2.0, 2.0,  t),  # чем сложнее, тем уже тоннель
+		"radius":         lerpf(2.0, 2.0,  t),
 		"allow_wall":     true,
 		"allow_pillar":   true,
-		"allow_ring":     t > 0.3,               # кольца появляются только при complexity > 2.2
+		"allow_ring":     t > 0.3,
 		"allow_bonuses":  true,
-		"allow_rotating": t > 0.2,               # вращение с complexity > 1.8
-		"allow_sliding":  t > 0.5,               # слайдинг только на высокой сложности
+		"allow_rotating": t > 0.2,
+		"allow_sliding":  t > 0.5,
+		"seed":           randi() # Фиксированный сид для этой связи
 	}
+	return s

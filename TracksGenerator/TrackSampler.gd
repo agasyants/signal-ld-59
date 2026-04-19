@@ -7,10 +7,13 @@ var session: Dictionary
 var _rng := RandomNumberGenerator.new()
 var _cached_values := {}  # Кэш для хранения сгенерированных значений
 
-func setup(t: TrackData, s: Dictionary) -> void:
+func setup(t: TrackData, s: Dictionary, seed_val: int = 0) -> void:
 	track = t
 	session = s
-	_rng.randomize()
+	if seed_val != 0:
+		_rng.seed = seed_val
+	else:
+		_rng.randomize()
 	_cached_values.clear()
 
 # Возвращает текущие параметры для заданного момента времени

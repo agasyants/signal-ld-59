@@ -27,10 +27,12 @@ func setup(c: Curve3D, p: Node3D, gen: Node3D, tp: TrackPlayer) -> void:
 func _spawn_all() -> void:
 	var length := curve.get_baked_length()
 	var progress := 40.0  # отступ от старта
+	var track_data := track_player.track
+	var session_speed: float = track_player.session["speed"]
 	
 	while progress < length - 20.0:
-		# Берём параметры трека в этой временной точке
-		var time = progress / generator._current_speed
+		# Берём параметры трека в этой временной точке через точное соответствие расстояние -> время
+		var time = track_data.get_time_at_dist(progress, session_speed)
 		var params := track_player._sampler.sample(time)
 		
 		var density: float = params.get("density", 0.5)
