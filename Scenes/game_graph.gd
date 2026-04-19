@@ -1,12 +1,14 @@
 extends Node
 
 var levels = [] # Массив массивов узлов
-
-var graph_container: Node2D
+var current_node: MyGraphNode
+var current_connection: MyGraphConnection
 
 # Called when the node enters the scene tree for the first time.
 func _init() -> void:
 	generate_planar_graph(5)
+	if levels.size() > 0 and levels[0].size() > 0:
+		current_node = levels[0][0]
 
 func generate_planar_graph(num_middle_levels: int):
 	levels.clear()
@@ -48,7 +50,11 @@ func generate_planar_graph(num_middle_levels: int):
 				end_target = next_level.size() - 1
 				
 			for target_idx in range(start_target, end_target + 1):
-				node.connections.append(next_level[target_idx])
+				var target_node = next_level[target_idx]
+				var complexity = randf_range(1.0, 5.0)
+				var track_name = "Track " + str(node.id) + "-" + str(target_node.id)
+				var connection = MyGraphConnection.new(node, target_node, complexity, track_name)
+				node.connections.append(connection)
 			
 			# Обновляем границу, чтобы следующий узел не "залезал" выше текущих связей
 			last_min_next_idx = end_target

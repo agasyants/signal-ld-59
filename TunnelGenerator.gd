@@ -10,7 +10,7 @@ class_name TunnelGenerator
 
 # 1. Адекватные размеры
 @export var radius_min: float = 2.0
-@export var radius_max: float = 20.0
+@export var radius_max: float = 3.0
 
 # 2. Больше циклов — чаще меняется
 @export var noise_cycles: float = 2.0
@@ -188,7 +188,19 @@ func _build_mesh():
 	add_child(mesh_instance)
 	mesh_instance.mesh = surface.commit()
 
-	var tunnel_shaders = ["res://shaders/tunnel.gdshader", "res://shaders/tunnel2.gdshader"]
+	var tunnel_shaders = [
+		"res://shaders/tunnel.gdshader", 
+		"res://shaders/tunnel2.gdshader",
+		"res://shaders/shader_matrix.gdshader",
+		"res://shaders/shader_lava.gdshader",
+		"res://shaders/shader_glitch.gdshader",
+		"res://shaders/shader_neon.gdshader",
+		"res://shaders/shader_ice.gdshader",
+		"res://shaders/shader_toxic.gdshader",
+		"res://shaders/shader_stars.gdshader",
+		"res://shaders/shader_vortex.gdshader",
+		"res://shaders/shader_gold.gdshader"
+	]
 
 	var shader = load(tunnel_shaders[rng.randi_range(0, tunnel_shaders.size() - 1)])
 	var mat = ShaderMaterial.new()
@@ -258,7 +270,16 @@ func _build_wireframe(baked: PackedVector3Array):
 	add_child(wire_instance)
 	wire_instance.mesh = wire_surface.commit()
 
-	var wire_tunnel_shaders = ["res://shaders/wire.gdshader", "res://shaders/wire2.gdshader"]
+	var wire_tunnel_shaders = [
+		"res://shaders/wire.gdshader", 
+		"res://shaders/wire2.gdshader",
+		"res://shaders/wire_cyber.gdshader",
+		"res://shaders/wire_rainbow.gdshader",
+		"res://shaders/wire_scan.gdshader",
+		"res://shaders/wire_dots.gdshader",
+		"res://shaders/wire_holo.gdshader",
+		"res://shaders/wire_stream.gdshader"
+	]
 
 	var shader = load(wire_tunnel_shaders[rng.randi_range(0, wire_tunnel_shaders.size() - 1)])
 	var wire_mat = ShaderMaterial.new()
