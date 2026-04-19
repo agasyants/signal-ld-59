@@ -20,7 +20,7 @@ func finish_level(completed: bool, result: Dictionary = {}) -> void:
 		"time":      result.get("time",  0.0),
 	}
 	score += last_result["score"]
-	get_tree().change_scene_to_file("res://map.tscn")
+	get_tree().change_scene_to_file("res://Scenes/GameGraph.tscn")
 
 func reset_run() -> void:
 	current_connection = null

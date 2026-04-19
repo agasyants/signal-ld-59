@@ -118,7 +118,8 @@ func _process(delta):
 
 
 func is_on_ground() -> bool:
-	return current_radius <= tunnel_radius + 0.001
+	print(current_radius, tunnel_radius)
+	return current_radius >= tunnel_radius - 0.01
 
 var tween: Tween
 

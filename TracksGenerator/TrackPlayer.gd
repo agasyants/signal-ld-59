@@ -34,12 +34,13 @@ func stop() -> void:
 	if _audio:
 		_audio.stop()
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if not is_playing or _audio == null:
 		return
 
-	# Синхронизируемся с аудио — не считаем через delta
-	elapsed = _audio.get_playback_position()
+	# delta уже масштабирован — elapsed идёт в игровом времени
+	elapsed += delta
+	_audio.pitch_scale = Engine.time_scale
 
 	var duration := track.get_duration()
 	if elapsed >= duration:

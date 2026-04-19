@@ -24,10 +24,10 @@ func _generate_session(c: float) -> Dictionary:
 	# Нормализуем complexity в [0, 1]
 	var t := clampf((c - 1.0) / 4.0, 0.0, 1.0)
 	return {
-		"speed":          lerpf(8.0,  28.0, t),
+		"speed":          lerpf(100.0,  100.0, t),
 		"density":        lerpf(0.4,  0.8,  t),
 		"difficulty":     lerpf(0.1,  1.0,  t),
-		"radius":         lerpf(2.0, 3.0,  t),  # чем сложнее, тем уже тоннель
+		"radius":         lerpf(2.0, 2.0,  t),  # чем сложнее, тем уже тоннель
 		"allow_wall":     true,
 		"allow_pillar":   true,
 		"allow_ring":     t > 0.3,               # кольца появляются только при complexity > 2.2

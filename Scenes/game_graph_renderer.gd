@@ -81,8 +81,7 @@ func _ready() -> void:
 					print("Selected connection: ", conn.track_name)
 					GameGraph.current_connection = conn
 					GameGraph.current_node = target_node
-					# Перерисовываем граф, чтобы обновить доступные кнопки
-					get_tree().reload_current_scene() 
+					GameGraph.start_level(conn)
 				)
 				
 				graph_container.add_child(conn_btn)

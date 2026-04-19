@@ -55,8 +55,6 @@ func _process(_delta: float) -> void:
 		+ "[b]Density:[/b] %.2f\n" % p.get("density", 0.0)
 		+ "\n[color=#aaffaa][b]── TUNNEL ──[/b][/color]\n"
 		+ "[b]Radius (current):[/b] %.2f\n" % current_radius
-		+ "[b]Radius range:[/b] %.2f – %.2f\n" % [_generator.radius_min, _generator.radius_max]
-		+ tunnel_radius_str
 		+ "\n[color=#aaffaa][b]── PLAYER ──[/b][/color]\n"
 		+ health_str
 		+ "\n[color=#aaffaa][b]── OBSTACLES ──[/b][/color]\n"

@@ -7,19 +7,12 @@ extends Node3D
 @export var sides: int = 12
 @export var bake_interval: float = 3.0
 
-# 1. Адекватные размеры
-@export var radius_min: float = 2.0
-@export var radius_max: float = 3.0
-
-# 2. Больше циклов — чаще меняется
-@export var noise_cycles: float = 2.0
-
-# 3. Усиливаем контраст — поднимаем шум в степень перед remap
 func get_radius_at_t(t: float) -> float:
-	var wave = sin(t * noise_cycles * TAU) * 0.6 \
-			 + sin(t * noise_cycles * 2.3 * TAU) * 0.4
-	var n = clamp((wave + 1.0) * 0.5, 0.0, 1.0)
-	return lerp(radius_min, radius_max, n)
+	# Просто берём из кеша по индексу
+	if _baked_radii.is_empty():
+		return session["radius"]
+	var idx = clamp(int(t * _baked_radii.size()), 0, _baked_radii.size() - 1)
+	return _baked_radii[idx]
 
 @export var player_scene: PackedScene
 @export var track: TrackData
@@ -71,14 +64,10 @@ func generate_from_session(s: Dictionary) -> void:
 	_current_speed = session["speed"]
 	generate()
 
-# 3. В generate() после создания _track_player добавить:
-
 func _on_track_finished() -> void:
 	track_finished.emit()
 
 func get_radius_at_point(world_pos: Vector3) -> float:
-	if _baked_points.is_empty():
-		return radius_min
 	var closest_idx := 0
 	var closest_dist := world_pos.distance_squared_to(_baked_points[0])
 	for i in range(1, _baked_points.size()):
@@ -91,13 +80,8 @@ func get_radius_at_point(world_pos: Vector3) -> float:
 func generate() -> void:
 	assert(track != null, "TunnelGenerator: track не назначен")
 
-	# Радиус из сессии
-	var base_radius: float = session["radius"]
-	radius_min = base_radius * 0.5
-	radius_max = base_radius * 1.5
-
 	# Длина трассы из трека
-	var total_length := track.get_total_length(session["speed"])
+	var total_length := track.get_total_length(session["speed"])*1.5
 	var segment_count := ceili(total_length / segment_length) + 2
 
 	# Генерация кривой
@@ -140,6 +124,10 @@ func generate() -> void:
 
 	_follow.loop = false
 	path.add_child(_follow)
+	
+	# В generate() — до _cache_radii()
+	_sampler = TrackSampler.new()
+	_sampler.setup(track, session)
 
 	_cache_radii()
 	_build_mesh()
@@ -158,16 +146,26 @@ func generate() -> void:
 	var spawner := ObstacleSpawner.new()
 	add_child(spawner)
 	spawner.setup(curve, player, self, _track_player)
-
+	
+	await get_tree().process_frame
 	_track_player.start()
 	_track_player.track_finished.connect(_on_track_finished)
+
+# tunnel_generator.gd — добавить переменную
+var _sampler: TrackSampler
 
 func _cache_radii() -> void:
 	_baked_points = curve.get_baked_points()
 	_baked_radii.resize(_baked_points.size())
 	var total := float(_baked_points.size())
+	var baked_len := curve.get_baked_length()
+	
 	for i in _baked_points.size():
-		_baked_radii[i] = get_radius_at_t(float(i) / total)
+		# Переводим позицию точки в время через скорость
+		var dist := (float(i) / total) * baked_len
+		var time := dist / _current_speed
+		var params := _sampler.sample(time)
+		_baked_radii[i] = params["radius_min"]
 
 func _build_mesh() -> void:
 	var surface := SurfaceTool.new()
@@ -202,7 +200,7 @@ func _build_mesh() -> void:
 
 		for s in sides:
 			var angle := TAU * s / sides
-			var dir_to_wall := right * cos(angle) + up * sin(angle)
+			var dir_to_wall := right * cos(angle) - up * sin(angle)
 			var uv := Vector2(float(s) / sides, float(i) / float(_baked_points.size() - 1))
 			surface.set_uv(uv)
 			surface.set_normal(dir_to_wall.normalized())

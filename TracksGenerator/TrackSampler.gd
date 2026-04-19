@@ -5,11 +5,13 @@ extends RefCounted
 var track: TrackData
 var session: Dictionary
 var _rng := RandomNumberGenerator.new()
+var _cached_values := {}  # Кэш для хранения сгенерированных значений
 
 func setup(t: TrackData, s: Dictionary) -> void:
 	track = t
 	session = s
 	_rng.randomize()
+	_cached_values.clear()
 
 # Возвращает текущие параметры для заданного момента времени
 func sample(time: float) -> Dictionary:
@@ -17,22 +19,26 @@ func sample(time: float) -> Dictionary:
 	var a: TrackSection = sections["a"]
 	var b: TrackSection = sections["b"]
 	var t: float = sections["t"]
-
-	var speed_k      := _interp(a.speed_curve,      b.speed_curve,      t)
-	var density_k    := _interp(a.density_curve,    b.density_curve,    t)
-	var difficulty_k := _interp(a.difficulty_curve, b.difficulty_curve, t)
-	var radius_k     := _interp(a.radius_curve,     b.radius_curve,     t)
-
-	var spread := 0.15
-	var r_min = session["radius"] * clampf(radius_k - spread, 0.1, 10.0)
-	var r_max = session["radius"] * clampf(radius_k + spread, 0.1, 10.0)
-
+	
+	# Получаем уникальный ключ для кэширования значений этого временного отрезка
+	var cache_key := _get_cache_key(a, b)
+	
+	# Генерируем или получаем из кэша значения для интерполяции
+	var interp_values := _get_or_generate_interp_values(cache_key, a, b)
+	
+	var speed_k      := _interp_with_values(interp_values.speed_va, interp_values.speed_vb, t)
+	var density_k    := _interp_with_values(interp_values.density_va, interp_values.density_vb, t)
+	var difficulty_k := _interp_with_values(interp_values.difficulty_va, interp_values.difficulty_vb, t)
+	var radius_k     := _interp_with_values(interp_values.radius_va, interp_values.radius_vb, t)
+	
+	var r_min = session["radius"] * radius_k
+	print(r_min, " ", radius_k, " ", session["radius"])
+	
 	return {
 		"speed":          session["speed"]      * speed_k,
 		"density":        session["density"]    * density_k,
 		"difficulty":     session["difficulty"] * difficulty_k,
 		"radius_min":     r_min,
-		"radius_max":     r_max,
 		"obstacle_types": a.obstacle_types & _session_obstacle_mask(),
 		"bonus_types":    a.bonus_types    & _session_bonus_mask(),
 		"allow_rotating": session["allow_rotating"] and a.allow_rotating,
@@ -58,13 +64,35 @@ func _find_sections(time: float) -> Dictionary:
 			var dt := sb.time - sa.time
 			var t := (time - sa.time) / dt if dt > 0.0 else 0.0
 			return { "a": sa, "b": sb, "t": t }
-
+	
 	return { "a": track.sections[-1], "b": track.sections[-1], "t": 1.0 }
 
-func _interp(ca: Vector2, cb: Vector2, t: float) -> float:
-	var va := _rng.randf_range(ca.x, ca.y)
-	var vb := _rng.randf_range(cb.x, cb.y)
-	return smoothstep(0.0, 1.0, lerpf(va, vb, t))
+func _get_cache_key(a: TrackSection, b: TrackSection) -> String:
+	# Используем уникальные идентификаторы секций для ключа кэша
+	return str(a.get_instance_id()) + "_" + str(b.get_instance_id())
+
+func _get_or_generate_interp_values(cache_key: String, a: TrackSection, b: TrackSection) -> Dictionary:
+	if _cached_values.has(cache_key):
+		return _cached_values[cache_key]
+	
+	# Генерируем случайные значения для интерполяции между a и b
+	var values = {
+		"speed_va":      _rng.randf_range(a.speed_curve.x,      a.speed_curve.y),
+		"speed_vb":      _rng.randf_range(b.speed_curve.x,      b.speed_curve.y),
+		"density_va":    _rng.randf_range(a.density_curve.x,    a.density_curve.y),
+		"density_vb":    _rng.randf_range(b.density_curve.x,    b.density_curve.y),
+		"difficulty_va": _rng.randf_range(a.difficulty_curve.x, a.difficulty_curve.y),
+		"difficulty_vb": _rng.randf_range(b.difficulty_curve.x, b.difficulty_curve.y),
+		"radius_va":     _rng.randf_range(a.radius_curve.x,     a.radius_curve.y),
+		"radius_vb":     _rng.randf_range(b.radius_curve.x,     b.radius_curve.y),
+	}
+	
+	_cached_values[cache_key] = values
+	return values
+
+func _interp_with_values(va: float, vb: float, t: float) -> float:
+	# Просто линейная интерполяция - работает с любыми значениями
+	return lerpf(va, vb, t)
 
 func _session_obstacle_mask() -> int:
 	var mask := 0

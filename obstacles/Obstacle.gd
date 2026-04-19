@@ -44,11 +44,8 @@ func build(tunnel_radius: float, params: Dictionary = {}):
 
 func _on_area_entered(other: Area3D):
 	if other.get_parent().is_in_group("player"):
-		hit.emit(damage)
-		on_hit(other.get_parent())
-
-func on_hit(_body: Node3D):
-	pass
+		hit.emit(-1)
+		
 
 func _make_mat(color: Color) -> StandardMaterial3D:
 	var mat = StandardMaterial3D.new()

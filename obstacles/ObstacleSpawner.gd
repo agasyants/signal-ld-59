@@ -9,8 +9,6 @@ var track_player: TrackPlayer
 
 var _rng := RandomNumberGenerator.new()
 var _current_params: Dictionary = {}
-var _spawn_timer: float = 0.0
-var _player_progress: float = 0.0
 
 # Сколько метров впереди игрока спавним препятствия
 const SPAWN_AHEAD: float = 80.0

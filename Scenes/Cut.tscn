@@ -1,8 +1,9 @@
-[gd_scene format=3 uid="uid://b035itkj1wxnl"]
+[gd_scene format=3 uid="uid://cvwl50inrjyj6"]
 
 [ext_resource type="Script" uid="uid://b2qrux0828qql" path="res://Scenes/CutsceneManager.gd" id="1_mgr"]
-[ext_resource type="Script" uid="uid://bd67yfgxua8r6" path="res://Scenes/CutsceneTunnel.gd" id="2_tunnel"]
+[ext_resource type="Script" path="res://Scenes/CutsceneTunnel.gd" id="2_tunnel"]
 [ext_resource type="Script" uid="uid://t7w1kpbpdbq5" path="res://Scenes/animated_label.gd" id="3_label"]
+[ext_resource type="AudioStream" uid="uid://bgqpc5kct2brb" path="res://Tracks/Intro.mp3" id="4_q0qb4"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hwjxs"]
 sky_top_color = Color(0, 0, 0, 1)
@@ -54,3 +55,7 @@ text = "Packet Racer"
 horizontal_alignment = 1
 autowrap_mode = 3
 script = ExtResource("3_label")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=2103352351]
+stream = ExtResource("4_q0qb4")
+autoplay = true
