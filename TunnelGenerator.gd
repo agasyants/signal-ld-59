@@ -3,7 +3,7 @@ class_name TunnelGenerator
 extends Node3D
 
 @export var segment_length: float = 30.0
-@export var curve_strength: float = 0.8
+@export var curve_strength: float = 0.5
 @export var sides: int = 12
 @export var bake_interval: float = 3.0
 
@@ -113,7 +113,7 @@ func generate() -> void:
 		var bend := Vector3(
 			_rng.randf_range(-curve_strength, curve_strength),
 			_rng.randf_range(-curve_strength, curve_strength),
-			0.0
+			_rng.randf_range(-curve_strength, curve_strength)
 		)
 		dir = (dir + bend).normalized()
 		pos += dir * segment_length
@@ -173,6 +173,9 @@ func _build_mesh() -> void:
 	var surface := SurfaceTool.new()
 	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
 
+	var last_right := Vector3.RIGHT
+	var last_up := Vector3.UP
+
 	for i in _baked_points.size():
 		var point := _baked_points[i]
 		var current_radius := _baked_radii[i]
@@ -182,11 +185,20 @@ func _build_mesh() -> void:
 		else:
 			forward = (point - _baked_points[i - 1]).normalized()
 
-		var up := Vector3.UP
-		if abs(forward.dot(up)) > 0.99:
-			up = Vector3.RIGHT
-		var right := forward.cross(up).normalized()
-		up = right.cross(forward).normalized()
+		if i == 0:
+			# Initial frame
+			if abs(forward.dot(Vector3.UP)) > 0.99:
+				last_right = forward.cross(Vector3.RIGHT).normalized()
+			else:
+				last_right = forward.cross(Vector3.UP).normalized()
+			last_up = last_right.cross(forward).normalized()
+		else:
+			# Parallel transport: keep the frame as consistent as possible
+			last_right = last_up.cross(forward).normalized()
+			last_up = forward.cross(last_right).normalized()
+
+		var right := last_right
+		var up := last_up
 
 		for s in sides:
 			var angle := TAU * s / sides
@@ -232,20 +244,38 @@ func _build_wireframe(baked: PackedVector3Array) -> void:
 	var wire_surface := SurfaceTool.new()
 	wire_surface.begin(Mesh.PRIMITIVE_LINES)
 
+	var frames_right: Array[Vector3] = []
+	var frames_up: Array[Vector3] = []
+	frames_right.resize(baked.size())
+	frames_up.resize(baked.size())
+
+	var last_right := Vector3.RIGHT
+	var last_up := Vector3.UP
+
 	for i in baked.size():
 		var point := baked[i]
-		var current_radius := _baked_radii[i]
 		var forward: Vector3
 		if i < baked.size() - 1:
 			forward = (baked[i + 1] - point).normalized()
 		else:
 			forward = (point - baked[i - 1]).normalized()
 
-		var up := Vector3.UP
-		if abs(forward.dot(up)) > 0.99:
-			up = Vector3.RIGHT
-		var right := forward.cross(up).normalized()
-		up = right.cross(forward).normalized()
+		if i == 0:
+			if abs(forward.dot(Vector3.UP)) > 0.99:
+				last_right = forward.cross(Vector3.RIGHT).normalized()
+			else:
+				last_right = forward.cross(Vector3.UP).normalized()
+			last_up = last_right.cross(forward).normalized()
+		else:
+			last_right = last_up.cross(forward).normalized()
+			last_up = forward.cross(last_right).normalized()
+		
+		frames_right[i] = last_right
+		frames_up[i] = last_up
+
+		var current_radius := _baked_radii[i]
+		var right := last_right
+		var up := last_up
 
 		for s in sides:
 			var angle_a := float(s) / sides
@@ -258,33 +288,37 @@ func _build_wireframe(baked: PackedVector3Array) -> void:
 			wire_surface.set_uv(Vector2(angle_b, v_coord))
 			wire_surface.add_vertex(vb)
 
-		if i < baked.size() - 1:
-			var next_point := baked[i + 1]
-			var next_radius := _baked_radii[i + 1]
-			var next_forward: Vector3
-			if i + 1 < baked.size() - 1:
-				next_forward = (baked[i + 2] - next_point).normalized()
-			else:
-				next_forward = forward
+	for i in baked.size() - 1:
+		var p1 := baked[i]
+		var p2 := baked[i + 1]
+		var r1 := _baked_radii[i]
+		var r2 := _baked_radii[i + 1]
+		var right1 := frames_right[i]
+		var up1 := frames_up[i]
+		var right2 := frames_right[i + 1]
+		var up2 := frames_up[i + 1]
 
-			var nup := Vector3.UP
-			if abs(next_forward.dot(nup)) > 0.99:
-				nup = Vector3.RIGHT
-			var nright := next_forward.cross(nup).normalized()
-			nup = nright.cross(next_forward).normalized()
-
-			for s in sides:
-				var angle := TAU * s / sides
-				var va := point + (right * cos(angle) + up * sin(angle)) * current_radius
-				var vb := next_point + (nright * cos(angle) + nup * sin(angle)) * next_radius
-				wire_surface.add_vertex(va)
-				wire_surface.add_vertex(vb)
+		for s in sides:
+			var angle := TAU * s / sides
+			var va := p1 + (right1 * cos(angle) + up1 * sin(angle)) * r1
+			var vb := p2 + (right2 * cos(angle) + up2 * sin(angle)) * r2
+			wire_surface.add_vertex(va)
+			wire_surface.add_vertex(vb)
 
 	var wire_instance := MeshInstance3D.new()
 	add_child(wire_instance)
 	wire_instance.mesh = wire_surface.commit()
 
-	var wire_tunnel_shaders = ["res://shaders/wire.gdshader", "res://shaders/wire2.gdshader"]
+	var wire_tunnel_shaders = [
+		"res://shaders/wire.gdshader", 
+		"res://shaders/wire2.gdshader",
+		"res://shaders/wire_cyber.gdshader",
+		"res://shaders/wire_rainbow.gdshader",
+		"res://shaders/wire_scan.gdshader",
+		"res://shaders/wire_dots.gdshader",
+		"res://shaders/wire_holo.gdshader",
+		"res://shaders/wire_stream.gdshader"
+	]
 
 	var shader = load(wire_tunnel_shaders[rng.randi_range(0, wire_tunnel_shaders.size() - 1)])
 	var wire_mat = ShaderMaterial.new()
