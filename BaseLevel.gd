@@ -45,7 +45,5 @@ func _calculate_score() -> int:
 
 # Вызывается если игрок умер
 func player_died() -> void:
-	GameGraph.finish_level(false, {
-		"score": int(_elapsed * 10.0),
-		"time":  _elapsed,
-	})
+	# Просто сохраняем состояние, но сцену не меняем — это сделает кнопка на экране смерти
+	print("Level: Player died, waiting for interaction")

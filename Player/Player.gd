@@ -22,10 +22,14 @@ var current_radius: float
 
 @onready var camera: Camera3D = $Camera3D
 @onready var shader := $Camera3D/CanvasLayer/ColorRect
+@onready var death_menu := $Camera3D/CanvasLayer/DeathMenu
+@onready var health_label := $Camera3D/CanvasLayer/HealthLabel
 
 
 func _ready():
+	shader.trigger_hit()
 	add_to_group("player")
+	_update_health_ui()
 	
 	var area = Area3D.new()
 	add_child(area)
@@ -125,10 +129,15 @@ var tween: Tween
 
 func take_damage(delta: int):
 	health += delta
+	_update_health_ui()
 	if health <= 0:
 		print('end')
 		shader.trigger_hit()
 		apply_hit_stop()
+		death_menu.show_death_screen()
+		var root = get_tree().current_scene
+		if root.has_method("player_died"):
+			root.player_died()
 	else:
 		shader.trigger_hit()
 		apply_hit_stop()
@@ -149,3 +158,9 @@ func apply_hit_stop(time_scale: float = 0.06, duration: float = 0.08):
 	Engine.time_scale = time_scale
 	await get_tree().create_timer(duration * time_scale).timeout # Учитываем замедление
 	Engine.time_scale = 0.5
+
+func _update_health_ui():
+	var heart_text = ""
+	for i in range(max(0, health)):
+		heart_text += "❤"
+	health_label.text = heart_text

@@ -4,6 +4,7 @@
 [ext_resource type="Shader" uid="uid://c8xhpvw10heje" path="res://Player/Hit.gdshader" id="2_q3lat"]
 [ext_resource type="Script" path="res://Player/HitEffect.gd" id="3_tok1r"]
 [ext_resource type="PackedScene" uid="uid://bxrrp825ar6yu" path="res://Pause/PauseMenu.tscn" id="4_ddoul"]
+[ext_resource type="PackedScene" uid="uid://dss81ubul8d0u" path="res://Player/DeathMenu.tscn" id="5_death"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hwjxs"]
 sky_top_color = Color(0, 0, 0, 1)
@@ -46,6 +47,17 @@ grow_vertical = 2
 script = ExtResource("3_tok1r")
 
 [node name="PauseMenu" parent="Camera3D/CanvasLayer" unique_id=1272836891 instance=ExtResource("4_ddoul")]
+
+[node name="DeathMenu" parent="Camera3D/CanvasLayer" unique_id=1234743215 instance=ExtResource("5_death")]
+
+[node name="HealthLabel" type="Label" parent="Camera3D/CanvasLayer" unique_id=1182531667]
+offset_left = 491.0
+offset_top = 16.0
+offset_right = 671.0
+offset_bottom = 82.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 56
+text = "❤❤❤"
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1399031586]
 visible = false

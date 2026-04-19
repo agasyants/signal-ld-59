@@ -63,27 +63,40 @@ anchor_right = 1.0
 anchor_bottom = 0.97400004
 offset_left = 21.0
 offset_top = 24.0
-offset_right = -164.0
-offset_bottom = -431.15204
-theme_override_font_sizes/font_size = 150
-text = "PLACEHOLDER"
+offset_right = -293.0
+offset_bottom = -455.15204
+theme_override_font_sizes/font_size = 130
+text = "PACKEtRACER"
+script = ExtResource("3_geirw")
+
+[node name="Label2" type="Label" parent="." unique_id=1758934878]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.97400004
+offset_left = 35.0
+offset_top = 186.0
+offset_right = -502.0
+offset_bottom = -409.15204
+theme_override_font_sizes/font_size = 30
+text = "Control <- arrows ->, Space — jump "
 script = ExtResource("3_geirw")
 
 [node name="start_btn" type="Button" parent="." unique_id=893268362]
 layout_mode = 0
-offset_left = 436.0
-offset_top = 275.0
-offset_right = 538.0
-offset_bottom = 302.0
+offset_left = 39.0
+offset_top = 302.0
+offset_right = 141.0
+offset_bottom = 329.0
 text = "START GAME"
 script = ExtResource("4_hwjxs")
 
 [node name="settings_btn" type="Button" parent="." unique_id=1020677495]
 layout_mode = 0
-offset_left = 41.0
-offset_top = 544.0
-offset_right = 124.0
-offset_bottom = 571.0
+offset_left = 49.0
+offset_top = 523.0
+offset_right = 132.0
+offset_bottom = 550.0
 text = "SETTINGS"
 script = ExtResource("5_hwjxs")
 
