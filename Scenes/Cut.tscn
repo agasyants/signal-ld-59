@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://b035itkj1wxnl"]
+
+[ext_resource type="Script" uid="uid://b2qrux0828qql" path="res://Scenes/CutsceneManager.gd" id="1_mgr"]
+[ext_resource type="Script" uid="uid://bd67yfgxua8r6" path="res://Scenes/CutsceneTunnel.gd" id="2_tunnel"]
+[ext_resource type="Script" uid="uid://t7w1kpbpdbq5" path="res://Scenes/animated_label.gd" id="3_label"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hwjxs"]
+sky_top_color = Color(0, 0, 0, 1)
+sky_horizon_color = Color(0.7647059, 0, 0.9411765, 1)
+ground_bottom_color = Color(0, 0, 0, 1)
+ground_horizon_color = Color(0, 0.87058824, 0.7882353, 1)
+
+[sub_resource type="Sky" id="Sky_rsiac"]
+sky_material = SubResource("ProceduralSkyMaterial_hwjxs")
+
+[sub_resource type="Environment" id="Environment_hwjxs"]
+background_mode = 2
+sky = SubResource("Sky_rsiac")
+glow_enabled = true
+glow_intensity = 1.6
+glow_bloom = 0.39
+
+[node name="Cut" type="Control" unique_id=1558369637]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mgr")
+
+[node name="World" type="Node3D" parent="." unique_id=1478197860]
+
+[node name="Camera3D" type="Camera3D" parent="World" unique_id=1223445637]
+environment = SubResource("Environment_hwjxs")
+
+[node name="Tunnel" type="Node3D" parent="World" unique_id=2125020916]
+script = ExtResource("2_tunnel")
+speed = 40.0
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=188616067]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AnimatedLabel" type="Label" parent="CenterContainer" unique_id=1922313784]
+custom_minimum_size = Vector2(1000, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 54
+text = "Packet Racer"
+horizontal_alignment = 1
+autowrap_mode = 3
+script = ExtResource("3_label")
