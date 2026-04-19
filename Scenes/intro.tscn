@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://e2hxu1x65fg5" path="res://Scenes/mesh_instance_3d.gd" id="2_rsiac"]
 [ext_resource type="Script" uid="uid://t7w1kpbpdbq5" path="res://Scenes/animated_label.gd" id="3_geirw"]
 [ext_resource type="Script" uid="uid://dsia4aideqckd" path="res://Scenes/start_btn.gd" id="4_hwjxs"]
-[ext_resource type="Script" uid="uid://x8fjagobuo4w" path="res://Scenes/settings_btn.gd" id="5_hwjxs"]
+[ext_resource type="Script" path="res://Scenes/volume_slider.gd" id="5_hwjxs"]
 [ext_resource type="PackedScene" uid="uid://bqug0pcaq7aj8" path="res://Scenes/pc2.tscn" id="7_3bmuq"]
 
 [sub_resource type="GDScript" id="GDScript_hwjxs"]
@@ -91,13 +91,15 @@ offset_bottom = 329.0
 text = "START GAME"
 script = ExtResource("4_hwjxs")
 
-[node name="settings_btn" type="Button" parent="." unique_id=1020677495]
+[node name="VolumeSlider" type="HSlider" parent="." unique_id=1020677495]
 layout_mode = 0
 offset_left = 49.0
 offset_top = 523.0
-offset_right = 132.0
-offset_bottom = 550.0
-text = "SETTINGS"
+offset_right = 232.0
+offset_bottom = 543.0
+max_value = 1.0
+step = 0.05
+value = 1.0
 script = ExtResource("5_hwjxs")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1323682445]
