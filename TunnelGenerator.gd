@@ -19,16 +19,16 @@ func get_radius_at_t(t: float) -> float:
 
 # Сессионные параметры — задаются через start()
 var session := {
-	"speed":          25.0,
-	"density":        0.4,
-	"difficulty":     10000.3,
-	"radius":         2.0,
-	"allow_wall":     true,
-	"allow_pillar":   true,
-	"allow_ring":     true,
-	"allow_bonuses":  true,
+	"speed": 25.0,
+	"density": 0.4,
+	"difficulty": 10000.3,
+	"radius": 2.0,
+	"allow_wall": true,
+	"allow_pillar": true,
+	"allow_ring": true,
+	"allow_bonuses": true,
 	"allow_rotating": true,
-	"allow_sliding":  false,
+	"allow_sliding": false,
 }
 
 # Внутренние переменные
@@ -41,7 +41,7 @@ var _baked_points: PackedVector3Array
 var _baked_radii: PackedFloat32Array
 var _current_speed: float = 15.0
 
-var  rng := RandomNumberGenerator.new()
+var rng := RandomNumberGenerator.new()
 
 # Вызывается из ObstacleSpawner для синхронизации скорости с треком
 func set_speed_from_track(speed: float) -> void:
@@ -62,6 +62,7 @@ signal track_finished
 func generate_from_session(s: Dictionary) -> void:
 	session = s
 	_current_speed = session["speed"]
+	rng.randomize()
 	generate()
 
 func _on_track_finished() -> void:
@@ -81,7 +82,7 @@ func generate() -> void:
 	assert(track != null, "TunnelGenerator: track не назначен")
 
 	# Длина трассы из трека
-	var total_length := track.get_total_length(session["speed"])*1.5
+	var total_length := track.get_total_length(session["speed"]) * 1.5
 	var segment_count := ceili(total_length / segment_length) + 2
 
 	# Генерация кривой
@@ -105,12 +106,12 @@ func generate() -> void:
 
 	for i in range(points.size()):
 		var p := points[i]
-		var in_handle  := Vector3.ZERO
+		var in_handle := Vector3.ZERO
 		var out_handle := Vector3.ZERO
 		if i > 0 and i < points.size() - 1:
 			var diff := points[i + 1] - points[i - 1]
 			out_handle = diff * 0.25
-			in_handle  = -out_handle
+			in_handle = - out_handle
 		elif i == 0:
 			out_handle = (points[i + 1] - p) * 0.25
 		elif i == points.size() - 1:
@@ -145,7 +146,7 @@ func generate() -> void:
 
 	var spawner := ObstacleSpawner.new()
 	add_child(spawner)
-	spawner.setup(curve, player, self, _track_player)
+	spawner.setup(curve, player, self , _track_player)
 	
 	await get_tree().process_frame
 	_track_player.start()
@@ -220,7 +221,7 @@ func _build_mesh() -> void:
 	mesh_instance.mesh = surface.commit()
 
 	var tunnel_shaders = [
-		"res://shaders/tunnel.gdshader", 
+		"res://shaders/tunnel.gdshader",
 		"res://shaders/tunnel2.gdshader",
 		"res://shaders/shader_matrix.gdshader",
 		"res://shaders/shader_lava.gdshader",
@@ -228,8 +229,6 @@ func _build_mesh() -> void:
 		"res://shaders/shader_neon.gdshader",
 		"res://shaders/shader_ice.gdshader",
 		"res://shaders/shader_toxic.gdshader",
-		"res://shaders/shader_stars.gdshader",
-		"res://shaders/shader_vortex.gdshader",
 		"res://shaders/shader_gold.gdshader"
 	]
 
@@ -308,13 +307,12 @@ func _build_wireframe(baked: PackedVector3Array) -> void:
 	wire_instance.mesh = wire_surface.commit()
 
 	var wire_tunnel_shaders = [
-		"res://shaders/wire.gdshader", 
+		"res://shaders/wire.gdshader",
 		"res://shaders/wire2.gdshader",
 		"res://shaders/wire_cyber.gdshader",
 		"res://shaders/wire_rainbow.gdshader",
 		"res://shaders/wire_scan.gdshader",
 		"res://shaders/wire_dots.gdshader",
-		"res://shaders/wire_holo.gdshader",
 		"res://shaders/wire_stream.gdshader"
 	]
 

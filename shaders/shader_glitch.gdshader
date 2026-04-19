@@ -10,9 +10,9 @@ void fragment() {
 	float g = hash(floor(TIME * 15.0));
 	vec2 uv = UV;
 	
-	if (hash(floor(uv.y * 50.0) + floor(TIME * 20.0)) < glitch_intensity) {
+	if (hash(floor(uv.y * 50.0) - floor(TIME * 20.0)) < glitch_intensity) {
 		uv.x += (hash(TIME) - 0.5) * 0.2;
-		ALBEDO = vec3(1.0, 0.0, 0.0);
+		ALBEDO = vec3(0.3, 0.3, 0.0);
 	} else {
 		float stripes = step(0.8, sin(uv.y * 100.0));
 		ALBEDO = base_color * (0.5 + stripes * 0.5);
