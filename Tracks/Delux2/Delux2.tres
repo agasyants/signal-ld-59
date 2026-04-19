@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="TrackData" format=3 uid="uid://g418672nawhr"]
+
+[ext_resource type="Script" uid="uid://ctnkck34hidh0" path="res://TracksGenerator/TrackData.gd" id="1_3hrsq"]
+[ext_resource type="AudioStream" uid="uid://i8hbv54qn8et" path="res://Tracks/Delux2/Delux(2).mp3" id="1_o2jp1"]
+[ext_resource type="Script" uid="uid://bmghgvae3181i" path="res://TracksGenerator/TrackSection.gd" id="2_o2jp1"]
+
+[sub_resource type="Resource" id="Resource_3hrsq"]
+script = ExtResource("2_o2jp1")
+density_curve = Vector2(1, 1)
+difficulty_curve = Vector2(1, 1)
+radius_curve = Vector2(1, 2)
+allow_rotating = false
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_o2jp1"]
+script = ExtResource("2_o2jp1")
+time = 90.0
+density_curve = Vector2(1, 1)
+difficulty_curve = Vector2(1, 1)
+radius_curve = Vector2(1, 2)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[resource]
+script = ExtResource("1_3hrsq")
+track_name = "Delux(2)"
+music = ExtResource("1_o2jp1")
+total_duration = 96.0
+sections = Array[ExtResource("2_o2jp1")]([SubResource("Resource_3hrsq"), SubResource("Resource_o2jp1")])

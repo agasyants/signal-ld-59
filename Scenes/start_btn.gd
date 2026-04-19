@@ -5,4 +5,5 @@ func _ready() -> void:
 	self.pressed.connect(_on_pressed)
 
 func _on_pressed() -> void:
-	get_tree().change_scene_to_file("res://main.tscn")
+	GameGraph.current_connection = GameGraph.levels[0][0].connections[0]
+	get_tree().change_scene_to_file("res://level.tscn")

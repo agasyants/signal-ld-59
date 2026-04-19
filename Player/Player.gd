@@ -4,8 +4,8 @@ class_name Player
 @export var rotate_speed: float = 3.5
 @export var tunnel_radius := 1.7
 @export var inertia_friction: float = 5.0
-@export var inertia_strength: float = 8.0
-@export var free_move_speed: float = 5.0   # скорость в свободном режиме
+@export var inertia_strength: float = 4.0
+@export var free_move_speed: float = 5.0
 
 @export var health: int = 3
 
@@ -13,6 +13,12 @@ var angular_velocity: float = 0.0
 var current_angle: float = 0.0
 
 var free_control: bool = false   # режим свободного полёта (Alt)
+
+# радиальное движение (прыжок)
+var radial_velocity: float = 0.0
+var current_radius: float
+@export var gravity: float = 20.0
+@export var jump_force: float = 8.0
 
 @onready var camera: Camera3D = $Camera3D
 @onready var shader := $Camera3D/CanvasLayer/ColorRect
@@ -32,7 +38,6 @@ func _ready():
 
 
 func _process(delta):
-	# Проверяем, удерживается ли Alt (можно заменить на action "free_control")
 	var alt_pressed = Input.is_key_pressed(KEY_ALT)
 	
 	if alt_pressed and not free_control:
@@ -44,27 +49,30 @@ func _process(delta):
 		free_control = false
 		var angle = atan2(position.y, position.x)
 		current_angle = angle
-		position.x = cos(angle) * tunnel_radius * 0.8
-		position.y = sin(angle) * tunnel_radius * 0.8
+		position.x = cos(angle) * tunnel_radius
+		position.y = sin(angle) * tunnel_radius
 		angular_velocity = 0.0
 	
 	if free_control:
 		# --- СВОБОДНОЕ УПРАВЛЕНИЕ WASD ---
 		# Получаем ввод с клавиш W, A, S, D
-		var move_input := Vector2(
+		var input := Vector2(
 			Input.get_axis("ui_left", "ui_right"),
 			Input.get_axis("ui_down", "ui_up")
 		)
+
+		if input.length() > 0.0:
+			input = input.normalized()
+
+		# поворачиваем input в сторону взгляда игрока
+		var rotated_input = input.rotated(rotation.z)
 		
-		if move_input.length() > 0.0:
-			move_input = move_input.normalized()
-		
-		var move_delta = move_input * free_move_speed * delta
+		var move_delta = rotated_input * free_move_speed * delta
 		position.x += move_delta.x
 		position.y += move_delta.y
 		
 		# Ограничиваем радиус – нельзя выходить за пределы туннеля
-		var current_radius = Vector2(position.x, position.y).length()
+		current_radius = Vector2(position.x, position.y).length()
 		if current_radius > tunnel_radius:
 			var limited_pos = Vector2(position.x, position.y).normalized() * tunnel_radius
 			position.x = limited_pos.x
@@ -89,9 +97,28 @@ func _process(delta):
 		position.x = cos(current_angle) * tunnel_radius * 0.8
 		position.y = sin(current_angle) * tunnel_radius * 0.8
 	
-	# --- ОРИЕНТАЦИЯ ИГРОКА (всегда по касательной к окружности) ---
-	var to_center = Vector2(position.x, position.y)
-	rotation.z = atan2(to_center.y, to_center.x) + PI / 2.0
+		var to_center = Vector2(position.x, position.y)
+		rotation.z = atan2(to_center.y, to_center.x) + PI / 2.0
+		# --- ПРЫЖОК ---
+		if Input.is_action_just_pressed("Jump") and is_on_ground():
+			radial_velocity = jump_force
+
+		# --- ГРАВИТАЦИЯ К ЦЕНТРУ ---
+		radial_velocity -= gravity * delta
+		current_radius -= radial_velocity * delta
+
+		# --- СТОЛКНОВЕНИЕ СО СТЕНКОЙ ---
+		if current_radius >= tunnel_radius:
+			current_radius = tunnel_radius
+			radial_velocity = 0.0
+
+		# позиция
+		position.x = cos(current_angle) * current_radius
+		position.y = sin(current_angle) * current_radius
+
+
+func is_on_ground() -> bool:
+	return current_radius <= tunnel_radius + 0.001
 
 var tween: Tween
 

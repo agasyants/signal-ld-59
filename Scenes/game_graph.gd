@@ -1,8 +1,32 @@
 extends Node
+# GameGraph
 
 var levels = [] # Массив массивов узлов
 var current_node: MyGraphNode
 var current_connection: MyGraphConnection
+
+var score: int = 0
+var health: int = 3
+var last_result := { "completed": false, "score": 0, "time": 0.0 }
+
+func start_level(connection: MyGraphConnection) -> void:
+	current_connection = connection
+	get_tree().change_scene_to_file("res://level.tscn")
+
+func finish_level(completed: bool, result: Dictionary = {}) -> void:
+	last_result = {
+		"completed": completed,
+		"score":     result.get("score", 0),
+		"time":      result.get("time",  0.0),
+	}
+	score += last_result["score"]
+	get_tree().change_scene_to_file("res://map.tscn")
+
+func reset_run() -> void:
+	current_connection = null
+	score  = 0
+	health = 3
+	last_result = { "completed": false, "score": 0, "time": 0.0 }
 
 # Called when the node enters the scene tree for the first time.
 func _init() -> void:

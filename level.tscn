@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://djysdog6injw8"]
+
+[ext_resource type="Script" uid="uid://cmilmgh7j85w" path="res://BaseLevel.gd" id="1_oi3di"]
+[ext_resource type="PackedScene" uid="uid://b4sffb4e62mfp" path="res://Player/Player.tscn" id="3_f2txt"]
+[ext_resource type="Resource" uid="uid://g418672nawhr" path="res://Tracks/Delux2/Delux2.tres" id="3_oi3di"]
+
+[node name="Node3D" type="Node3D" unique_id=899153843]
+script = ExtResource("1_oi3di")
+player_scene = ExtResource("3_f2txt")
+fallback_track = ExtResource("3_oi3di")

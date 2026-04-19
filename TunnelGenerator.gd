@@ -1,10 +1,9 @@
-extends Node3D
+# tunnel_generator.gd
 class_name TunnelGenerator
+extends Node3D
 
-@export var segment_count: int = 60
 @export var segment_length: float = 30.0
 @export var curve_strength: float = 0.8
-@export var tunnel_radius: float = 2.0
 @export var sides: int = 12
 @export var bake_interval: float = 3.0
 
@@ -23,168 +22,190 @@ func get_radius_at_t(t: float) -> float:
 	return lerp(radius_min, radius_max, n)
 
 @export var player_scene: PackedScene
+@export var track: TrackData
 
-var player: Player
+# Сессионные параметры — задаются через start()
+var session := {
+	"speed":          25.0,
+	"density":        0.4,
+	"difficulty":     10000.3,
+	"radius":         2.0,
+	"allow_wall":     true,
+	"allow_pillar":   true,
+	"allow_ring":     true,
+	"allow_bonuses":  true,
+	"allow_rotating": true,
+	"allow_sliding":  false,
+}
 
+# Внутренние переменные
 var curve: Curve3D
-var mesh_instance: MeshInstance3D
-var rng: RandomNumberGenerator
-var follow := PathFollow3D.new()
-var noise = FastNoiseLite.new()
-
-# Кешируем запечённые точки и радиусы, чтобы не пересчитывать
+var player: Node3D
+var _follow := PathFollow3D.new()
+var _rng := RandomNumberGenerator.new()
+var _track_player: TrackPlayer
 var _baked_points: PackedVector3Array
 var _baked_radii: PackedFloat32Array
+var _current_speed: float = 15.0
 
-func _ready():
-	rng = RandomNumberGenerator.new()
-	rng.randomize()
+var  rng := RandomNumberGenerator.new()
+
+# Вызывается из ObstacleSpawner для синхронизации скорости с треком
+func set_speed_from_track(speed: float) -> void:
+	_current_speed = speed
+
+func _process(delta: float) -> void:
+	_follow.progress += _current_speed * delta
+	if player and curve:
+		var t := _follow.progress / curve.get_baked_length()
+		player.tunnel_radius = get_radius_at_t(t) * 0.8
+
+# Добавить в tunnel_generator.gd (дополнения к существующему коду)
+
+# 1. В начало класса добавить сигнал:
+signal track_finished
+
+# 2. Заменить метод start() на generate_from_session():
+func generate_from_session(s: Dictionary) -> void:
+	session = s
+	_current_speed = session["speed"]
 	generate()
 
-@export var speed: float = 15.0
-@export var fastspeed: float = 30.0
+# 3. В generate() после создания _track_player добавить:
 
-func _process(delta):
-	if Input.is_key_pressed(KEY_SHIFT):
-		follow.progress += fastspeed * delta
-	else:
-		follow.progress += speed * delta
-	player.tunnel_radius = get_radius_at_t(follow.progress / curve.get_baked_length())
+func _on_track_finished() -> void:
+	track_finished.emit()
 
-# Получить радиус по мировой позиции (для спавнера и других внешних систем).
-# Находим ближайшую запечённую точку и берём её радиус из кеша.
 func get_radius_at_point(world_pos: Vector3) -> float:
 	if _baked_points.is_empty():
 		return radius_min
-	var closest_idx = 0
-	var closest_dist = world_pos.distance_squared_to(_baked_points[0])
+	var closest_idx := 0
+	var closest_dist := world_pos.distance_squared_to(_baked_points[0])
 	for i in range(1, _baked_points.size()):
-		var d = world_pos.distance_squared_to(_baked_points[i])
+		var d := world_pos.distance_squared_to(_baked_points[i])
 		if d < closest_dist:
 			closest_dist = d
 			closest_idx = i
 	return _baked_radii[closest_idx]
 
-func generate():
+func generate() -> void:
+	assert(track != null, "TunnelGenerator: track не назначен")
+
+	# Радиус из сессии
+	var base_radius: float = session["radius"]
+	radius_min = base_radius * 0.5
+	radius_max = base_radius * 1.5
+
+	# Длина трассы из трека
+	var total_length := track.get_total_length(session["speed"])
+	var segment_count := ceili(total_length / segment_length) + 2
+
+	# Генерация кривой
 	curve = Curve3D.new()
 	curve.bake_interval = bake_interval
 
-	var points = []
-	var pos = Vector3.ZERO
-	var dir = Vector3(0, 0, -1)
+	var points: Array[Vector3] = []
+	var pos := Vector3.ZERO
+	var dir := Vector3(0.0, 0.0, -1.0)
 	points.append(pos)
 
 	for i in segment_count:
-		var bend = Vector3(
-			rng.randf_range(-curve_strength, curve_strength),
-			rng.randf_range(-curve_strength, curve_strength),
-			0
+		var bend := Vector3(
+			_rng.randf_range(-curve_strength, curve_strength),
+			_rng.randf_range(-curve_strength, curve_strength),
+			0.0
 		)
 		dir = (dir + bend).normalized()
 		pos += dir * segment_length
 		points.append(pos)
 
 	for i in range(points.size()):
-		var p = points[i]
-		var in_handle = Vector3.ZERO
-		var out_handle = Vector3.ZERO
+		var p := points[i]
+		var in_handle  := Vector3.ZERO
+		var out_handle := Vector3.ZERO
 		if i > 0 and i < points.size() - 1:
-			var diff = points[i + 1] - points[i - 1]
+			var diff := points[i + 1] - points[i - 1]
 			out_handle = diff * 0.25
-			in_handle = - out_handle
+			in_handle  = -out_handle
 		elif i == 0:
 			out_handle = (points[i + 1] - p) * 0.25
 		elif i == points.size() - 1:
 			in_handle = (points[i - 1] - p) * 0.25
 		curve.add_point(p, in_handle, out_handle)
+		
 
-	var path = Path3D.new()
+	var path := Path3D.new()
 	path.curve = curve
 	add_child(path)
 
-	#follow.rotation_mode = PathFollow3D.ROTATION_ORIENTED
-	follow.loop = false
-	path.add_child(follow)
+	_follow.loop = false
+	path.add_child(_follow)
 
 	_cache_radii()
 	_build_mesh()
 	_build_wireframe(_baked_points)
 
+	# Игрок
 	if player_scene:
 		player = player_scene.instantiate()
-		follow.add_child(player)
+		_follow.add_child(player)
 
-		var spawner = ObstacleSpawner.new()
-		add_child(spawner)
-		spawner.setup(curve, player, self )
+	# TrackPlayer + спавнер
+	_track_player = TrackPlayer.new()
+	_track_player.setup(track, session)
+	add_child(_track_player)
 
-# Считаем радиус для каждой запечённой точки один раз при генерации
-func _cache_radii():
+	var spawner := ObstacleSpawner.new()
+	add_child(spawner)
+	spawner.setup(curve, player, self, _track_player)
+
+	_track_player.start()
+	_track_player.track_finished.connect(_on_track_finished)
+
+func _cache_radii() -> void:
 	_baked_points = curve.get_baked_points()
 	_baked_radii.resize(_baked_points.size())
-	var total = float(_baked_points.size())
-	
-	print("Baked points: ", _baked_points.size()) # должно быть > 100
-	
-	var min_r = 9999.0
-	var max_r = 0.0
-	
+	var total := float(_baked_points.size())
 	for i in _baked_points.size():
-		var r = get_radius_at_t(float(i) / total)
-		_baked_radii[i] = r
-		min_r = min(min_r, r)
-		max_r = max(max_r, r)
-	
-	print("Radius range: ", min_r, " → ", max_r) # если одно число — шум не работает
+		_baked_radii[i] = get_radius_at_t(float(i) / total)
 
-func _build_mesh():
-	var surface = SurfaceTool.new()
+func _build_mesh() -> void:
+	var surface := SurfaceTool.new()
 	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
 
 	for i in _baked_points.size():
-		var point = _baked_points[i]
-		var current_radius = _baked_radii[i]
+		var point := _baked_points[i]
+		var current_radius := _baked_radii[i]
 		var forward: Vector3
 		if i < _baked_points.size() - 1:
 			forward = (_baked_points[i + 1] - point).normalized()
 		else:
 			forward = (point - _baked_points[i - 1]).normalized()
 
-		var up = Vector3.UP
+		var up := Vector3.UP
 		if abs(forward.dot(up)) > 0.99:
 			up = Vector3.RIGHT
-		var right = forward.cross(up).normalized()
+		var right := forward.cross(up).normalized()
 		up = right.cross(forward).normalized()
 
 		for s in sides:
-			var angle = TAU * s / sides
-			# 1. Вычисляем направление от центра к данной вершине в сечении
-			var direction_to_wall = (right * cos(angle) + up * sin(angle))
-			# 2. Позиция вершины (центр + направление * радиус)
-
-			# ВАЖНО: Устанавливаем UV
-			# x - по кругу (от 0 до 1)
-			# y - по длине туннеля (от 0 до 1)
-			var uv = Vector2(float(s) / sides, float(i) / float(_baked_points.size() - 1))
+			var angle := TAU * s / sides
+			var dir_to_wall := right * cos(angle) + up * sin(angle)
+			var uv := Vector2(float(s) / sides, float(i) / float(_baked_points.size() - 1))
 			surface.set_uv(uv)
-
-			var vertex = point + direction_to_wall * current_radius
-			# 3. НОРМАЛЬ: инвертируем направление, чтобы она смотрела ВНУТРЬ тоннеля
-			# Именно по этому вектору шейдер будет "выдавливать" иголки
-			var normal = direction_to_wall.normalized()
-			surface.set_normal(normal)
-			surface.add_vertex(vertex)
+			surface.set_normal(dir_to_wall.normalized())
+			surface.add_vertex(point + dir_to_wall * current_radius)
 
 	for i in _baked_points.size() - 1:
 		for s in sides:
-			var a = i * sides + s
-			var b = i * sides + (s + 1) % sides
-			var c = (i + 1) * sides + s
-			var d = (i + 1) * sides + (s + 1) % sides
+			var a := i * sides + s
+			var b := i * sides + (s + 1) % sides
+			var c := (i + 1) * sides + s
+			var d := (i + 1) * sides + (s + 1) % sides
 			surface.add_index(a); surface.add_index(b); surface.add_index(c)
 			surface.add_index(b); surface.add_index(d); surface.add_index(c)
 
-	mesh_instance = MeshInstance3D.new()
+	var mesh_instance := MeshInstance3D.new()
 	add_child(mesh_instance)
 	mesh_instance.mesh = surface.commit()
 
@@ -207,79 +228,63 @@ func _build_mesh():
 	mat.shader = shader
 	mesh_instance.material_override = mat
 
-func _build_wireframe(baked: PackedVector3Array):
-	var wire_surface = SurfaceTool.new()
+func _build_wireframe(baked: PackedVector3Array) -> void:
+	var wire_surface := SurfaceTool.new()
 	wire_surface.begin(Mesh.PRIMITIVE_LINES)
 
 	for i in baked.size():
-		var point = baked[i]
-		var current_radius = _baked_radii[i] # берём из кеша
+		var point := baked[i]
+		var current_radius := _baked_radii[i]
 		var forward: Vector3
 		if i < baked.size() - 1:
 			forward = (baked[i + 1] - point).normalized()
 		else:
 			forward = (point - baked[i - 1]).normalized()
 
-		var up = Vector3.UP
+		var up := Vector3.UP
 		if abs(forward.dot(up)) > 0.99:
 			up = Vector3.RIGHT
-		var right = forward.cross(up).normalized()
+		var right := forward.cross(up).normalized()
 		up = right.cross(forward).normalized()
 
 		for s in sides:
-			var angle_a = float(s) / sides
-			var angle_b = float(s + 1) / sides
-			
-			var va = point + (right * cos(angle_a * TAU) + up * sin(angle_a * TAU)) * current_radius
-			var vb = point + (right * cos(angle_b * TAU) + up * sin(angle_b * TAU)) * current_radius
-
-			# Прогресс вдоль пути (V-координата)
-			var v_coord = float(i) / (baked.size() - 1)
-
-			# Вершина A
+			var angle_a := float(s) / sides
+			var angle_b := float(s + 1) / sides
+			var va := point + (right * cos(angle_a * TAU) + up * sin(angle_a * TAU)) * current_radius
+			var vb := point + (right * cos(angle_b * TAU) + up * sin(angle_b * TAU)) * current_radius
+			var v_coord := float(i) / (baked.size() - 1)
 			wire_surface.set_uv(Vector2(angle_a, v_coord))
 			wire_surface.add_vertex(va)
-			
-			# Вершина B
 			wire_surface.set_uv(Vector2(angle_b, v_coord))
 			wire_surface.add_vertex(vb)
 
 		if i < baked.size() - 1:
-			var next_point = baked[i + 1]
-			var next_radius = _baked_radii[i + 1]
+			var next_point := baked[i + 1]
+			var next_radius := _baked_radii[i + 1]
 			var next_forward: Vector3
 			if i + 1 < baked.size() - 1:
 				next_forward = (baked[i + 2] - next_point).normalized()
 			else:
 				next_forward = forward
 
-			var nup = Vector3.UP
+			var nup := Vector3.UP
 			if abs(next_forward.dot(nup)) > 0.99:
 				nup = Vector3.RIGHT
-			var nright = next_forward.cross(nup).normalized()
+			var nright := next_forward.cross(nup).normalized()
 			nup = nright.cross(next_forward).normalized()
 
 			for s in sides:
-				var angle = TAU * s / sides
-				var va = point + (right * cos(angle) + up * sin(angle)) * current_radius
-				var vb = next_point + (nright * cos(angle) + nup * sin(angle)) * next_radius
+				var angle := TAU * s / sides
+				var va := point + (right * cos(angle) + up * sin(angle)) * current_radius
+				var vb := next_point + (nright * cos(angle) + nup * sin(angle)) * next_radius
 				wire_surface.add_vertex(va)
 				wire_surface.add_vertex(vb)
 
-	var wire_instance = MeshInstance3D.new()
+	var wire_instance := MeshInstance3D.new()
 	add_child(wire_instance)
 	wire_instance.mesh = wire_surface.commit()
 
-	var wire_tunnel_shaders = [
-		"res://shaders/wire.gdshader", 
-		"res://shaders/wire2.gdshader",
-		"res://shaders/wire_cyber.gdshader",
-		"res://shaders/wire_rainbow.gdshader",
-		"res://shaders/wire_scan.gdshader",
-		"res://shaders/wire_dots.gdshader",
-		"res://shaders/wire_holo.gdshader",
-		"res://shaders/wire_stream.gdshader"
-	]
+	var wire_tunnel_shaders = ["res://shaders/wire.gdshader", "res://shaders/wire2.gdshader"]
 
 	var shader = load(wire_tunnel_shaders[rng.randi_range(0, wire_tunnel_shaders.size() - 1)])
 	var wire_mat = ShaderMaterial.new()
