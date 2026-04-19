@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="TrackData" format=3 uid="uid://bvm3rfvxadvki"]
+
+[ext_resource type="AudioStream" uid="uid://cnmu7kva064s" path="res://Tracks/ToHell/To Hell (Radio).mp3" id="1_8co8q"]
+[ext_resource type="Script" uid="uid://ctnkck34hidh0" path="res://TracksGenerator/TrackData.gd" id="2_kpggc"]
+[ext_resource type="Script" uid="uid://bmghgvae3181i" path="res://TracksGenerator/TrackSection.gd" id="3_82hbn"]
+
+[sub_resource type="Resource" id="Resource_w6hgm"]
+script = ExtResource("3_82hbn")
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_8co8q"]
+script = ExtResource("3_82hbn")
+time = 25.0
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_kpggc"]
+script = ExtResource("3_82hbn")
+time = 30.0
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_82hbn"]
+script = ExtResource("3_82hbn")
+time = 84.0
+speed_curve = Vector2(0.25, 0.25)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_cr4k1"]
+script = ExtResource("3_82hbn")
+time = 86.0
+density_curve = Vector2(0.1, 0.1)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_75x74"]
+script = ExtResource("3_82hbn")
+time = 100.0
+density_curve = Vector2(0.6, 0.8)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[resource]
+script = ExtResource("2_kpggc")
+track_name = "ToHell"
+music = ExtResource("1_8co8q")
+sections = Array[ExtResource("3_82hbn")]([SubResource("Resource_w6hgm"), SubResource("Resource_8co8q"), SubResource("Resource_kpggc"), SubResource("Resource_82hbn"), SubResource("Resource_cr4k1"), SubResource("Resource_75x74")])

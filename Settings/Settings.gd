@@ -14,8 +14,5 @@ func _ready():
 	k = Vector2(render_size) / real_size
 	root.content_scale_size = render_size
 
-func get_setting(key: String):
-	return null
-
 func is_analytics():
 	return false

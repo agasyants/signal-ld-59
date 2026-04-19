@@ -41,6 +41,9 @@ func _init() -> void:
 	generate_planar_graph(5)
 	if levels.size() > 0 and levels[0].size() > 0:
 		current_node = levels[0][0]
+		
+
+var tracks = ['Delux2', 'Waters', 'ToHell']
 
 func generate_planar_graph(num_middle_levels: int):
 	levels.clear()
@@ -71,11 +74,16 @@ func generate_planar_graph(num_middle_levels: int):
 				end_target = next_level.size() - 1
 				
 			for target_idx in range(start_target, end_target + 1):
+				var current_track = tracks[randi_range(0,tracks.size()-1)]
 				var target_node = next_level[target_idx]
 				var complexity = randf_range(1.0, 5.0)
 				var track_name = "Track " + str(node.id) + "-" + str(target_node.id)
 				var connection = MyGraphConnection.new(node, target_node, complexity, track_name)
-				connection.track = load("res://Tracks/Delux2/Delux2.tres")
+				
+				# Временно назначаем один и тот же трек всем соединениям
+				connection.track = load("res://Tracks/" + current_track + "/" + current_track + ".tres")
+				connection.track_name = current_track
+				
 				node.connections.append(connection)
 			
 			last_min_next_idx = end_target

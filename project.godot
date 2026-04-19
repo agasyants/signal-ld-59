@@ -17,8 +17,8 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Settings="*res://Settings/Settings.gd"
 GameGraph="*uid://dngkoeuuqsvar"
+Settings="*uid://cedn0l3sn03nx"
 
 [display]
 

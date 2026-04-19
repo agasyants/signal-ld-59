@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://dsia4aideqckd" path="res://Scenes/start_btn.gd" id="4_hwjxs"]
 [ext_resource type="Script" path="res://Scenes/volume_slider.gd" id="5_hwjxs"]
 [ext_resource type="PackedScene" uid="uid://bqug0pcaq7aj8" path="res://Scenes/pc2.tscn" id="7_3bmuq"]
+[ext_resource type="AudioStream" uid="uid://l4i6kblewdt7" path="res://Tracks/Menu.mp3" id="7_nn7w8"]
 
 [sub_resource type="GDScript" id="GDScript_hwjxs"]
 
@@ -109,3 +110,9 @@ light_size = 0.56
 
 [node name="pc2" parent="." unique_id=1910662151 instance=ExtResource("7_3bmuq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1520474, -0.71871823, -3.5839117)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=289998762]
+stream = ExtResource("7_nn7w8")
+volume_db = -5.658
+autoplay = true
+parameters/looping = true

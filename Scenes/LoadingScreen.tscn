@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://osvb5qh1xbcb"]
 
 [sub_resource type="GDScript" id="GDScript_1"]
 script/source = "extends Node
@@ -7,7 +7,7 @@ func _ready():
 	get_tree().change_scene_to_file(\"res://level.tscn\")
 "
 
-[node name="LoadingScreen" type="Control"]
+[node name="LoadingScreen" type="Control" unique_id=1011844596]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,7 +15,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1843437619]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -24,7 +24,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=617080284]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -32,20 +32,18 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1337576834]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CenterContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer" unique_id=574225617]
 layout_mode = 2
-theme_override_font_size = 48
 text = "LOADING DATA STREAM..."
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="CenterContainer/VBoxContainer"]
+[node name="Label2" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1623011520]
 layout_mode = 2
-theme_override_font_size = 24
 text = "SYNCING WITH PACKET..."
 horizontal_alignment = 1
 
-[node name="Script" type="Node" parent="."]
+[node name="Script" type="Node" parent="." unique_id=720267445]
 script = SubResource("GDScript_1")

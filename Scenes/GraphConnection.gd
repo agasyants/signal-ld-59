@@ -24,8 +24,8 @@ func _generate_session(c: float) -> Dictionary:
 	# Нормализуем complexity в [0, 1]
 	var t := clampf((c - 1.0) / 4.0, 0.0, 1.0)
 	var s = {
-		"speed":          lerpf(100.0,  100.0, t),
-		"density":        lerpf(0.4,  0.8,  t),
+		"speed":          lerpf(70.0,  70.0, t),
+		"density":        lerpf(0.9,  0.9,  t),
 		"difficulty":     lerpf(0.1,  1.0,  t),
 		"radius":         lerpf(2.0, 2.0,  t),
 		"allow_wall":     true,

@@ -3,7 +3,7 @@ class_name TunnelGenerator
 extends Node3D
 
 @export var segment_length: float = 30.0
-@export var curve_strength: float = 0.5
+@export var curve_strength: float = 0.4
 @export var sides: int = 12
 @export var bake_interval: float = 3.0
 

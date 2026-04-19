@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="TrackData" format=3 uid="uid://ctpse0ll6dlpj"]
+
+[ext_resource type="AudioStream" uid="uid://cqa1dcn21mcpf" path="res://Tracks/Waters/Waters.mp3" id="1_ucs36"]
+[ext_resource type="Script" uid="uid://ctnkck34hidh0" path="res://TracksGenerator/TrackData.gd" id="2_vqmr5"]
+[ext_resource type="Script" uid="uid://bmghgvae3181i" path="res://TracksGenerator/TrackSection.gd" id="3_b1ory"]
+
+[sub_resource type="Resource" id="Resource_kmil1"]
+script = ExtResource("3_b1ory")
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_ivxmg"]
+script = ExtResource("3_b1ory")
+time = 20.0
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_xr56r"]
+script = ExtResource("3_b1ory")
+time = 22.0
+speed_curve = Vector2(0.3, 0.3)
+density_curve = Vector2(0.2, 0.3)
+radius_curve = Vector2(1.5, 1.5)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_drq2b"]
+script = ExtResource("3_b1ory")
+time = 36.0
+speed_curve = Vector2(0.25, 0.25)
+density_curve = Vector2(0.5, 0.5)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_x2jtn"]
+script = ExtResource("3_b1ory")
+time = 42.0
+speed_curve = Vector2(0.3, 0.3)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[resource]
+script = ExtResource("2_vqmr5")
+track_name = "Waters"
+music = ExtResource("1_ucs36")
+sections = Array[ExtResource("3_b1ory")]([SubResource("Resource_kmil1"), SubResource("Resource_ivxmg"), SubResource("Resource_xr56r"), SubResource("Resource_drq2b"), SubResource("Resource_x2jtn")])

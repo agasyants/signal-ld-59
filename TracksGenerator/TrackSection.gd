@@ -8,10 +8,10 @@ extends Resource
 # Коэффициенты 0..1 — min/max для интерполяции внутри секции
 # Итоговое значение = session_value * коэффициент
 @export_group("Speed")
-@export var speed_curve: Vector2 = Vector2(0.8, 1.2)
+@export var speed_curve: Vector2 = Vector2(0.2, 0.2)
 
 @export_group("Density")
-@export var density_curve: Vector2 = Vector2(0.4, 0.6)
+@export var density_curve: Vector2 = Vector2(1.0, 1.0)
 
 @export_group("Difficulty")
 @export var difficulty_curve: Vector2 = Vector2(0.2, 0.4)
@@ -19,7 +19,7 @@ extends Resource
 @export_group("Radius")
 # Коэффициент масштабирования session.radius
 # radius_min = session.radius * (k - spread), radius_max = session.radius * (k + spread)
-@export var radius_curve: Vector2 = Vector2(0.7, 1.3)
+@export var radius_curve: Vector2 = Vector2(1.0, 1.0)
 
 @export_group("Obstacle Types")
 # Битовые флаги — пересекаются с глобальными разрешениями сессии
