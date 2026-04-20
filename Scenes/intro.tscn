@@ -8,7 +8,7 @@
 [ext_resource type="Script" uid="uid://dosqi48nmva5u" path="res://Scenes/volume_slider.gd" id="5_hwjxs"]
 [ext_resource type="PackedScene" uid="uid://bqug0pcaq7aj8" path="res://Scenes/pc2.tscn" id="7_3bmuq"]
 [ext_resource type="AudioStream" uid="uid://l4i6kblewdt7" path="res://Tracks/Menu.mp3" id="7_nn7w8"]
-[ext_resource type="Script" uid="uid://b5olmc4yihvho" path="res://Scenes/resolution_dropdown.gd" id="res_dropdown"]
+[ext_resource type="Script" path="res://Scenes/resolution_dropdown.gd" id="res_dropdown"]
 
 [sub_resource type="GDScript" id="GDScript_hwjxs"]
 
@@ -90,7 +90,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1520474, -0.71871823, -3.5
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=289998762]
 stream = ExtResource("7_nn7w8")
-volume_db = -5.658
+volume_db = -1.595
 autoplay = true
 parameters/looping = true
 

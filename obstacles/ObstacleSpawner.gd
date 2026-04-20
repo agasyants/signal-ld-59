@@ -39,7 +39,7 @@ func _spawn_all() -> void:
 
 		_current_params = params
 		_try_spawn(progress)
-		if randf() < 0.4:
+		if randf() < 0.25:
 			_try_spawn_bonus(progress + interval/2)
 
 		progress += maxf(interval, 3.0)  # минимум 3 метра между препятствиями

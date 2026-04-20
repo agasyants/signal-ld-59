@@ -28,7 +28,6 @@ func finish_level(completed: bool, result: Dictionary = {}) -> void:
 		if current_connection:
 			current_node = current_connection.to_node
 			
-			# Victory check: if current_node has no connections, it's the end!
 			if current_node.connections.is_empty():
 				get_tree().change_scene_to_file("res://Scenes/WinMenu.tscn")
 				return

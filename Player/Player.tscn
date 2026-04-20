@@ -2,15 +2,16 @@
 
 [ext_resource type="Script" uid="uid://cjfvc7ibo14e1" path="res://Player/Player.gd" id="1_xhfnw"]
 [ext_resource type="Shader" uid="uid://c8xhpvw10heje" path="res://Player/Hit.gdshader" id="2_q3lat"]
-[ext_resource type="Environment" uid="uid://dy5vafjht6ugx" path="res://environment.tres" id="2_s1rgi"]
+[ext_resource type="Environment" uid="uid://bl85oxdrhxxej" path="res://environment.tres" id="2_s1rgi"]
 [ext_resource type="Script" uid="uid://ddhdscuohvcm0" path="res://Player/HitEffect.gd" id="3_tok1r"]
-[ext_resource type="Shader" path="res://Player/WhipeIn.gdshader" id="4_6ysni"]
+[ext_resource type="Shader" uid="uid://exymffjbr218" path="res://Player/WhipeIn.gdshader" id="4_6ysni"]
 [ext_resource type="PackedScene" uid="uid://bxrrp825ar6yu" path="res://Pause/PauseMenu.tscn" id="4_ddoul"]
 [ext_resource type="PackedScene" uid="uid://dss81ubul8d0u" path="res://Player/DeathMenu.tscn" id="5_death"]
-[ext_resource type="Script" path="res://Player/WipeIn.gd" id="5_vlldt"]
-[ext_resource type="Script" uid="uid://t7w1kpbpdbq5" path="res://Scaling/ScalingLabel.gd" id="6_scaling"]
+[ext_resource type="Script" uid="uid://cnul6ly322w4h" path="res://Player/WipeIn.gd" id="5_vlldt"]
+[ext_resource type="Script" uid="uid://t7w1kpbpdbq5" path="res://Scenes/animated_label.gd" id="6_scaling"]
 [ext_resource type="AudioStream" uid="uid://bctqvaiwm6elv" path="res://Sounds/jump.wav" id="7_jump"]
 [ext_resource type="AudioStream" uid="uid://dx1dornd1m442" path="res://Sounds/tone.wav" id="8_tone"]
+[ext_resource type="AudioStream" uid="uid://dl0ejo023ce5d" path="res://Effects/hit.mp3" id="10_0j2ni"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tok1r"]
 shader = ExtResource("2_q3lat")
@@ -75,13 +76,15 @@ theme_override_font_sizes/font_size = 40
 text = "COINS: 0"
 script = ExtResource("6_scaling")
 
+[node name="HitSound" type="AudioStreamPlayer" parent="." unique_id=1497618842]
+stream = ExtResource("10_0j2ni")
+volume_db = -1.354
+
 [node name="MoveSound" type="AudioStreamPlayer" parent="." unique_id=33445566]
 stream = ExtResource("8_tone")
 volume_db = -15.0
 autoplay = true
-bus = &"Master"
 
 [node name="JumpSound" type="AudioStreamPlayer" parent="." unique_id=33445567]
 stream = ExtResource("7_jump")
 volume_db = -5.0
-bus = &"Master"

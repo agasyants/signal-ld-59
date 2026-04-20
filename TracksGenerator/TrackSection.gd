@@ -30,4 +30,4 @@ extends Resource
 
 @export_group("Behavior")
 @export var allow_rotating: bool = true
-@export var allow_sliding: bool = false
+@export var allow_sliding: bool = true

@@ -98,6 +98,7 @@ func is_on_ground() -> bool:
 	return current_radius >= tunnel_radius - 0.01
 
 var tween: Tween
+@onready var hit_sound: AudioStreamPlayer = $HitSound
 
 func take_damage(delta: int):
 	health += delta
@@ -109,9 +110,13 @@ func take_damage(delta: int):
 		apply_hit_stop()
 		death_menu.show_death_screen()
 		var root = get_tree().current_scene
+		hit_sound.pitch_scale = 0.5
+		hit_sound.play()
 		if root.has_method("player_died"):
 			root.player_died()
 	else:
+		hit_sound.pitch_scale = randf_range(0.9, 1.1)
+		hit_sound.play()
 		shader.trigger_hit()
 		apply_hit_stop()
 	if tween:
@@ -156,7 +161,7 @@ func apply_bonus(type: Bonus.BonusType) -> void:
 		Bonus.BonusType.SLOW:
 			_apply_slow()
 
-func _apply_slow(scal: float = 0.35, duration: float = 4.0) -> void:
+func _apply_slow(scal: float = 0.6, duration: float = 8.0) -> void:
 	if tween:
 		tween.kill()
 	Engine.time_scale = scal
