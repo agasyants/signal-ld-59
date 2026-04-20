@@ -5,6 +5,7 @@ class_name Player
 @export var inertia_friction: float = 7.0
 @export var inertia_strength: float = 5.0
 @export var health: int = 3
+@export var coins: int = 0
 var angular_velocity: float = 0.0
 var current_angle: float = 0.0
 var radial_velocity: float = 0.0
@@ -16,12 +17,14 @@ var is_jumping: bool = false
 @onready var shader := $Camera3D/CanvasLayer/ColorRect
 @onready var death_menu := $Camera3D/CanvasLayer/DeathMenu
 @onready var health_label := $Camera3D/CanvasLayer/HealthLabel
+@onready var coin_label := $Camera3D/CanvasLayer/CoinLabel
 
 func _ready():
 	shader.trigger_hit()
 	add_to_group("player")
 	current_radius = tunnel_radius
 	_update_health_ui()
+	_update_coins_ui()
 	var area = Area3D.new()
 	add_child(area)
 	var shape = CollisionShape3D.new()
@@ -103,6 +106,10 @@ func _update_health_ui():
 		heart_text += "❤"
 	health_label.text = heart_text
 
+func _update_coins_ui():
+	if coin_label:
+		coin_label.text = "COINS: %d" % coins
+
 func apply_bonus(type: Bonus.BonusType) -> void:
 	match type:
 		Bonus.BonusType.HEALTH:
@@ -114,6 +121,8 @@ func apply_bonus(type: Bonus.BonusType) -> void:
 				root.set_speed_boost(1.4, 5.0)  # множитель, длительность
 
 		Bonus.BonusType.COIN:
+			coins += 1
+			_update_coins_ui()
 			var root = get_tree().current_scene
 			if root.has_method("add_score"):
 				root.add_score(100)

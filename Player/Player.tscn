@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://bxrrp825ar6yu" path="res://Pause/PauseMenu.tscn" id="4_ddoul"]
 [ext_resource type="PackedScene" uid="uid://dss81ubul8d0u" path="res://Player/DeathMenu.tscn" id="5_death"]
 [ext_resource type="Script" path="res://Player/WipeIn.gd" id="5_vlldt"]
+[ext_resource type="Script" uid="uid://t7w1kpbpdbq5" path="res://Scaling/ScalingLabel.gd" id="6_scaling"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tok1r"]
 shader = ExtResource("2_q3lat")
@@ -53,10 +54,21 @@ script = ExtResource("5_vlldt")
 [node name="DeathMenu" parent="Camera3D/CanvasLayer" unique_id=1234743215 instance=ExtResource("5_death")]
 
 [node name="HealthLabel" type="Label" parent="Camera3D/CanvasLayer" unique_id=1182531667]
-offset_left = 491.0
-offset_top = 16.0
-offset_right = 671.0
-offset_bottom = 82.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 200.0
+offset_bottom = 86.0
 theme_override_colors/font_color = Color(1, 0, 0, 1)
 theme_override_font_sizes/font_size = 56
 text = "❤❤❤"
+script = ExtResource("6_scaling")
+
+[node name="CoinLabel" type="Label" parent="Camera3D/CanvasLayer" unique_id=22334455]
+offset_left = 20.0
+offset_top = 80.0
+offset_right = 300.0
+offset_bottom = 146.0
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_font_sizes/font_size = 40
+text = "COINS: 0"
+script = ExtResource("6_scaling")
