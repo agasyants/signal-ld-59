@@ -8,7 +8,7 @@
 [ext_resource type="Script" uid="uid://dosqi48nmva5u" path="res://Scenes/volume_slider.gd" id="5_hwjxs"]
 [ext_resource type="PackedScene" uid="uid://bqug0pcaq7aj8" path="res://Scenes/pc2.tscn" id="7_3bmuq"]
 [ext_resource type="AudioStream" uid="uid://l4i6kblewdt7" path="res://Tracks/Menu.mp3" id="7_nn7w8"]
-[ext_resource type="Script" path="res://Scenes/resolution_dropdown.gd" id="res_dropdown"]
+[ext_resource type="Script" uid="uid://b5olmc4yihvho" path="res://Scenes/resolution_dropdown.gd" id="res_dropdown"]
 
 [sub_resource type="GDScript" id="GDScript_hwjxs"]
 
@@ -66,7 +66,8 @@ offset_top = 186.0
 offset_right = -502.0
 offset_bottom = -479.28003
 theme_override_font_sizes/font_size = 30
-text = "Control <- arrows ->, Space — jump "
+text = "Control <- arrows ->
+Space jump "
 script = ExtResource("3_geirw")
 
 [node name="start_btn" type="Button" parent="." unique_id=893268362]
