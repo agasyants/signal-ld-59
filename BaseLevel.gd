@@ -39,14 +39,11 @@ func _on_track_finished() -> void:
 		coins_collected = _generator.player.coins
 		
 	GameGraph.finish_level(true, {
-		"score": _calculate_score(),
 		"time":  _elapsed,
 		"coins": coins_collected,
 	})
 
-func _calculate_score() -> int:
-	# Базовый счёт за прохождение + бонус за сложность
-	return int(1000.0 * _connection.complexity)
+
 
 # Вызывается если игрок умер
 func player_died() -> void:

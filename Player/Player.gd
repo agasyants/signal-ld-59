@@ -111,6 +111,12 @@ var tween: Tween
 @onready var bonus_sound: AudioStreamPlayer = $BonusSound
 
 func take_damage(delta: int):
+	if delta < 0: # Damage
+		if GameGraph.coins > 0:
+			GameGraph.coins -= 1
+			show_popup_info("-1 COIN", Color.ORANGE_RED)
+		_update_coins_ui()
+	
 	health += delta
 	GameGraph.health = health # Синхронизируем с глобальным состоянием
 	_update_health_ui()
@@ -143,6 +149,10 @@ func _update_health_ui():
 	var heart_text = ""
 	for i in range(max(0, health)):
 		heart_text += "❤"
+	
+	if health >= 5:
+		heart_text += " MAX"
+	
 	health_label.text = heart_text
 
 func _update_coins_ui():
@@ -154,20 +164,22 @@ func apply_bonus(type: Bonus.BonusType) -> void:
 	bonus_sound.play()
 	match type:
 		Bonus.BonusType.HEALTH:
-			health = min(health + 1, 5)
-			GameGraph.health = health # Синхронизируем
-			_update_health_ui()
+			if health >= 5:
+				show_popup_info("HEALTH MAX", Color.ORANGE)
+			else:
+				health = min(health + 1, 5)
+				GameGraph.health = health # Синхронизируем
+				_update_health_ui()
+				show_popup_info("+♥️", Color.RED)
 			# Ускорение — через рут сцену
 			var root = get_tree().current_scene
 			if root.has_method("set_speed_boost"):
-				root.set_speed_boost(1.4, 5.0)  # множитель, длительность
+				root.set_speed_boost(1.4, 5.0) # множитель, длительность
 
 		Bonus.BonusType.COIN:
 			coins += 1
 			_update_coins_ui()
-			var root = get_tree().current_scene
-			if root.has_method("add_score"):
-				root.add_score(100)
+			show_popup_info("+1 COIN", Color.GOLD)
 
 		Bonus.BonusType.SLOW:
 			_apply_slow()
@@ -177,5 +189,42 @@ func _apply_slow(scal: float = 0.6, duration: float = 8.0) -> void:
 		tween.kill()
 	Engine.time_scale = scal
 	tween = create_tween().set_parallel(true)
-	tween.tween_property(Engine, "time_scale", 1.0, duration)\
+	tween.tween_property(Engine, "time_scale", 1.0, duration) \
 		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+
+func show_popup_info(text: String, color: Color):
+	var label = Label.new()
+	label.text = text
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	
+	# Style
+	label.add_theme_font_size_override("font_size", 64)
+	label.add_theme_color_override("font_color", color)
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_constant_override("outline_size", 12)
+	
+	# Add to HUD layer
+	var hud_layer = $Camera3D/CanvasLayer
+	hud_layer.add_child(label)
+	
+	# Center it
+	var screen_size = get_viewport().get_visible_rect().size
+	label.custom_minimum_size = Vector2(400, 100)
+	label.position = (screen_size - label.custom_minimum_size) / 2.0
+	label.pivot_offset = label.custom_minimum_size / 2.0
+	
+	# Animation
+	label.scale = Vector2.ZERO
+	label.modulate.a = 1.0
+	
+	var ptween = create_tween().set_parallel(false)
+	# Pop in
+	ptween.tween_property(label, "scale", Vector2.ONE * 1.2, 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	ptween.tween_property(label, "scale", Vector2.ONE, 0.1)
+	# Wait
+	ptween.tween_interval(0.6)
+	# Fade and float up
+	var drift_tween = create_tween().set_parallel(true)
+	drift_tween.tween_property(label, "modulate:a", 0.0, 0.4)
+	drift_tween.tween_property(label, "position:y", label.position.y - 150, 0.4)
+	drift_tween.finished.connect(label.queue_free)

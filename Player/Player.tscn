@@ -65,7 +65,6 @@ theme_override_colors/font_color = Color(1, 0, 0, 1)
 theme_override_font_sizes/font_size = 56
 text = "❤❤❤"
 horizontal_alignment = 2
-script = ExtResource("6_scaling")
 
 [node name="CoinLabel" type="Label" parent="Camera3D/CanvasLayer" unique_id=22334455]
 offset_left = 734.0
@@ -76,7 +75,6 @@ theme_override_colors/font_color = Color(1, 1, 0, 1)
 theme_override_font_sizes/font_size = 40
 text = "COINS: 0"
 horizontal_alignment = 2
-script = ExtResource("6_scaling")
 
 [node name="HitSound" type="AudioStreamPlayer" parent="." unique_id=1497618842]
 stream = ExtResource("10_0j2ni")

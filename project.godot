@@ -33,6 +33,9 @@ import/blender/enabled=false
 [gui]
 
 theme/custom_font="uid://cb62yxmf3p41h"
+theme/size/viewport_height=6648
+theme/dpi/allow_hidpi=false
+theme/stretch/aspect="expand"
 
 [input]
 

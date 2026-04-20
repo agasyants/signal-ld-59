@@ -19,7 +19,9 @@ func _init(_id, _lvl, _idx):
 	node_type = types.pick_random()
 	ip_address = "%d.%d.%d.%d" % [randi_range(10, 255), randi_range(0, 255), randi_range(0, 255), randi_range(1, 254)]
 	
-	# Randomize reward for demo
-	if randf() > 0.7:
-		reward_type = ["health", "points"].pick_random()
-		reward_amount = randi_range(1, 10) * (10 if reward_type == "points" else 1)
+	# Always give a reward
+	reward_type = ["health", "points"].pick_random()
+	if reward_type == "points":
+		reward_amount = randi_range(2, 5) # 2 to 5 coins
+	else:
+		reward_amount = 1 # Always +1 health

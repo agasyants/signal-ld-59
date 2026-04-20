@@ -5,10 +5,10 @@ var levels = [] # Массив массивов узлов
 var current_node: MyGraphNode
 var current_connection: MyGraphConnection
 
-var score: int = 0
+var score: int = 1000
 var coins: int = 0
 var health: int = 3
-var last_result := { "completed": false, "score": 0, "time": 0.0, "coins": 0 }
+var last_result := {"completed": false, "score": 0, "time": 0.0, "coins": 0}
 
 func start_level(connection: MyGraphConnection) -> void:
 	current_connection = connection
@@ -18,9 +18,9 @@ func finish_level(completed: bool, result: Dictionary = {}) -> void:
 	Engine.time_scale = 1.0
 	last_result = {
 		"completed": completed,
-		"score":     result.get("score", 0),
-		"time":      result.get("time",  0.0),
-		"coins":     result.get("coins", 0),
+		"score": result.get("score", 0),
+		"time": result.get("time", 0.0),
+		"coins": result.get("coins", 0),
 	}
 	if completed:
 		score += last_result["score"]
@@ -28,25 +28,35 @@ func finish_level(completed: bool, result: Dictionary = {}) -> void:
 		if current_connection:
 			current_node = current_connection.to_node
 			
+			# Apply node rewards
+			if current_node.reward_type == "health":
+				health = min(health + current_node.reward_amount, 5)
+			elif current_node.reward_type == "points":
+				score += current_node.reward_amount
+			
 			if current_node.connections.is_empty():
+				coins += 5 # Always give 5 coins on victory
+				print("GameGraph: Victory reached! Transitioning to WinMenu.tscn")
 				get_tree().change_scene_to_file("res://Scenes/WinMenu.tscn")
 				return
 	
+	print("GameGraph: Level finished. Returning to GameGraph.tscn")
 	get_tree().change_scene_to_file("res://Scenes/GameGraph.tscn")
 
 func reset_run() -> void:
 	Engine.time_scale = 1.0
 	current_connection = null
-	score  = 0
-	coins  = 0
+	score = 1000
+	coins = 0
 	health = 3
-	last_result = { "completed": false, "score": 0, "time": 0.0 }
-	generate_planar_graph(5)
+	last_result = {"completed": false, "score": 0, "time": 0.0}
+	generate_planar_graph(0)
 	if levels.size() > 0 and levels[0].size() > 0:
 		current_node = levels[0][0]
 
 func _init() -> void:
-	generate_planar_graph(5)
+	coins = 3
+	generate_planar_graph(4)
 	if levels.size() > 0 and levels[0].size() > 0:
 		current_node = levels[0][0]
 		
@@ -82,9 +92,9 @@ func generate_planar_graph(num_middle_levels: int):
 				end_target = next_level.size() - 1
 				
 			for target_idx in range(start_target, end_target + 1):
-				var current_track = tracks[randi_range(0,tracks.size()-1)]
+				var current_track = tracks[randi_range(0, tracks.size() - 1)]
 				var target_node = next_level[target_idx]
-				var complexity = 1 + float(i)/2 + (randf()-0.5)*0.8
+				var complexity = 1 + float(i) / 2 + (randf() - 0.5) * 0.8
 				var connection = MyGraphConnection.new(node, target_node, complexity, current_track)
 				
 				# Временно назначаем один и тот же трек всем соединениям

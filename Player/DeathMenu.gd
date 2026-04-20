@@ -22,4 +22,5 @@ func _on_back_pressed():
 
 func show_death_screen():
 	get_tree().paused = true
+	label.text = "SYSTEM FAILURE\nCONNECTION TERMINATED"
 	show()

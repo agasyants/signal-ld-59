@@ -33,6 +33,25 @@ func update_graph() -> void:
 	status_label.modulate = Color(0, 1, 0.5, 0.2)
 	status_label.position = Vector2(40, 70) * k
 	graph_container.add_child(status_label)
+
+	# --- Player Stats HUD ---
+	var coins_label = Label.new()
+	coins_label.text = "DATA COINS: %d" % GameGraph.coins
+	coins_label.add_theme_font_size_override("font_size", int(16 * k))
+	coins_label.modulate = Color.GOLD
+	coins_label.position = Vector2(screen_size.x - 300 * k, 70 * k)
+	graph_container.add_child(coins_label)
+
+	var health_label = Label.new()
+	var hearts = ""
+	for i in range(GameGraph.health): hearts += "❤"
+	if GameGraph.health >= 5:
+		hearts += " MAX"
+	health_label.text = "INTEGRITY: %s" % hearts
+	health_label.add_theme_font_size_override("font_size", int(16 * k))
+	health_label.modulate = Color.ORANGE_RED
+	health_label.position = Vector2(screen_size.x - 300 * k, 95 * k)
+	graph_container.add_child(health_label)
 	
 	var total_levels = GameGraph.levels.size()
 	var max_nodes_in_level = 0
@@ -177,7 +196,8 @@ func update_graph() -> void:
 			# Отображение награды (чуть ниже теперь)
 			if node.reward_type != "none":
 				var label = Label.new()
-				label.text = "%s: +%d" % [node.reward_type.capitalize(), node.reward_amount]
+				var display_name = "Coins" if node.reward_type == "points" else node.reward_type.capitalize()
+				label.text = "%s: +%d" % [display_name, node.reward_amount]
 				label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 				label.position = node_pos + (Vector2(-50, 60) * k)
 				label.custom_minimum_size = Vector2(100, 20) * k
