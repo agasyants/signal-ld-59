@@ -3,8 +3,8 @@ class_name Player
 
 @export var rotate_speed: float = 3.5
 @export var tunnel_radius := 1.7
-@export var inertia_friction: float = 5.0
-@export var inertia_strength: float = 4.0
+@export var inertia_friction: float = 7.0
+@export var inertia_strength: float = 5.0
 @export var free_move_speed: float = 5.0
 
 @export var health: int = 3

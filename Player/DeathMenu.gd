@@ -8,7 +8,7 @@ func _ready():
 	back_button.pressed.connect(_on_back_pressed)
 	hide()
 
-func _process(delta):
+func _process(_delta):
 	if visible:
 		# Flashing effect
 		var pulse = (sin(Time.get_ticks_msec() * 0.01) + 1.0) * 0.5

@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="TrackData" format=3 uid="uid://2uar2drat3ck"]
+
+[ext_resource type="AudioStream" uid="uid://btgai8714rw0m" path="res://Tracks/Shade/Shade.mp3" id="1_n3wm7"]
+[ext_resource type="Script" uid="uid://ctnkck34hidh0" path="res://TracksGenerator/TrackData.gd" id="2_18r22"]
+[ext_resource type="Script" uid="uid://bmghgvae3181i" path="res://TracksGenerator/TrackSection.gd" id="3_2a6cy"]
+
+[sub_resource type="Resource" id="Resource_a271m"]
+script = ExtResource("3_2a6cy")
+speed_curve = Vector2(0.1, 0.1)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_2htch"]
+script = ExtResource("3_2a6cy")
+time = 5.0
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_w1jhu"]
+script = ExtResource("3_2a6cy")
+time = 62.0
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_e63nn"]
+script = ExtResource("3_2a6cy")
+time = 67.0
+speed_curve = Vector2(0.15, 0.15)
+density_curve = Vector2(0.5, 0.5)
+allow_rotating = false
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_avtcu"]
+script = ExtResource("3_2a6cy")
+time = 80.0
+density_curve = Vector2(0.7, 0.7)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_13bca"]
+script = ExtResource("3_2a6cy")
+time = 81.0
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[resource]
+script = ExtResource("2_18r22")
+track_name = "Shade"
+music = ExtResource("1_n3wm7")
+sections = Array[ExtResource("3_2a6cy")]([SubResource("Resource_a271m"), SubResource("Resource_2htch"), SubResource("Resource_w1jhu"), SubResource("Resource_e63nn"), SubResource("Resource_avtcu"), SubResource("Resource_13bca")])

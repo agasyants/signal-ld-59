@@ -2,9 +2,11 @@
 
 [ext_resource type="Script" uid="uid://cjfvc7ibo14e1" path="res://Player/Player.gd" id="1_xhfnw"]
 [ext_resource type="Shader" uid="uid://c8xhpvw10heje" path="res://Player/Hit.gdshader" id="2_q3lat"]
-[ext_resource type="Script" path="res://Player/HitEffect.gd" id="3_tok1r"]
+[ext_resource type="Script" uid="uid://ddhdscuohvcm0" path="res://Player/HitEffect.gd" id="3_tok1r"]
+[ext_resource type="Shader" uid="uid://exymffjbr218" path="res://Player/WhipeIn.gdshader" id="4_6ysni"]
 [ext_resource type="PackedScene" uid="uid://bxrrp825ar6yu" path="res://Pause/PauseMenu.tscn" id="4_ddoul"]
 [ext_resource type="PackedScene" uid="uid://dss81ubul8d0u" path="res://Player/DeathMenu.tscn" id="5_death"]
+[ext_resource type="Script" uid="uid://cnul6ly322w4h" path="res://Player/WipeIn.gd" id="5_vlldt"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hwjxs"]
 sky_top_color = Color(0, 0, 0, 1)
@@ -27,17 +29,23 @@ shader = ExtResource("2_q3lat")
 shader_parameter/shake_intensity = 0.0
 shader_parameter/glitch_intensity = 0.0
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vlldt"]
+shader = ExtResource("4_6ysni")
+shader_parameter/progress = 1.0
+shader_parameter/intensity = 2.0
+
 [node name="Node3D" type="Node3D" unique_id=1879108322]
 script = ExtResource("1_xhfnw")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=86636411]
-transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.06864834)
 environment = SubResource("Environment_hwjxs")
 fov = 100.0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="Camera3D" unique_id=2007247693]
 
 [node name="ColorRect" type="ColorRect" parent="Camera3D/CanvasLayer" unique_id=1225159589]
+visible = false
 material = SubResource("ShaderMaterial_tok1r")
 anchors_preset = 15
 anchor_right = 1.0
@@ -45,6 +53,15 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("3_tok1r")
+
+[node name="ColorRect2" type="ColorRect" parent="Camera3D/CanvasLayer" unique_id=59301191]
+material = SubResource("ShaderMaterial_vlldt")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_vlldt")
 
 [node name="PauseMenu" parent="Camera3D/CanvasLayer" unique_id=1272836891 instance=ExtResource("4_ddoul")]
 

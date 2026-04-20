@@ -38,10 +38,6 @@ func _process(_delta: float) -> void:
 	if _player and "health" in _player:
 		health_str = "[b]Health:[/b] %d\n" % _player.health
 
-	var tunnel_radius_str := ""
-	if _player and "tunnel_radius" in _player:
-		tunnel_radius_str = "[b]Orbit radius:[/b] %.2f\n" % _player.tunnel_radius
-
 	_label.text = (
 		"[color=#00f5ff][b]═══ DEBUG HUD ═══[/b][/color]\n"
 		+ "\n[color=#aaffaa][b]── TRACK ──[/b][/color]\n"

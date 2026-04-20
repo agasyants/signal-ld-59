@@ -35,7 +35,6 @@ func sample(time: float) -> Dictionary:
 	var radius_k     := _interp_with_values(interp_values.radius_va, interp_values.radius_vb, t)
 	
 	var r_min = session["radius"] * radius_k
-	print(r_min, " ", radius_k, " ", session["radius"])
 	
 	return {
 		"speed":          session["speed"]      * speed_k,
@@ -99,9 +98,17 @@ func _interp_with_values(va: float, vb: float, t: float) -> float:
 
 func _session_obstacle_mask() -> int:
 	var mask := 0
-	if session.get("allow_wall",   true): mask |= 1
-	if session.get("allow_pillar", true): mask |= 2
-	if session.get("allow_ring",   true): mask |= 4
+	if session.get("allow_wall",      true): mask |= 1
+	if session.get("allow_pillar",    true): mask |= 2
+	if session.get("allow_ring",      true): mask |= 4
+	if session.get("allow_gateway",   true): mask |= 8
+	if session.get("allow_switch",    true): mask |= 16
+	if session.get("allow_spinner",   true): mask |= 32
+	if session.get("allow_spikes",    true): mask |= 64
+	if session.get("allow_bars",      true): mask |= 128
+	if session.get("allow_lasergrid", true): mask |= 256
+	if session.get("allow_pendulum",  true): mask |= 512
+	if session.get("allow_vortex",    true): mask |= 1024
 	return mask
 
 func _session_bonus_mask() -> int:

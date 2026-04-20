@@ -1,0 +1,72 @@
+[gd_resource type="Resource" script_class="TrackData" format=3 uid="uid://dw3c4ggkn1q3a"]
+
+[ext_resource type="AudioStream" uid="uid://t5g08cnsiwvq" path="res://Tracks/Above/Above the Skies (Remaster).mp3" id="1_eopwt"]
+[ext_resource type="Script" uid="uid://ctnkck34hidh0" path="res://TracksGenerator/TrackData.gd" id="1_q6rga"]
+[ext_resource type="Script" uid="uid://bmghgvae3181i" path="res://TracksGenerator/TrackSection.gd" id="2_eopwt"]
+
+[sub_resource type="Resource" id="Resource_m7eoa"]
+script = ExtResource("2_eopwt")
+speed_curve = Vector2(0.12, 0.14)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_ri1um"]
+script = ExtResource("2_eopwt")
+time = 100.0
+difficulty_curve = Vector2(0.4, 0.6)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_q6rga"]
+script = ExtResource("2_eopwt")
+time = 110.0
+speed_curve = Vector2(2, 2)
+density_curve = Vector2(0.3, 0.3)
+difficulty_curve = Vector2(0.2, 0.2)
+radius_curve = Vector2(20, 20)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_eopwt"]
+script = ExtResource("2_eopwt")
+time = 175.0
+speed_curve = Vector2(2, 2)
+radius_curve = Vector2(15, 15)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_5rnje"]
+script = ExtResource("2_eopwt")
+time = 180.0
+density_curve = Vector2(0, 0)
+difficulty_curve = Vector2(0, 0)
+radius_curve = Vector2(2, 2)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_0a815"]
+script = ExtResource("2_eopwt")
+time = 189.0
+speed_curve = Vector2(0.1, 0.1)
+density_curve = Vector2(0.2, 0.2)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_xj4wn"]
+script = ExtResource("2_eopwt")
+time = 192.0
+speed_curve = Vector2(0.25, 0.25)
+density_curve = Vector2(1, 1.2)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_0wk5j"]
+script = ExtResource("2_eopwt")
+time = 205.0
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_y6dnu"]
+script = ExtResource("2_eopwt")
+time = 215.0
+speed_curve = Vector2(0.1, 0.1)
+density_curve = Vector2(0, 0)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[resource]
+script = ExtResource("1_q6rga")
+track_name = "Above"
+music = ExtResource("1_eopwt")
+sections = Array[ExtResource("2_eopwt")]([SubResource("Resource_m7eoa"), SubResource("Resource_ri1um"), SubResource("Resource_q6rga"), SubResource("Resource_eopwt"), SubResource("Resource_5rnje"), SubResource("Resource_0a815"), SubResource("Resource_xj4wn"), SubResource("Resource_0wk5j"), SubResource("Resource_y6dnu")])

@@ -21,19 +21,25 @@ func _init(_from: MyGraphNode, _to: MyGraphNode, _complexity: float = 1.0, _trac
 # complexity 1..5 → сессионные параметры
 # Чем выше complexity, тем быстрее, плотнее и сложнее
 func _generate_session(c: float) -> Dictionary:
-	# Нормализуем complexity в [0, 1]
 	var t := clampf((c - 1.0) / 4.0, 0.0, 1.0)
-	var s = {
-		"speed":          lerpf(70.0,  70.0, t),
-		"density":        lerpf(0.9,  0.9,  t),
-		"difficulty":     lerpf(0.1,  1.0,  t),
-		"radius":         lerpf(2.0, 2.0,  t),
-		"allow_wall":     true,
-		"allow_pillar":   true,
-		"allow_ring":     t > 0.3,
-		"allow_bonuses":  true,
-		"allow_rotating": t > 0.2,
-		"allow_sliding":  t > 0.5,
-		"seed":           randi() # Фиксированный сид для этой связи
+	return {
+		"speed":            lerpf(60.0, 60.0, t),
+		"density":          lerpf(0.7,  0.7,  t),
+		"difficulty":       lerpf(1.0,  1.0,  t),
+		"radius":           lerpf(2.0,  2.0,  t),
+		"allow_wall":       true,
+		"allow_pillar":     true,
+		"allow_ring":       true,
+		"allow_gateway":    true,
+		"allow_switch":     true,
+		"allow_spinner":    true,
+		"allow_spikes":     true,
+		"allow_bars":       true,
+		"allow_lasergrid":  true,
+		"allow_pendulum":   true,
+		"allow_vortex":     true,
+		"allow_bonuses":    true,
+		"allow_rotating":   t > 0.2,
+		"allow_sliding":    t > 0.5,
+		"seed":             randi()
 	}
-	return s

@@ -1,0 +1,66 @@
+[gd_resource type="Resource" script_class="TrackData" format=3 uid="uid://dwfm62swn51pv"]
+
+[ext_resource type="AudioStream" uid="uid://vpuyrpu04c3c" path="res://Tracks/Blizzard/Blizzard (Remaster 2).mp3" id="1_lwg86"]
+[ext_resource type="Script" uid="uid://ctnkck34hidh0" path="res://TracksGenerator/TrackData.gd" id="2_ror2p"]
+[ext_resource type="Script" uid="uid://bmghgvae3181i" path="res://TracksGenerator/TrackSection.gd" id="3_pnvim"]
+
+[sub_resource type="Resource" id="Resource_tm3by"]
+script = ExtResource("3_pnvim")
+speed_curve = Vector2(2, 2)
+density_curve = Vector2(0.1, 0.1)
+radius_curve = Vector2(20, 20)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_nshb1"]
+script = ExtResource("3_pnvim")
+time = 20.0
+speed_curve = Vector2(2, 2)
+radius_curve = Vector2(18, 18)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_gfoqq"]
+script = ExtResource("3_pnvim")
+time = 38.0
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_dkken"]
+script = ExtResource("3_pnvim")
+time = 80.0
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_8ysc8"]
+script = ExtResource("3_pnvim")
+time = 90.0
+speed_curve = Vector2(0.15, 0.15)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_m0ofv"]
+script = ExtResource("3_pnvim")
+time = 111.0
+speed_curve = Vector2(0.15, 0.15)
+density_curve = Vector2(2, 2)
+obstacle_types = 2027
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_g4yn4"]
+script = ExtResource("3_pnvim")
+time = 160.0
+speed_curve = Vector2(0.15, 0.15)
+radius_curve = Vector2(1.5, 1.5)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_qxx45"]
+script = ExtResource("3_pnvim")
+time = 174.0
+speed_curve = Vector2(0.25, 0.25)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_ef47k"]
+script = ExtResource("3_pnvim")
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[resource]
+script = ExtResource("2_ror2p")
+track_name = "Blizzard"
+music = ExtResource("1_lwg86")
+sections = Array[ExtResource("3_pnvim")]([SubResource("Resource_tm3by"), SubResource("Resource_nshb1"), SubResource("Resource_gfoqq"), SubResource("Resource_dkken"), SubResource("Resource_8ysc8"), SubResource("Resource_m0ofv"), SubResource("Resource_g4yn4"), SubResource("Resource_qxx45"), SubResource("Resource_ef47k")])

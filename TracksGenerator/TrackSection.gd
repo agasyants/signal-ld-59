@@ -23,7 +23,7 @@ extends Resource
 
 @export_group("Obstacle Types")
 # Битовые флаги — пересекаются с глобальными разрешениями сессии
-@export_flags("Wall", "Pillar", "Ring") var obstacle_types: int = 7
+@export_flags("Wall", "Pillar", "Ring", "Gateway", "Switch", "Spinner", "Spikes", "Bars", "LaserGrid", "Pendulum", "Vortex") var obstacle_types: int = 2047
 
 @export_group("Bonus Types")
 @export_flags("Health", "Shield", "Slow") var bonus_types: int = 0

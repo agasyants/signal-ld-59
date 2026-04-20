@@ -1,0 +1,50 @@
+[gd_resource type="Resource" script_class="TrackData" format=3 uid="uid://box12wfc6fgv4"]
+
+[ext_resource type="AudioStream" uid="uid://djchdeb3i57n1" path="res://Tracks/Daft/Daft.mp3" id="1_fi178"]
+[ext_resource type="Script" uid="uid://ctnkck34hidh0" path="res://TracksGenerator/TrackData.gd" id="1_iemy4"]
+[ext_resource type="Script" uid="uid://bmghgvae3181i" path="res://TracksGenerator/TrackSection.gd" id="2_fi178"]
+
+[sub_resource type="Resource" id="Resource_6o6ws"]
+script = ExtResource("2_fi178")
+speed_curve = Vector2(0.1, 0.1)
+density_curve = Vector2(0.5, 0.5)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_8ypn4"]
+script = ExtResource("2_fi178")
+time = 5.0
+obstacle_types = 251
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_w5vgt"]
+script = ExtResource("2_fi178")
+time = 25.0
+density_curve = Vector2(0.8, 0.8)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_fokeo"]
+script = ExtResource("2_fi178")
+time = 30.0
+speed_curve = Vector2(0.4, 0.4)
+density_curve = Vector2(0.5, 0.5)
+radius_curve = Vector2(2, 2)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_chs0x"]
+script = ExtResource("2_fi178")
+time = 40.0
+speed_curve = Vector2(0.4, 0.4)
+density_curve = Vector2(0.6, 0.6)
+radius_curve = Vector2(2, 2)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_iemy4"]
+script = ExtResource("2_fi178")
+time = 45.0
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[resource]
+script = ExtResource("1_iemy4")
+track_name = "Daft"
+music = ExtResource("1_fi178")
+sections = Array[ExtResource("2_fi178")]([SubResource("Resource_6o6ws"), SubResource("Resource_8ypn4"), SubResource("Resource_w5vgt"), SubResource("Resource_fokeo"), SubResource("Resource_chs0x"), SubResource("Resource_iemy4")])

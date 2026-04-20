@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://t5g08cnsiwvq"
+path="res://.godot/imported/Above the Skies (Remaster).mp3-adf72dacf50b176c43b7155d1a991f75.mp3str"
+
+[deps]
+
+source_file="res://Tracks/Above/Above the Skies (Remaster).mp3"
+dest_files=["res://.godot/imported/Above the Skies (Remaster).mp3-adf72dacf50b176c43b7155d1a991f75.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

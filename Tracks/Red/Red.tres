@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="TrackData" format=3 uid="uid://g5wyrmtbrip"]
+
+[ext_resource type="AudioStream" uid="uid://djgobyjewa1d0" path="res://Tracks/Red/Red.mp3" id="1_1puhf"]
+[ext_resource type="Script" uid="uid://ctnkck34hidh0" path="res://TracksGenerator/TrackData.gd" id="2_psb2j"]
+[ext_resource type="Script" uid="uid://bmghgvae3181i" path="res://TracksGenerator/TrackSection.gd" id="3_6o5yh"]
+
+[sub_resource type="Resource" id="Resource_fl5oy"]
+script = ExtResource("3_6o5yh")
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_xbe2s"]
+script = ExtResource("3_6o5yh")
+time = 104.0
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_pqylu"]
+script = ExtResource("3_6o5yh")
+time = 120.0
+density_curve = Vector2(0.5, 0.5)
+radius_curve = Vector2(2, 2)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_kqd8s"]
+script = ExtResource("3_6o5yh")
+time = 150.0
+density_curve = Vector2(0.8, 0.8)
+radius_curve = Vector2(2, 2)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_fhbsl"]
+script = ExtResource("3_6o5yh")
+time = 155.0
+density_curve = Vector2(1.2, 1.2)
+difficulty_curve = Vector2(0.4, 0.4)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_7qw4d"]
+script = ExtResource("3_6o5yh")
+time = 230.0
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_yhi2u"]
+script = ExtResource("3_6o5yh")
+time = 250.0
+density_curve = Vector2(0, 0)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[resource]
+script = ExtResource("2_psb2j")
+track_name = "Red"
+music = ExtResource("1_1puhf")
+sections = Array[ExtResource("3_6o5yh")]([SubResource("Resource_fl5oy"), SubResource("Resource_xbe2s"), SubResource("Resource_pqylu"), SubResource("Resource_kqd8s"), SubResource("Resource_fhbsl"), SubResource("Resource_7qw4d"), SubResource("Resource_yhi2u")])

@@ -26,24 +26,24 @@ func setup(c: Curve3D, p: Node3D, gen: Node3D, tp: TrackPlayer) -> void:
 
 func _spawn_all() -> void:
 	var length := curve.get_baked_length()
-	var progress := 40.0  # отступ от старта
+	var progress := 40.0
 	var track_data := track_player.track
 	var session_speed: float = track_player.session["speed"]
-	
+
 	while progress < length - 20.0:
-		# Берём параметры трека в этой временной точке через точное соответствие расстояние -> время
 		var time = track_data.get_time_at_dist(progress, session_speed)
 		var params := track_player._sampler.sample(time)
-		
+
 		var density: float = params.get("density", 0.5)
-		var interval := lerpf(40.0, 5.0, density)
-		
+		# density 0..1 → интервал 40..5, с рандомным разбросом
+		var base_interval := lerpf(40.0, 5.0, density)
+		var spread := lerpf(10.0, 1.0, density)  # при низкой плотности разброс больше
+		var interval := base_interval + _rng.randf_range(-spread, spread)
+
 		_current_params = params
 		_try_spawn(progress)
-		
-		progress += interval + _rng.randf_range(-2.0, 2.0)
-	
-	print("Spawned all obstacles. Curve length: ", length)
+
+		progress += maxf(interval, 3.0)  # минимум 3 метра между препятствиями
 
 func _on_params_changed(params: Dictionary) -> void:
 	_current_params = params
@@ -95,16 +95,32 @@ func _try_spawn_bonus(progress: float) -> void:
 func _pick_obstacle() -> Obstacle:
 	var types: int = _current_params.get("obstacle_types", 7)
 	var available: Array[String] = []
-	if types & 1: available.append("wall")
-	if types & 2: available.append("pillar")
-	if types & 4: available.append("ring")
+	if types & 1:    available.append("wall")
+	if types & 2:    available.append("pillar")
+	if types & 4:    available.append("ring")
+	if types & 8:    available.append("gateway")
+	if types & 16:   available.append("switch")
+	if types & 32:   available.append("spinner")
+	if types & 64:   available.append("spikes")
+	if types & 128:  available.append("bars")
+	if types & 256:  available.append("lasergrid")
+	if types & 512:  available.append("pendulum")
+	if types & 1024: available.append("vortex")
 	if available.is_empty():
 		return null
 
 	match available[_rng.randi() % available.size()]:
-		"wall":   return WallObstacle.new()
-		"pillar": return PillarObstacle.new()
-		"ring":   return RingObstacle.new()
+		"wall":      return WallObstacle.new()
+		"pillar":    return PillarObstacle.new()
+		"ring":      return RingObstacle.new()
+		"gateway":   return GatewayObstacle.new()
+		"switch":    return SwitchObstacle.new()
+		"spinner":   return SpinnerObstacle.new()
+		"spikes":    return SpikeObstacle.new()
+		"bars":      return BarsObstacle.new()
+		"lasergrid": return LaserGridObstacle.new()
+		"pendulum":  return PendulumObstacle.new()
+		"vortex":    return VortexObstacle.new()
 	return null
 
 func _build_params(obstacle: Obstacle, tunnel_radius: float) -> Dictionary:
@@ -119,9 +135,14 @@ func _build_params(obstacle: Obstacle, tunnel_radius: float) -> Dictionary:
 
 	var params := {
 		"mode":  mode,
-		# difficulty 0..1 → скорость препятствия 0.3..4.0
 		"speed": lerpf(0.3, 4.0, difficulty) + _rng.randf_range(-0.2, 0.2),
 	}
+
+	# Линейный проход — для Gateway, Bars
+	var passage_width := lerpf(tunnel_radius * 1.2, tunnel_radius * 0.3, difficulty)
+	
+	# Угловой проход — для Ring, Wall
+	var passage_angle := lerpf(PI * 1.0, PI * 0.2, difficulty)
 
 	if obstacle is WallObstacle:
 		params["gap_start"] = _rng.randf() * TAU
@@ -130,7 +151,27 @@ func _build_params(obstacle: Obstacle, tunnel_radius: float) -> Dictionary:
 		params["amplitude"] = tunnel_radius * lerpf(0.2, 0.6, difficulty)
 	elif obstacle is RingObstacle:
 		params["gap_start"] = _rng.randf() * TAU
-		params["gap_size"]  = lerpf(PI * 0.7, PI * 0.25, difficulty)
+		params["gap_size"]  = passage_angle
+	elif obstacle is GatewayObstacle:
+		params["gap_width"]  = passage_width
+		params["gap_offset"] = _rng.randf_range(-tunnel_radius * 0.3, tunnel_radius * 0.3)
+		params["gap_start"]  = _rng.randf() * TAU
+	elif obstacle is SwitchObstacle:
+		params["gap_start"] = _rng.randf() * TAU
+	elif obstacle is SpinnerObstacle:
+		params["blade_count"] = 3
+		params["speed"]       = lerpf(1.0, 5.0, difficulty)
+	elif obstacle is SpikeObstacle:
+		params["gap_count"] = roundi(lerpf(4.0, 2.0, difficulty))
+	elif obstacle is BarsObstacle:
+		params["gap"]       = passage_width
+		params["gap_start"] = _rng.randf() * TAU
+	elif obstacle is LaserGridObstacle:
+		params["h_count"] = roundi(lerpf(2.0, 4.0, difficulty))
+		params["v_count"] = roundi(lerpf(2.0, 4.0, difficulty))
+	elif obstacle is PendulumObstacle:
+		params["speed"]     = lerpf(1.0, 3.0, difficulty)
+		params["amplitude"] = lerpf(PI * 0.4, PI * 0.8, difficulty)
 
 	return params
 
