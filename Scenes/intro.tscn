@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://dosqi48nmva5u" path="res://Scenes/volume_slider.gd" id="5_hwjxs"]
 [ext_resource type="PackedScene" uid="uid://bqug0pcaq7aj8" path="res://Scenes/pc2.tscn" id="7_3bmuq"]
 [ext_resource type="AudioStream" uid="uid://l4i6kblewdt7" path="res://Tracks/Menu.mp3" id="7_nn7w8"]
+[ext_resource type="Script" uid="uid://c6gtgp8nbq5jx" path="res://Scenes/quit_btn.gd" id="quit_btn_scr"]
 [ext_resource type="Script" uid="uid://b5olmc4yihvho" path="res://Scenes/resolution_dropdown.gd" id="res_dropdown"]
 
 [sub_resource type="GDScript" id="GDScript_hwjxs"]
@@ -82,6 +83,17 @@ offset_bottom = 329.0
 theme_override_font_sizes/font_size = 56
 text = "START GAME"
 script = ExtResource("4_hwjxs")
+
+[node name="quit_btn" type="Button" parent="." unique_id=893268363]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 39.0
+offset_top = 390.0
+offset_right = 141.0
+offset_bottom = 417.0
+theme_override_font_sizes/font_size = 56
+text = "QUIT"
+script = ExtResource("quit_btn_scr")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1323682445]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.105367, -0.32001185)

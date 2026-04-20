@@ -3,20 +3,15 @@ extends Control
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	$VBoxContainer/ResumeButton.pressed.connect(_on_resume_button_pressed)
-	$VBoxContainer/RestartButton.pressed.connect(_on_restart_button_pressed)
 	$VBoxContainer/QuitButton.pressed.connect(_on_quit_button_pressed)
 	hide()
 
 func _on_resume_button_pressed():
 	resume()
 
-func _on_restart_button_pressed():
-	resume()
-	get_tree().reload_current_scene()
-	
 func _on_quit_button_pressed():
 	resume()
-	get_tree().quit()
+	get_tree().change_scene_to_file("res://Scenes/intro.tscn")
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
