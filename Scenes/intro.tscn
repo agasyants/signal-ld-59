@@ -1,13 +1,14 @@
 [gd_scene format=3 uid="uid://bwoatb7ojru75"]
 
 [ext_resource type="Shader" uid="uid://bx0ew0a85fy1r" path="res://Scenes/intro.gdshader" id="1_alxvg"]
-[ext_resource type="Environment" uid="uid://dy5vafjht6ugx" path="res://environment.tres" id="1_nn7w8"]
+[ext_resource type="Environment" uid="uid://bl85oxdrhxxej" path="res://environment.tres" id="1_nn7w8"]
 [ext_resource type="Script" uid="uid://e2hxu1x65fg5" path="res://Scenes/mesh_instance_3d.gd" id="2_rsiac"]
 [ext_resource type="Script" uid="uid://t7w1kpbpdbq5" path="res://Scenes/animated_label.gd" id="3_geirw"]
 [ext_resource type="Script" uid="uid://dsia4aideqckd" path="res://Scenes/start_btn.gd" id="4_hwjxs"]
 [ext_resource type="Script" uid="uid://dosqi48nmva5u" path="res://Scenes/volume_slider.gd" id="5_hwjxs"]
 [ext_resource type="PackedScene" uid="uid://bqug0pcaq7aj8" path="res://Scenes/pc2.tscn" id="7_3bmuq"]
 [ext_resource type="AudioStream" uid="uid://l4i6kblewdt7" path="res://Tracks/Menu.mp3" id="7_nn7w8"]
+[ext_resource type="Script" uid="uid://b5olmc4yihvho" path="res://Scenes/resolution_dropdown.gd" id="res_dropdown"]
 
 [sub_resource type="GDScript" id="GDScript_hwjxs"]
 
@@ -46,12 +47,12 @@ script = ExtResource("2_rsiac")
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
-anchor_bottom = 0.97400004
+anchor_bottom = 1.0
 offset_left = 21.0
 offset_top = 24.0
-offset_right = -293.0
-offset_bottom = -455.15204
-theme_override_font_sizes/font_size = 130
+offset_right = -486.0
+offset_bottom = -523.0
+theme_override_font_sizes/font_size = 120
 text = "PACKEtRACER"
 script = ExtResource("3_geirw")
 
@@ -68,38 +69,16 @@ theme_override_font_sizes/font_size = 30
 text = "Control <- arrows ->, Space — jump "
 script = ExtResource("3_geirw")
 
-[node name="Label3" type="Label" parent="." unique_id=289303754]
+[node name="start_btn" type="Button" parent="." unique_id=893268362]
 layout_mode = 1
 anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 0.97400004
-offset_left = 36.0
-offset_top = 936.0
-offset_right = -1107.0
-offset_bottom = 270.71997
-theme_override_font_sizes/font_size = 30
-text = "Volume"
-script = ExtResource("3_geirw")
-
-[node name="start_btn" type="Button" parent="." unique_id=893268362]
-layout_mode = 0
 offset_left = 39.0
 offset_top = 302.0
 offset_right = 141.0
 offset_bottom = 329.0
+theme_override_font_sizes/font_size = 56
 text = "START GAME"
 script = ExtResource("4_hwjxs")
-
-[node name="VolumeSlider" type="HSlider" parent="." unique_id=1020677495]
-layout_mode = 0
-offset_left = 161.0
-offset_top = 946.0
-offset_right = 344.0
-offset_bottom = 966.0
-max_value = 1.0
-step = 0.05
-value = 1.0
-script = ExtResource("5_hwjxs")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1323682445]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.105367, -0.32001185)
@@ -114,3 +93,44 @@ stream = ExtResource("7_nn7w8")
 volume_db = -5.658
 autoplay = true
 parameters/looping = true
+
+[node name="ResolutionLabel" type="Label" parent="." unique_id=987654321]
+layout_mode = 0
+offset_left = 540.0
+offset_top = 570.0
+offset_right = 716.0
+offset_bottom = 606.0
+theme_override_font_sizes/font_size = 30
+text = "Resolution"
+script = ExtResource("3_geirw")
+
+[node name="ResolutionDropdown" type="OptionButton" parent="." unique_id=987654322]
+layout_mode = 0
+offset_left = 721.0
+offset_top = 571.0
+offset_right = 901.0
+offset_bottom = 609.0
+theme_override_font_sizes/font_size = 26
+script = ExtResource("res_dropdown")
+
+[node name="Label3" type="Label" parent="." unique_id=289303754]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 571.0
+offset_right = 135.0
+offset_bottom = 607.0
+theme_override_font_sizes/font_size = 30
+text = "Volume"
+script = ExtResource("3_geirw")
+
+[node name="VolumeSlider" type="HSlider" parent="." unique_id=1020677495]
+custom_minimum_size = Vector2(210, 0)
+layout_mode = 0
+offset_left = 151.0
+offset_top = 584.0
+offset_right = 361.0
+offset_bottom = 600.0
+max_value = 1.0
+step = 0.05
+value = 1.0
+script = ExtResource("5_hwjxs")

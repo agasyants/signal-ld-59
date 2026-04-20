@@ -30,4 +30,4 @@ func _process(delta):
 
 func _show_next_phrase():
 	label.text = phrases[current_phrase_idx][0]
-	label._ready() # Re-trigger animation
+	label.reset_animation() # Re-trigger animation safely

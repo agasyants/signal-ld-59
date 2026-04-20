@@ -3,10 +3,21 @@ extends Control
 var graph_container: Node2D
 
 func _ready() -> void:
+	Settings.resolution_changed.connect(_on_resolution_changed)
+	_on_resolution_changed(Vector2.ZERO)
+
+func _on_resolution_changed(_res: Vector2) -> void:
+	update_graph()
+
+func update_graph() -> void:
+	if graph_container:
+		graph_container.queue_free()
+	
 	graph_container = Node2D.new()
 	add_child(graph_container)
 
 	var screen_size = get_viewport_rect().size
+	var k = Settings.k.y * 0.85 # Немного уменьшаем общий масштаб (на 15%)
 	
 	var total_levels = GameGraph.levels.size()
 	var max_nodes_in_level = 0
@@ -14,8 +25,8 @@ func _ready() -> void:
 		max_nodes_in_level = max(max_nodes_in_level, level.size())
 
 	# --- Настройки сетки ---
-	var step_x = 200.0 # Расстояние между колонками (уровнями)
-	var step_y = 120.0 # Расстояние между узлами в одной колонке
+	var step_x = 200.0 * k # Расстояние между колонками (уровнями)
+	var step_y = 120.0 * k # Расстояние между узлами в одной колонке
 
 	# Вычисляем габариты всего графа
 	var total_graph_width = (total_levels - 1) * step_x
@@ -59,7 +70,7 @@ func _ready() -> void:
 				# Рисуем линию
 				var line = Line2D.new()
 				line.points = PackedVector2Array([p1, p2])
-				line.width = 3.0
+				line.width = 3.0 * k
 				line.default_color = Color(0.4, 1.0, 0.4, 0.8) if is_available else Color(0.4, 0.7, 1.0, 0.2)
 				line.antialiased = true
 				line.z_index = -1
@@ -69,9 +80,9 @@ func _ready() -> void:
 				var midpoint = (p1 + p2) / 2.0
 				var conn_btn = Button.new()
 				conn_btn.text = conn.track_name + "\nDiff: %.1f" % conn.complexity
-				conn_btn.custom_minimum_size = Vector2(80, 40)
-				conn_btn.position = midpoint - Vector2(40, 20)
-				conn_btn.add_theme_font_size_override("font_size", 10)
+				conn_btn.custom_minimum_size = Vector2(80, 40) * k
+				conn_btn.position = midpoint - (Vector2(40, 20) * k)
+				conn_btn.add_theme_font_size_override("font_size", int(10 * k))
 				
 				# Блокируем кнопку если это не текущий путь
 				conn_btn.disabled = !is_available
@@ -96,8 +107,8 @@ func _ready() -> void:
 			
 			var node_sprite = Sprite2D.new()
 			var tex = GradientTexture2D.new()
-			tex.width = 40 if is_current else 32
-			tex.height = 40 if is_current else 32
+			tex.width = int((40 if is_current else 32) * k)
+			tex.height = int((40 if is_current else 32) * k)
 			tex.fill = GradientTexture2D.FILL_RADIAL
 			tex.fill_from = Vector2(0.5, 0.5)
 			var grad = Gradient.new()
@@ -117,8 +128,8 @@ func _ready() -> void:
 				var label = Label.new()
 				label.text = "%s: +%d" % [node.reward_type.capitalize(), node.reward_amount]
 				label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-				label.position = node_pos + Vector2(-50, 20)
-				label.custom_minimum_size = Vector2(100, 20)
+				label.position = node_pos + (Vector2(-50, 20) * k)
+				label.custom_minimum_size = Vector2(100, 20) * k
 				label.add_theme_color_override("font_color", Color.YELLOW)
-				label.add_theme_font_size_override("font_size", 12)
+				label.add_theme_font_size_override("font_size", int(12 * k))
 				graph_container.add_child(label)

@@ -7,10 +7,14 @@ var animation_duration = 1.0
 var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*"
 
 func _ready() -> void:
+	super._ready()
+	reset_animation()
+
+func reset_animation() -> void:
 	initial_text = text
 	is_animated = true
 	elapsed_time = 0.0
-
+	
 func _process(delta: float) -> void:
 	if is_animated:
 		elapsed_time += delta

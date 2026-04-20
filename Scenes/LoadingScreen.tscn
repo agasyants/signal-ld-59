@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://osvb5qh1xbcb"]
 
+[ext_resource type="Script" uid="uid://t7w1kpbpdbq5" path="res://Scaling/ScalingLabel.gd" id="1_scaling"]
+
 [sub_resource type="GDScript" id="GDScript_1"]
 script/source = "extends Node
 func _ready():
@@ -39,11 +41,13 @@ layout_mode = 2
 layout_mode = 2
 text = "LOADING DATA STREAM..."
 horizontal_alignment = 1
+script = ExtResource("1_scaling")
 
 [node name="Label2" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1623011520]
 layout_mode = 2
 text = "SYNCING WITH PACKET..."
 horizontal_alignment = 1
+script = ExtResource("1_scaling")
 
 [node name="Script" type="Node" parent="." unique_id=720267445]
 script = SubResource("GDScript_1")
