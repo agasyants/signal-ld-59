@@ -150,7 +150,7 @@ func _update_health_ui():
 	for i in range(max(0, health)):
 		heart_text += "♥️"
 	
-	if health >= 5:
+	if health >= GameGraph.max_health:
 		heart_text += " MAX"
 	
 	health_label.text = heart_text
@@ -164,10 +164,10 @@ func apply_bonus(type: Bonus.BonusType) -> void:
 	bonus_sound.play()
 	match type:
 		Bonus.BonusType.HEALTH:
-			if health >= 5:
+			if health >= GameGraph.max_health:
 				show_popup_info("HEALTH MAX", Color.ORANGE)
 			else:
-				health = min(health + 1, 5)
+				health = min(health + 1, GameGraph.max_health)
 				GameGraph.health = health # Синхронизируем
 				_update_health_ui()
 				show_popup_info("+♥️", Color.RED)

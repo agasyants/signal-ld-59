@@ -20,8 +20,13 @@ func _init(_id, _lvl, _idx):
 	ip_address = "%d.%d.%d.%d" % [randi_range(10, 255), randi_range(0, 255), randi_range(0, 255), randi_range(1, 254)]
 	
 	# Always give a reward
-	reward_type = ["health", "points"].pick_random()
-	if reward_type == "points":
-		reward_amount = randi_range(2, 5) # 2 to 5 coins
-	else:
-		reward_amount = 1 # Always +1 health
+	var r = randf()
+	if r < 0.2: # 20% chance for Max Health upgrade
+		reward_type = "max_health"
+		reward_amount = 1
+	elif r < 0.6: # 40% chance for health
+		reward_type = "health"
+		reward_amount = 1
+	else: # 40% chance for coins
+		reward_type = "points"
+		reward_amount = randi_range(2, 5)

@@ -45,7 +45,7 @@ func update_graph() -> void:
 	var health_label = Label.new()
 	var hearts = ""
 	for i in range(GameGraph.health): hearts += "♥️"
-	if GameGraph.health >= 5:
+	if GameGraph.health >= GameGraph.max_health:
 		hearts += " MAX"
 	health_label.text = "INTEGRITY: %s" % hearts
 	health_label.add_theme_font_size_override("font_size", int(16 * k))

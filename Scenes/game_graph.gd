@@ -8,6 +8,7 @@ var current_connection: MyGraphConnection
 var score: int = 1000
 var coins: int = 0
 var health: int = 3
+var max_health: int = 5
 var last_result := {"completed": false, "score": 0, "time": 0.0, "coins": 0}
 
 func start_level(connection: MyGraphConnection) -> void:
@@ -30,7 +31,10 @@ func finish_level(completed: bool, result: Dictionary = {}) -> void:
 			
 			# Apply node rewards
 			if current_node.reward_type == "health":
-				health = min(health + current_node.reward_amount, 5)
+				health = min(health + current_node.reward_amount, max_health)
+			elif current_node.reward_type == "max_health":
+				max_health += 1
+				health = min(health + 1, max_health) # Bonus healing for upgrading
 			elif current_node.reward_type == "points":
 				score += current_node.reward_amount
 			
@@ -49,13 +53,14 @@ func reset_run() -> void:
 	score = 1000
 	coins = 0
 	health = 3
+	max_health = 5
 	last_result = {"completed": false, "score": 0, "time": 0.0}
 	generate_planar_graph(0)
 	if levels.size() > 0 and levels[0].size() > 0:
 		current_node = levels[0][0]
 
 func _init() -> void:
-	coins = 3
+	coins = 0
 	generate_planar_graph(4)
 	if levels.size() > 0 and levels[0].size() > 0:
 		current_node = levels[0][0]
@@ -74,7 +79,14 @@ func generate_planar_graph(num_middle_levels: int):
 		
 		var level_array = []
 		for j in range(nodes_in_level):
-			level_array.append(MyGraphNode.new(current_id, i, j))
+			var node = MyGraphNode.new(current_id, i, j)
+			
+			# No rewards on first and last levels
+			if i == 0 or i == num_middle_levels + 1:
+				node.reward_type = "none"
+				node.reward_amount = 0
+				
+			level_array.append(node)
 			current_id += 1
 		levels.append(level_array)
 

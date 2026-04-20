@@ -6,7 +6,7 @@
 
 [sub_resource type="Resource" id="Resource_o1tfr"]
 script = ExtResource("3_m1nvw")
-speed_curve = Vector2(0.14, 0.15)
+speed_curve = Vector2(0.15, 0.15)
 difficulty_curve = Vector2(0.2, 0.3)
 radius_curve = Vector2(1.2, 1.4)
 metadata/_custom_type_script = "uid://bmghgvae3181i"
