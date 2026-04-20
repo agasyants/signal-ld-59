@@ -34,9 +34,14 @@ func _process(delta: float) -> void:
 	_elapsed += delta
 
 func _on_track_finished() -> void:
+	var coins_collected = 0
+	if _generator and _generator.player:
+		coins_collected = _generator.player.coins
+		
 	GameGraph.finish_level(true, {
 		"score": _calculate_score(),
 		"time":  _elapsed,
+		"coins": coins_collected,
 	})
 
 func _calculate_score() -> int:

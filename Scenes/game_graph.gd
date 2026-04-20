@@ -6,8 +6,9 @@ var current_node: MyGraphNode
 var current_connection: MyGraphConnection
 
 var score: int = 0
+var coins: int = 0
 var health: int = 3
-var last_result := { "completed": false, "score": 0, "time": 0.0 }
+var last_result := { "completed": false, "score": 0, "time": 0.0, "coins": 0 }
 
 func start_level(connection: MyGraphConnection) -> void:
 	current_connection = connection
@@ -19,11 +20,18 @@ func finish_level(completed: bool, result: Dictionary = {}) -> void:
 		"completed": completed,
 		"score":     result.get("score", 0),
 		"time":      result.get("time",  0.0),
+		"coins":     result.get("coins", 0),
 	}
 	if completed:
 		score += last_result["score"]
+		coins += last_result["coins"]
 		if current_connection:
 			current_node = current_connection.to_node
+			
+			# Victory check: if current_node has no connections, it's the end!
+			if current_node.connections.is_empty():
+				get_tree().change_scene_to_file("res://Scenes/WinMenu.tscn")
+				return
 	
 	get_tree().change_scene_to_file("res://Scenes/GameGraph.tscn")
 
@@ -31,6 +39,7 @@ func reset_run() -> void:
 	Engine.time_scale = 1.0
 	current_connection = null
 	score  = 0
+	coins  = 0
 	health = 3
 	last_result = { "completed": false, "score": 0, "time": 0.0 }
 	generate_planar_graph(5)
