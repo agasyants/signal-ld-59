@@ -18,11 +18,19 @@ var is_jumping: bool = false
 @onready var death_menu := $Camera3D/CanvasLayer/DeathMenu
 @onready var health_label := $Camera3D/CanvasLayer/HealthLabel
 @onready var coin_label := $Camera3D/CanvasLayer/CoinLabel
+@onready var move_sound: AudioStreamPlayer = $MoveSound
+@onready var jump_sound: AudioStreamPlayer = $JumpSound
 
 func _ready():
 	# Инициализация параметров из глобального состояния
 	health = GameGraph.health
 	coins = 0 # В начале уровня монеты текущего уровня сброшены (будут добавлены в GameGraph.coins в конце)
+	
+	if move_sound and move_sound.stream is AudioStreamWAV:
+		move_sound.stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
+	
+	if move_sound:
+		move_sound.play()
 	
 	shader.trigger_hit()
 	add_to_group("player")
@@ -48,10 +56,21 @@ func _process(delta):
 	angular_velocity = clamp(angular_velocity, -max_velocity, max_velocity)
 	current_angle += angular_velocity * delta
 
+	# --- ЗВУК ДВИЖЕНИЯ ---
+	if move_sound:
+		var target_pitch = 1.0 + abs(angular_velocity) * 0.1
+		move_sound.pitch_scale = lerp(move_sound.pitch_scale, target_pitch, 5.0 * delta)
+		
+		# Немного увеличиваем громкость при движении
+		var target_vol = -15.0 + abs(angular_velocity) * 2.0
+		move_sound.volume_db = lerp(move_sound.volume_db, target_vol, 5.0 * delta)
+
 	# --- ПРЫЖОК ---
 	if Input.is_action_just_pressed("Jump") and is_on_ground():
 		radial_velocity = tunnel_radius * 4
 		is_jumping = true
+		if jump_sound:
+			jump_sound.play()
 
 	# Отпустили кнопку раньше — срезаем скорость вверх
 	if is_jumping and Input.is_action_just_released("Jump"):

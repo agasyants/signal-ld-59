@@ -9,6 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://dss81ubul8d0u" path="res://Player/DeathMenu.tscn" id="5_death"]
 [ext_resource type="Script" path="res://Player/WipeIn.gd" id="5_vlldt"]
 [ext_resource type="Script" uid="uid://t7w1kpbpdbq5" path="res://Scaling/ScalingLabel.gd" id="6_scaling"]
+[ext_resource type="AudioStream" uid="uid://bctqvaiwm6elv" path="res://Sounds/jump.wav" id="7_jump"]
+[ext_resource type="AudioStream" uid="uid://dx1dornd1m442" path="res://Sounds/tone.wav" id="8_tone"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tok1r"]
 shader = ExtResource("2_q3lat")
@@ -72,3 +74,14 @@ theme_override_colors/font_color = Color(1, 1, 0, 1)
 theme_override_font_sizes/font_size = 40
 text = "COINS: 0"
 script = ExtResource("6_scaling")
+
+[node name="MoveSound" type="AudioStreamPlayer" parent="." unique_id=33445566]
+stream = ExtResource("8_tone")
+volume_db = -15.0
+autoplay = true
+bus = &"Master"
+
+[node name="JumpSound" type="AudioStreamPlayer" parent="." unique_id=33445567]
+stream = ExtResource("7_jump")
+volume_db = -5.0
+bus = &"Master"
