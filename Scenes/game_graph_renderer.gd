@@ -17,7 +17,7 @@ func update_graph() -> void:
 	add_child(graph_container)
 
 	var screen_size = get_viewport_rect().size
-	var k = Settings.k.y * 0.85 
+	var k = Settings.k.y * 0.75
 	
 	# --- Background/Decorations ---
 	var bg_label = Label.new()
@@ -40,8 +40,8 @@ func update_graph() -> void:
 		max_nodes_in_level = max(max_nodes_in_level, level.size())
 
 	# --- Настройки сетки ---
-	var step_x = 220.0 * k 
-	var step_y = 130.0 * k 
+	var step_x = 220.0 * k
+	var step_y = 130.0 * k
 	
 	var level_names = ["SOURCE", "SUBNET A", "SUBNET B", "GATEWAY", "FIREWALL", "CORE", "END_NODE"]
 
@@ -81,6 +81,16 @@ func update_graph() -> void:
 		var y = start_y + center_offset_y + n_idx * step_y
 		return Vector2(x, y)
 
+	var type_colors = {
+		"SERVER": Color.CYAN,
+		"DNS NODE": Color.LIME_GREEN,
+		"FIREWALL": Color.ORANGE_RED,
+		"GATEWAY": Color.GOLD,
+		"ROUTER": Color.MAGENTA,
+		"DATABASE": Color.MEDIUM_PURPLE,
+		"UPLINK": Color.ALICE_BLUE
+	}
+
 	# --- Отрисовка ---
 	
 	# 1. Линии и кнопки соединений
@@ -117,7 +127,7 @@ func update_graph() -> void:
 				conn_btn.disabled = !is_available
 				
 				# При клике - перемещаемся к следующему узлу
-				conn_btn.pressed.connect(func(): 
+				conn_btn.pressed.connect(func():
 					print("Selected connection: ", conn.track_name)
 					GameGraph.current_connection = conn
 					GameGraph.current_node = target_node
@@ -142,8 +152,9 @@ func update_graph() -> void:
 			tex.fill_from = Vector2(0.5, 0.5)
 			var grad = Gradient.new()
 			
-			# Подсвечиваем текущий узел золотым, остальные — голубым
-			var glow_color = Color.GOLD if is_current else Color.CYAN
+			# Подсвечиваем текущий узел золотым, а типы узлов — разными цветами
+			var base_color = type_colors.get(node.node_type, Color.CYAN)
+			var glow_color = Color.GOLD if is_current else base_color
 			grad.set_color(0, glow_color)
 			grad.set_color(1, Color(glow_color.r, glow_color.g, glow_color.b, 0))
 			
@@ -152,13 +163,24 @@ func update_graph() -> void:
 			node_sprite.position = node_pos
 			graph_container.add_child(node_sprite)
 			
-			# Отображение награды
+			# Подпись типа и IP под узлом
+			var info_label = Label.new()
+			info_label.text = "%s\n%s" % [node.node_type, node.ip_address]
+			info_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			info_label.add_theme_font_size_override("font_size", int(10 * k))
+			info_label.modulate = base_color.lerp(Color.WHITE, 0.5)
+			info_label.modulate.a = 0.8
+			info_label.position = node_pos + Vector2(-60 * k, 25 * k)
+			info_label.custom_minimum_size = Vector2(120 * k, 30 * k)
+			graph_container.add_child(info_label)
+
+			# Отображение награды (чуть ниже теперь)
 			if node.reward_type != "none":
 				var label = Label.new()
 				label.text = "%s: +%d" % [node.reward_type.capitalize(), node.reward_amount]
 				label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-				label.position = node_pos + (Vector2(-50, 20) * k)
+				label.position = node_pos + (Vector2(-50, 60) * k)
 				label.custom_minimum_size = Vector2(100, 20) * k
 				label.add_theme_color_override("font_color", Color.YELLOW)
-				label.add_theme_font_size_override("font_size", int(12 * k))
+				label.add_theme_font_size_override("font_size", int(11 * k))
 				graph_container.add_child(label)
