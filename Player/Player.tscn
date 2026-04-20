@@ -7,11 +7,12 @@
 [ext_resource type="Shader" uid="uid://exymffjbr218" path="res://Player/WhipeIn.gdshader" id="4_6ysni"]
 [ext_resource type="PackedScene" uid="uid://bxrrp825ar6yu" path="res://Pause/PauseMenu.tscn" id="4_ddoul"]
 [ext_resource type="PackedScene" uid="uid://dss81ubul8d0u" path="res://Player/DeathMenu.tscn" id="5_death"]
-[ext_resource type="Script" path="res://Player/WipeIn.gd" id="5_vlldt"]
+[ext_resource type="Script" uid="uid://cnul6ly322w4h" path="res://Player/WipeIn.gd" id="5_vlldt"]
 [ext_resource type="Script" uid="uid://t7w1kpbpdbq5" path="res://Scenes/animated_label.gd" id="6_scaling"]
 [ext_resource type="AudioStream" uid="uid://bctqvaiwm6elv" path="res://Sounds/jump.wav" id="7_jump"]
-[ext_resource type="AudioStream" uid="uid://dx1dornd1m442" path="res://Sounds/tone.wav" id="8_tone"]
 [ext_resource type="AudioStream" uid="uid://dl0ejo023ce5d" path="res://Effects/hit.mp3" id="10_0j2ni"]
+[ext_resource type="AudioStream" uid="uid://c1vmn3oua24rh" path="res://Effects/drive.mp3" id="11_p7tob"]
+[ext_resource type="AudioStream" uid="uid://dbtwb62rcwiup" path="res://Effects/bonus.mp3" id="13_p7tob"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tok1r"]
 shader = ExtResource("2_q3lat")
@@ -83,10 +84,15 @@ stream = ExtResource("10_0j2ni")
 volume_db = -1.354
 
 [node name="MoveSound" type="AudioStreamPlayer" parent="." unique_id=33445566]
-stream = ExtResource("8_tone")
-volume_db = -15.0
+stream = ExtResource("11_p7tob")
+volume_db = -20.0
 autoplay = true
+parameters/looping = true
 
 [node name="JumpSound" type="AudioStreamPlayer" parent="." unique_id=33445567]
 stream = ExtResource("7_jump")
 volume_db = -5.0
+
+[node name="BonusSound" type="AudioStreamPlayer" parent="." unique_id=599955121]
+stream = ExtResource("13_p7tob")
+volume_db = -5.958

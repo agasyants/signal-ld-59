@@ -1,9 +1,9 @@
 extends Node3D
 class_name Player
-@export var rotate_speed: float = 3.5
+@export var rotate_speed: float = 3.8
 @export var tunnel_radius := 1.7
-@export var inertia_friction: float = 7.0
-@export var inertia_strength: float = 5.0
+@export var inertia_friction: float = 10.0
+@export var inertia_strength: float = 4.6
 @export var health: int = 3
 @export var coins: int = 0
 var angular_velocity: float = 0.0
@@ -24,7 +24,7 @@ var is_jumping: bool = false
 func _ready():
 	# Инициализация параметров из глобального состояния
 	health = GameGraph.health
-	coins = 0 # В начале уровня монеты текущего уровня сброшены (будут добавлены в GameGraph.coins в конце)
+	coins = 0
 	
 	if move_sound and move_sound.stream is AudioStreamWAV:
 		move_sound.stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
@@ -45,31 +45,43 @@ func _ready():
 	shape.shape = sphere
 	area.add_child(shape)
 
+@export var turn_responsiveness: float = 5 # Множитель "резкости" разворота
+
 func _process(delta):
-	# --- ВРАЩЕНИЕ ---
 	var input = Input.get_axis("ui_left", "ui_right")
 	var max_velocity = rotate_speed * 1.5
+	
 	if input != 0:
-		angular_velocity += input * rotate_speed * inertia_strength * delta
+		var turn_factor = 1.0
+		
+		# Проверяем, меняет ли игрок направление (знаки разные)
+		# abs > 0.1 нужно, чтобы не срабатывало, когда скорость около нуля
+		if sign(angular_velocity) != sign(input) and abs(angular_velocity) > 0.1:
+			turn_factor = turn_responsiveness
+			
+		# Умножаем ускорение на этот фактор
+		angular_velocity += input * rotate_speed * inertia_strength * turn_factor * delta
 	else:
+		# Стандартное затухание
 		angular_velocity = lerp(angular_velocity, 0.0, inertia_friction * delta)
+		
 	angular_velocity = clamp(angular_velocity, -max_velocity, max_velocity)
 	current_angle += angular_velocity * delta
 
 	# --- ЗВУК ДВИЖЕНИЯ ---
 	if move_sound:
-		var target_pitch = 1.0 + abs(angular_velocity) * 0.1
+		var target_pitch = 1.1 + abs(angular_velocity) * 0.1
 		move_sound.pitch_scale = lerp(move_sound.pitch_scale, target_pitch, 5.0 * delta)
 		
 		# Немного увеличиваем громкость при движении
-		var target_vol = -15.0 + abs(angular_velocity) * 2.0
+		var target_vol = -17.0 + abs(angular_velocity) * 2.0
 		move_sound.volume_db = lerp(move_sound.volume_db, target_vol, 5.0 * delta)
 
 	# --- ПРЫЖОК ---
 	if Input.is_action_just_pressed("Jump") and is_on_ground():
 		radial_velocity = tunnel_radius * 4
 		is_jumping = true
-		if jump_sound:
+		if jump_sound and false:
 			jump_sound.play()
 
 	# Отпустили кнопку раньше — срезаем скорость вверх
@@ -99,6 +111,7 @@ func is_on_ground() -> bool:
 
 var tween: Tween
 @onready var hit_sound: AudioStreamPlayer = $HitSound
+@onready var bonus_sound: AudioStreamPlayer = $BonusSound
 
 func take_damage(delta: int):
 	health += delta
@@ -141,6 +154,7 @@ func _update_coins_ui():
 		coin_label.text = "COINS: %d" % (GameGraph.coins + coins)
 
 func apply_bonus(type: Bonus.BonusType) -> void:
+	bonus_sound.play()
 	match type:
 		Bonus.BonusType.HEALTH:
 			health = min(health + 1, 5)

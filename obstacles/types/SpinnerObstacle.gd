@@ -13,7 +13,7 @@ func _build_blade(tunnel_radius: float, angle: float):
 	var mesh_instance = MeshInstance3D.new()
 	add_child(mesh_instance)
 	var box = BoxMesh.new()
-	box.size = Vector3(tunnel_radius * 2, tunnel_radius * 0.3, 0.4)
+	box.size = Vector3(tunnel_radius * 2, tunnel_radius * 0.22, 0.4)
 	mesh_instance.mesh = box
 	mesh_instance.rotation.z = angle
 	mesh_instance.material_override = _make_mat(Color(1.0, 0.0, 0.5))
