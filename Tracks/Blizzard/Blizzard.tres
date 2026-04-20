@@ -55,12 +55,8 @@ time = 174.0
 speed_curve = Vector2(0.25, 0.25)
 metadata/_custom_type_script = "uid://bmghgvae3181i"
 
-[sub_resource type="Resource" id="Resource_ef47k"]
-script = ExtResource("3_pnvim")
-metadata/_custom_type_script = "uid://bmghgvae3181i"
-
 [resource]
 script = ExtResource("2_ror2p")
 track_name = "Blizzard"
 music = ExtResource("1_lwg86")
-sections = Array[ExtResource("3_pnvim")]([SubResource("Resource_tm3by"), SubResource("Resource_nshb1"), SubResource("Resource_gfoqq"), SubResource("Resource_dkken"), SubResource("Resource_8ysc8"), SubResource("Resource_m0ofv"), SubResource("Resource_g4yn4"), SubResource("Resource_qxx45"), SubResource("Resource_ef47k")])
+sections = Array[ExtResource("3_pnvim")]([SubResource("Resource_tm3by"), SubResource("Resource_nshb1"), SubResource("Resource_gfoqq"), SubResource("Resource_dkken"), SubResource("Resource_8ysc8"), SubResource("Resource_m0ofv"), SubResource("Resource_g4yn4"), SubResource("Resource_qxx45")])

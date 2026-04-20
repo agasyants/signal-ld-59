@@ -39,7 +39,7 @@ var _rng := RandomNumberGenerator.new()
 var _track_player: TrackPlayer
 var _baked_points: PackedVector3Array
 var _baked_radii: PackedFloat32Array
-var _current_speed: float = 15.0
+var _current_speed: float = 40.0
 
 var rng := RandomNumberGenerator.new()
 
@@ -52,6 +52,12 @@ func _process(delta: float) -> void:
 	if player and curve:
 		var t := _follow.progress / curve.get_baked_length()
 		player.tunnel_radius = get_radius_at_t(t) * 0.8
+
+	if _follow.progress_ratio > 0.99:
+		# timeout 1 sec
+		await get_tree().create_timer(1.0).timeout
+		_on_track_finished()
+		
 
 # Добавить в tunnel_generator.gd (дополнения к существующему коду)
 
@@ -82,45 +88,32 @@ func generate() -> void:
 	assert(track != null, "TunnelGenerator: track не назначен")
 
 	# Длина трассы из трека
-	var total_length := track.get_total_length(session["speed"]) * 1.5
-	var segment_count := ceili(total_length / segment_length) + 2
+	var target_length := track.get_total_length(session["speed"])
+	var segment_count := ceili(target_length / segment_length) + 2
 
-	# Генерация кривой
-	curve = Curve3D.new()
-	curve.bake_interval = bake_interval
+	var points = _get_points(segment_count)
 
-	var points: Array[Vector3] = []
-	var pos := Vector3.ZERO
-	var dir := Vector3(0.0, 0.0, -1.0)
-	points.append(pos)
-
-	for i in segment_count:
-		var bend := Vector3(
-			_rng.randf_range(-curve_strength, curve_strength),
-			_rng.randf_range(-curve_strength, curve_strength),
-			_rng.randf_range(-curve_strength, curve_strength)
-		)
-		dir = (dir + bend).normalized()
-		pos += dir * segment_length
-		points.append(pos)
-
-	for i in range(points.size()):
-		var p := points[i]
-		var in_handle := Vector3.ZERO
-		var out_handle := Vector3.ZERO
-		if i > 0 and i < points.size() - 1:
-			var diff := points[i + 1] - points[i - 1]
-			out_handle = diff * 0.25
-			in_handle = - out_handle
-		elif i == 0:
-			out_handle = (points[i + 1] - p) * 0.25
-		elif i == points.size() - 1:
-			in_handle = (points[i - 1] - p) * 0.25
-		curve.add_point(p, in_handle, out_handle)
+	var final_curve: Curve3D
+	for i in range(5):
+		final_curve = _get_curve(points, bake_interval)
+		var current_length = final_curve.get_baked_length()
 		
+		# Находим коэффициент отклонения
+		# Если current_length > target_length, ratio будет меньше 1.0 (сжатие)
+		var correction_ratio = target_length / current_length
+		
+		print("Iteration %d | Target length: %.16f | Length: %.16f | Ratio: %.16f" % [i + 1, target_length, current_length, correction_ratio])
+		
+		# Масштабируем точки для следующей итерации
+		for j in range(points.size()):
+			points[j] *= correction_ratio
+			
+		# Если погрешность уже мизерная, можно выйти раньше
+		if abs(current_length - target_length) < 0.001:
+			break
 
 	var path := Path3D.new()
-	path.curve = curve
+	path.curve = final_curve
 	add_child(path)
 
 	_follow.loop = false
@@ -154,6 +147,46 @@ func generate() -> void:
 
 # tunnel_generator.gd — добавить переменную
 var _sampler: TrackSampler
+
+func _get_points(segment_count: int) -> Array[Vector3]:
+	var points: Array[Vector3] = []
+	var pos := Vector3.ZERO
+	var dir := Vector3(0.0, 0.0, -1.0)
+
+	points.append(pos)
+
+	for i in segment_count:
+		var bend := Vector3(
+			_rng.randf_range(-curve_strength, curve_strength),
+			_rng.randf_range(-curve_strength, curve_strength),
+			_rng.randf_range(-curve_strength, curve_strength)
+		)
+		dir = (dir + bend).normalized()
+		pos += dir * segment_length
+		points.append(pos)
+	
+	return points
+
+func _get_curve(points: Array[Vector3], bake_interval: float) -> Curve3D:
+	# Генерация кривой
+	curve = Curve3D.new()
+	curve.bake_interval = bake_interval
+
+	for i in range(points.size()):
+		var p := points[i]
+		var in_handle := Vector3.ZERO
+		var out_handle := Vector3.ZERO
+		if i > 0 and i < points.size() - 1:
+			var diff := points[i + 1] - points[i - 1]
+			out_handle = diff * 0.25
+			in_handle = - out_handle
+		elif i == 0:
+			out_handle = (points[i + 1] - p) * 0.25
+		elif i == points.size() - 1:
+			in_handle = (points[i - 1] - p) * 0.25
+		curve.add_point(p, in_handle, out_handle)
+		
+	return curve
 
 func _cache_radii() -> void:
 	_baked_points = curve.get_baked_points()
@@ -273,7 +306,7 @@ func _build_wireframe(baked: PackedVector3Array) -> void:
 		frames_right[i] = last_right
 		frames_up[i] = last_up
 
-		var current_radius := _baked_radii[i]
+		var current_radius := _baked_radii[i] - 0.05
 		var right := last_right
 		var up := last_up
 

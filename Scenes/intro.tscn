@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://e2hxu1x65fg5" path="res://Scenes/mesh_instance_3d.gd" id="2_rsiac"]
 [ext_resource type="Script" uid="uid://t7w1kpbpdbq5" path="res://Scenes/animated_label.gd" id="3_geirw"]
 [ext_resource type="Script" uid="uid://dsia4aideqckd" path="res://Scenes/start_btn.gd" id="4_hwjxs"]
-[ext_resource type="Script" path="res://Scenes/volume_slider.gd" id="5_hwjxs"]
+[ext_resource type="Script" uid="uid://dosqi48nmva5u" path="res://Scenes/volume_slider.gd" id="5_hwjxs"]
 [ext_resource type="PackedScene" uid="uid://bqug0pcaq7aj8" path="res://Scenes/pc2.tscn" id="7_3bmuq"]
 [ext_resource type="AudioStream" uid="uid://l4i6kblewdt7" path="res://Tracks/Menu.mp3" id="7_nn7w8"]
 
