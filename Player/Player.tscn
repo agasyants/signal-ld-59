@@ -2,27 +2,12 @@
 
 [ext_resource type="Script" uid="uid://cjfvc7ibo14e1" path="res://Player/Player.gd" id="1_xhfnw"]
 [ext_resource type="Shader" uid="uid://c8xhpvw10heje" path="res://Player/Hit.gdshader" id="2_q3lat"]
+[ext_resource type="Environment" uid="uid://dy5vafjht6ugx" path="res://environment.tres" id="2_s1rgi"]
 [ext_resource type="Script" uid="uid://ddhdscuohvcm0" path="res://Player/HitEffect.gd" id="3_tok1r"]
-[ext_resource type="Shader" uid="uid://exymffjbr218" path="res://Player/WhipeIn.gdshader" id="4_6ysni"]
+[ext_resource type="Shader" path="res://Player/WhipeIn.gdshader" id="4_6ysni"]
 [ext_resource type="PackedScene" uid="uid://bxrrp825ar6yu" path="res://Pause/PauseMenu.tscn" id="4_ddoul"]
 [ext_resource type="PackedScene" uid="uid://dss81ubul8d0u" path="res://Player/DeathMenu.tscn" id="5_death"]
-[ext_resource type="Script" uid="uid://cnul6ly322w4h" path="res://Player/WipeIn.gd" id="5_vlldt"]
-
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hwjxs"]
-sky_top_color = Color(0, 0, 0, 1)
-sky_horizon_color = Color(0.7647059, 0, 0.9411765, 1)
-ground_bottom_color = Color(0, 0, 0, 1)
-ground_horizon_color = Color(0, 0.87058824, 0.7882353, 1)
-
-[sub_resource type="Sky" id="Sky_rsiac"]
-sky_material = SubResource("ProceduralSkyMaterial_hwjxs")
-
-[sub_resource type="Environment" id="Environment_hwjxs"]
-background_mode = 2
-sky = SubResource("Sky_rsiac")
-glow_enabled = true
-glow_intensity = 1.6
-glow_bloom = 0.39
+[ext_resource type="Script" path="res://Player/WipeIn.gd" id="5_vlldt"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tok1r"]
 shader = ExtResource("2_q3lat")
@@ -39,7 +24,7 @@ script = ExtResource("1_xhfnw")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=86636411]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.06864834)
-environment = SubResource("Environment_hwjxs")
+environment = ExtResource("2_s1rgi")
 fov = 100.0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="Camera3D" unique_id=2007247693]
@@ -75,15 +60,3 @@ offset_bottom = 82.0
 theme_override_colors/font_color = Color(1, 0, 0, 1)
 theme_override_font_sizes/font_size = 56
 text = "❤❤❤"
-
-[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1399031586]
-visible = false
-light_energy = 11.011
-light_size = 0.495
-omni_range = 2.642
-
-[node name="SpotLight3D" type="SpotLight3D" parent="." unique_id=52362702]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.2464464)
-light_energy = 12.746
-spot_range = 135.6068
-spot_angle = 19.59784
