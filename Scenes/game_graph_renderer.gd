@@ -17,7 +17,22 @@ func update_graph() -> void:
 	add_child(graph_container)
 
 	var screen_size = get_viewport_rect().size
-	var k = Settings.k.y * 0.85 # Немного уменьшаем общий масштаб (на 15%)
+	var k = Settings.k.y * 0.85 
+	
+	# --- Background/Decorations ---
+	var bg_label = Label.new()
+	bg_label.text = "NETWORK TOPOLOGY MAP // PROTOCOL: SIGNAL-LD-59"
+	bg_label.add_theme_font_size_override("font_size", int(24 * k))
+	bg_label.modulate = Color(0, 1, 1, 0.3)
+	bg_label.position = Vector2(40, 40) * k
+	graph_container.add_child(bg_label)
+
+	var status_label = Label.new()
+	status_label.text = "STATUS: ACTIVE STREAM // ENCRYPTION: 1024-BIT"
+	status_label.add_theme_font_size_override("font_size", int(14 * k))
+	status_label.modulate = Color(0, 1, 0.5, 0.2)
+	status_label.position = Vector2(40, 70) * k
+	graph_container.add_child(status_label)
 	
 	var total_levels = GameGraph.levels.size()
 	var max_nodes_in_level = 0
@@ -25,17 +40,31 @@ func update_graph() -> void:
 		max_nodes_in_level = max(max_nodes_in_level, level.size())
 
 	# --- Настройки сетки ---
-	var step_x = 200.0 * k # Расстояние между колонками (уровнями)
-	var step_y = 120.0 * k # Расстояние между узлами в одной колонке
+	var step_x = 220.0 * k 
+	var step_y = 130.0 * k 
+	
+	var level_names = ["SOURCE", "SUBNET A", "SUBNET B", "GATEWAY", "FIREWALL", "CORE", "END_NODE"]
 
 	# Вычисляем габариты всего графа
 	var total_graph_width = (total_levels - 1) * step_x
-	# Высота считается по самому "толстому" уровню
 	var total_graph_height = (max_nodes_in_level - 1) * step_y
 
 	# Точка старта, чтобы центр графа совпал с центром экрана
 	var start_x = (screen_size.x - total_graph_width) / 2.0
 	var start_y = (screen_size.y - total_graph_height) / 2.0
+	
+	# Рендерим заголовки уровней
+	for i in range(total_levels):
+		var l_label = Label.new()
+		var l_name = level_names[i] if i < level_names.size() else "ZONE %02d" % i
+		l_label.text = l_name
+		l_label.add_theme_font_size_override("font_size", int(12 * k))
+		l_label.modulate = Color(1, 1, 1, 0.15)
+		l_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		var lx = start_x + i * step_x
+		l_label.position = Vector2(lx - 50 * k, start_y - 80 * k)
+		l_label.custom_minimum_size = Vector2(100 * k, 20 * k)
+		graph_container.add_child(l_label)
 
 	# Функция расчета позиции
 	var get_node_pos = func(l_idx: int, n_idx: int):
