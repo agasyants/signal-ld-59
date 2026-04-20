@@ -11,7 +11,7 @@ var current_angle: float = 0.0
 var radial_velocity: float = 0.0
 var current_radius: float
 @export var gravity: float = 15.0
-@export var jump_cut_multiplier: float = 0.6
+@export var jump_cut_multiplier: float = 0.8
 var is_jumping: bool = false
 @onready var camera: Camera3D = $Camera3D
 @onready var shader := $Camera3D/CanvasLayer/ColorRect
@@ -19,7 +19,6 @@ var is_jumping: bool = false
 @onready var health_label := $Camera3D/CanvasLayer/HealthLabel
 @onready var coin_label := $Camera3D/CanvasLayer/CoinLabel
 @onready var move_sound: AudioStreamPlayer = $MoveSound
-@onready var jump_sound: AudioStreamPlayer = $JumpSound
 
 func _ready():
 	# Инициализация параметров из глобального состояния
@@ -81,8 +80,6 @@ func _process(delta):
 	if Input.is_action_just_pressed("Jump") and is_on_ground():
 		radial_velocity = tunnel_radius * 4
 		is_jumping = true
-		if jump_sound and false:
-			jump_sound.play()
 
 	# Отпустили кнопку раньше — срезаем скорость вверх
 	if is_jumping and Input.is_action_just_released("Jump"):

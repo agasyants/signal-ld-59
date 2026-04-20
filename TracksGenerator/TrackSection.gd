@@ -14,7 +14,7 @@ extends Resource
 @export var density_curve: Vector2 = Vector2(1.0, 1.0)
 
 @export_group("Difficulty")
-@export var difficulty_curve: Vector2 = Vector2(0.2, 0.4)
+@export var difficulty_curve: Vector2 = Vector2(0.3, 0.3)
 
 @export_group("Radius")
 # Коэффициент масштабирования session.radius

@@ -39,7 +39,7 @@ func sample(time: float) -> Dictionary:
 	return {
 		"speed":          session["speed"]      * speed_k,
 		"density":        session["density"]    * density_k,
-		"difficulty":     session["difficulty"] * difficulty_k,
+		"difficulty":     session["difficulty"] * difficulty_k * 2,
 		"radius_min":     r_min,
 		"obstacle_types": a.obstacle_types & _session_obstacle_mask(),
 		"bonus_types":    a.bonus_types    & _session_bonus_mask(),

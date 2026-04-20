@@ -23,9 +23,9 @@ func _init(_from: MyGraphNode, _to: MyGraphNode, _complexity: float = 1.0, _trac
 func _generate_session(c: float) -> Dictionary:
 	var t := clampf((c - 1.0) / 4.0, 0.0, 1.0)
 	return {
-		"speed":            lerpf(40.0, 50.0, t),
-		"density":          lerpf(0.7,  0.95,  t),
-		"difficulty":       lerpf(0.6,  1.0,  t),
+		"speed":            lerpf(40.0, 55.0, t),
+		"density":          lerpf(0.7,  1.1,  t),
+		"difficulty":       lerpf(0.6,  1.2,  t),
 		"radius":           lerpf(1.6,  1.3,  t),
 		"allow_wall":       true,
 		"allow_pillar":     true,
@@ -39,6 +39,7 @@ func _generate_session(c: float) -> Dictionary:
 		"allow_pendulum":   t > 0.5,
 		"allow_vortex":     t > 0.6,
 		"allow_bonuses":    true,
+		"no_static":        t > 0.7,
 		"allow_rotating":   t > 0.2,
 		"allow_sliding":    false,
 		"seed":             randi()

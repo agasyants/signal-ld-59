@@ -2,7 +2,8 @@
 
 [ext_resource type="Script" uid="uid://bje5vv1tecr2e" path="res://Scenes/game_graph_renderer.gd" id="1_empn0"]
 [ext_resource type="Script" uid="uid://cpw82kopic3dy" path="res://Scenes/back_button.gd" id="2_empn0"]
-[ext_resource type="Environment" uid="uid://dy5vafjht6ugx" path="res://environment.tres" id="3_4np11"]
+[ext_resource type="Environment" uid="uid://bl85oxdrhxxej" path="res://environment.tres" id="3_4np11"]
+[ext_resource type="AudioStream" uid="uid://ddbrtalt7x07e" path="res://Tracks/Grapth.mp3" id="4_olis4"]
 
 [node name="GameGraph" type="Control" unique_id=2062126881]
 layout_mode = 3
@@ -25,3 +26,9 @@ script = ExtResource("2_empn0")
 [node name="Camera3D" type="Camera3D" parent="." unique_id=2062822024]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0024471283, 1.1920929e-07, 0.19213152)
 environment = ExtResource("3_4np11")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=346552181]
+stream = ExtResource("4_olis4")
+volume_db = -5.687
+autoplay = true
+parameters/looping = true

@@ -132,7 +132,7 @@ func _build_params(obstacle: Obstacle, tunnel_radius: float) -> Dictionary:
 		"mode":  mode,
 		"speed": lerpf(0.3, 4.0, difficulty) + _rng.randf_range(-0.2, 0.2),
 	}
-	var base_speed := lerpf(1.5, 3.5, difficulty) + _rng.randf_range(-0.3, 0.3)
+	var base_speed := lerpf(1.0, 3.5, difficulty) + _rng.randf_range(-0.3, 0.3)
 
 	# Случайное направление — просто знак
 	var direction := 1.0 if _rng.randf() < 0.5 else -1.0
