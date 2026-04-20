@@ -55,7 +55,7 @@ func reset_run() -> void:
 	health = 3
 	max_health = 5
 	last_result = {"completed": false, "score": 0, "time": 0.0}
-	generate_planar_graph(0)
+	generate_planar_graph(4)
 	if levels.size() > 0 and levels[0].size() > 0:
 		current_node = levels[0][0]
 
