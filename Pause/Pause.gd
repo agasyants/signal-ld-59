@@ -21,7 +21,7 @@ func _on_quit_button_pressed():
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		if self.visible:
-			_on_quit_button_pressed()
+			resume()
 		else:
 			pause()
 
