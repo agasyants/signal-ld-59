@@ -42,6 +42,8 @@ func _spawn_all() -> void:
 
 		_current_params = params
 		_try_spawn(progress)
+		if randf() < 0.5:  # ~12% шанс бонуса на точку спавна
+			_try_spawn_bonus(progress + 2.0)
 
 		progress += maxf(interval, 3.0)  # минимум 3 метра между препятствиями
 
@@ -66,29 +68,25 @@ func _try_spawn(progress: float) -> void:
 	obstacle.hit.connect(_on_hit)
 
 func _try_spawn_bonus(progress: float) -> void:
-	if not _current_params.get("allow_bonuses", false):
-		return
-	var bonus_mask: int = _current_params.get("bonus_types", 0)
-	if bonus_mask == 0:
-		return
-
 	var max_len := curve.get_baked_length()
 	if progress >= max_len:
 		return
 
-	# Выбираем случайный разрешённый тип бонуса
-	var available_bonuses: Array[int] = []
-	if bonus_mask & 1: available_bonuses.append(Bonus.BonusType.HEALTH)
-	if bonus_mask & 2: available_bonuses.append(Bonus.BonusType.SHIELD)
-	if bonus_mask & 4: available_bonuses.append(Bonus.BonusType.SLOW)
-	if available_bonuses.is_empty():
-		return
+	var all_types := [Bonus.BonusType.HEALTH, Bonus.BonusType.HEALTH, Bonus.BonusType.HEALTH, Bonus.BonusType.COIN, Bonus.BonusType.COIN, Bonus.BonusType.COIN, Bonus.BonusType.COIN, Bonus.BonusType.COIN, Bonus.BonusType.COIN, Bonus.BonusType.COIN, Bonus.BonusType.COIN, Bonus.BonusType.SLOW]
+	var bonus_type: Bonus.BonusType = all_types[_rng.randi() % all_types.size()]
 
-	var bonus_type: int = available_bonuses[_rng.randi() % available_bonuses.size()]
 	var t := curve.sample_baked_with_rotation(progress, true)
+	var current_radius: float = generator.get_radius_at_point(t.origin)
+
+	# Случайный угол по окружности тоннеля
+	var angle := _rng.randf() * TAU
+	var offset := t.basis.x * cos(angle) * current_radius \
+				+ t.basis.y * sin(angle) * current_radius
+
 	var bonus := Bonus.new()
 	add_child(bonus)
 	bonus.global_transform = t
+	bonus.global_position += offset * 0.8  # 0.85 чтобы не впритык к стенке
 	bonus.build(bonus_type)
 	bonus.collected.connect(_on_bonus_collected)
 
@@ -179,6 +177,6 @@ func _on_hit(damage: float) -> void:
 	if player.has_method("take_damage"):
 		player.take_damage(damage)
 
-func _on_bonus_collected(type: String) -> void:
+func _on_bonus_collected(type: Bonus.BonusType) -> void:
 	if player.has_method("apply_bonus"):
 		player.apply_bonus(type)

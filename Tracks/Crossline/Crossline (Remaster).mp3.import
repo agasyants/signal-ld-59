@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cd8vgvxvp6hms"
+path="res://.godot/imported/Crossline (Remaster).mp3-6fcda009e9a2af229382cecc5cc71df0.mp3str"
+
+[deps]
+
+source_file="res://Tracks/Crossline/Crossline (Remaster).mp3"
+dest_files=["res://.godot/imported/Crossline (Remaster).mp3-6fcda009e9a2af229382cecc5cc71df0.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

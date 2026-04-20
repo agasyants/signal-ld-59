@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://d2use5vxu0kat"
+path="res://.godot/imported/Dust Tears (Remaster).mp3-d15d4d05ee1b1d554c5592b5bc02c337.mp3str"
+
+[deps]
+
+source_file="res://Tracks/Dust/Dust Tears (Remaster).mp3"
+dest_files=["res://.godot/imported/Dust Tears (Remaster).mp3-d15d4d05ee1b1d554c5592b5bc02c337.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

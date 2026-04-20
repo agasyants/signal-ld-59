@@ -1,14 +1,16 @@
-[gd_resource type="Environment" format=3 uid="uid://dy5vafjht6ugx"]
+[gd_resource type="Environment" format=3 uid="uid://bl85oxdrhxxej"]
 
-[ext_resource type="Shader" uid="uid://d1f8hcarsv8qb" path="res://Scenes/sky.gdshader" id="1_0wybp"]
+[ext_resource type="Shader" path="res://Scenes/sky.gdshader" id="1_0wybp"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_scygu"]
 shader = ExtResource("1_0wybp")
-shader_parameter/sun_color = Color(10, 10, 10, 1)
-shader_parameter/sun_size = 0.05
-shader_parameter/sun_blur = 0.01
+shader_parameter/top_color = Color(0.243, 0, 0.329, 1)
+shader_parameter/mid_color = Color(0.137, 0.004, 0.231, 1)
+shader_parameter/bottom_color = Color(0.012, 0.239, 0.408, 1)
 shader_parameter/star_density = 0.5
 shader_parameter/star_brightness = 1.2
+shader_parameter/star_speed = 0.02
+shader_parameter/parallax_strength = 0.01
 
 [sub_resource type="Sky" id="Sky_rsiac"]
 sky_material = SubResource("ShaderMaterial_scygu")

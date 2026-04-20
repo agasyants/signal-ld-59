@@ -6,26 +6,26 @@
 
 [sub_resource type="Resource" id="Resource_tm3by"]
 script = ExtResource("3_pnvim")
-speed_curve = Vector2(2, 2)
+speed_curve = Vector2(0.1, 0.1)
 density_curve = Vector2(0.1, 0.1)
-radius_curve = Vector2(20, 20)
 metadata/_custom_type_script = "uid://bmghgvae3181i"
 
 [sub_resource type="Resource" id="Resource_nshb1"]
 script = ExtResource("3_pnvim")
 time = 20.0
-speed_curve = Vector2(2, 2)
-radius_curve = Vector2(18, 18)
+speed_curve = Vector2(0.15, 0.15)
 metadata/_custom_type_script = "uid://bmghgvae3181i"
 
 [sub_resource type="Resource" id="Resource_gfoqq"]
 script = ExtResource("3_pnvim")
 time = 38.0
+speed_curve = Vector2(0.22, 0.22)
 metadata/_custom_type_script = "uid://bmghgvae3181i"
 
 [sub_resource type="Resource" id="Resource_dkken"]
 script = ExtResource("3_pnvim")
 time = 80.0
+speed_curve = Vector2(0.25, 0.25)
 metadata/_custom_type_script = "uid://bmghgvae3181i"
 
 [sub_resource type="Resource" id="Resource_8ysc8"]

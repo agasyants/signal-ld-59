@@ -43,7 +43,7 @@ func _init() -> void:
 		current_node = levels[0][0]
 		
 
-var tracks = ['Delux2', 'Waters', 'ToHell', 'Red', 'Shade', 'Above', 'Daft', 'Blizzard']
+var tracks = ['Delux2', 'Waters', 'ToHell', 'Red', 'Shade', 'Above', 'Daft', 'Blizzard', 'Crossline', 'Dust', 'Red', 'Drifting']
 
 func generate_planar_graph(num_middle_levels: int):
 	levels.clear()
@@ -76,13 +76,11 @@ func generate_planar_graph(num_middle_levels: int):
 			for target_idx in range(start_target, end_target + 1):
 				var current_track = tracks[randi_range(0,tracks.size()-1)]
 				var target_node = next_level[target_idx]
-				var complexity = randf_range(1.0, 5.0)
-				var track_name = "Track " + str(node.id) + "-" + str(target_node.id)
-				var connection = MyGraphConnection.new(node, target_node, complexity, track_name)
+				var complexity = 1 + float(i)/2 + (randf()-0.5)*0.8
+				var connection = MyGraphConnection.new(node, target_node, complexity, current_track)
 				
 				# Временно назначаем один и тот же трек всем соединениям
 				connection.track = load("res://Tracks/" + current_track + "/" + current_track + ".tres")
-				connection.track_name = current_track
 				
 				node.connections.append(connection)
 			

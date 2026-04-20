@@ -6,7 +6,7 @@
 
 [sub_resource type="Resource" id="Resource_3hrsq"]
 script = ExtResource("2_o2jp1")
-speed_curve = Vector2(0.1, 0.1)
+speed_curve = Vector2(0.1, 0.16)
 density_curve = Vector2(0.5, 0.5)
 difficulty_curve = Vector2(1, 1)
 allow_rotating = false
@@ -15,7 +15,6 @@ metadata/_custom_type_script = "uid://bmghgvae3181i"
 [sub_resource type="Resource" id="Resource_o2jp1"]
 script = ExtResource("2_o2jp1")
 time = 13.0
-speed_curve = Vector2(0.1, 0.2)
 density_curve = Vector2(0.5, 1)
 difficulty_curve = Vector2(1, 1)
 metadata/_custom_type_script = "uid://bmghgvae3181i"
@@ -33,13 +32,18 @@ metadata/_custom_type_script = "uid://bmghgvae3181i"
 [sub_resource type="Resource" id="Resource_gaido"]
 script = ExtResource("2_o2jp1")
 time = 54.0
-speed_curve = Vector2(0.5, 0.5)
+speed_curve = Vector2(0.1, 0.1)
 density_curve = Vector2(0.1, 0.1)
-radius_curve = Vector2(10, 10)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_rph7t"]
+script = ExtResource("2_o2jp1")
+time = 90.0
+speed_curve = Vector2(0.25, 0.25)
 metadata/_custom_type_script = "uid://bmghgvae3181i"
 
 [resource]
 script = ExtResource("1_3hrsq")
 track_name = "Delux(2)"
 music = ExtResource("1_o2jp1")
-sections = Array[ExtResource("2_o2jp1")]([SubResource("Resource_3hrsq"), SubResource("Resource_o2jp1"), SubResource("Resource_6ivij"), SubResource("Resource_4d6yi"), SubResource("Resource_gaido")])
+sections = Array[ExtResource("2_o2jp1")]([SubResource("Resource_3hrsq"), SubResource("Resource_o2jp1"), SubResource("Resource_6ivij"), SubResource("Resource_4d6yi"), SubResource("Resource_gaido"), SubResource("Resource_rph7t")])

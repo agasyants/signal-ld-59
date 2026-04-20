@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="TrackData" format=3 uid="uid://cp1pxv3orvavm"]
+
+[ext_resource type="AudioStream" uid="uid://b01n7fnlnld85" path="res://Tracks/Drifting/Drifting.mp3" id="1_yeglk"]
+[ext_resource type="Script" uid="uid://ctnkck34hidh0" path="res://TracksGenerator/TrackData.gd" id="2_6npoh"]
+[ext_resource type="Script" uid="uid://bmghgvae3181i" path="res://TracksGenerator/TrackSection.gd" id="3_m1nvw"]
+
+[sub_resource type="Resource" id="Resource_o1tfr"]
+script = ExtResource("3_m1nvw")
+speed_curve = Vector2(0.14, 0.15)
+difficulty_curve = Vector2(0.2, 0.3)
+radius_curve = Vector2(1.2, 1.4)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_yeglk"]
+script = ExtResource("3_m1nvw")
+time = 80.0
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[resource]
+script = ExtResource("2_6npoh")
+track_name = "Drifting"
+music = ExtResource("1_yeglk")
+sections = Array[ExtResource("3_m1nvw")]([SubResource("Resource_o1tfr"), SubResource("Resource_yeglk")])

@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="TrackData" format=3 uid="uid://cucjuu1flsakl"]
+
+[ext_resource type="Script" uid="uid://ctnkck34hidh0" path="res://TracksGenerator/TrackData.gd" id="1_2j7ft"]
+[ext_resource type="AudioStream" uid="uid://cd8vgvxvp6hms" path="res://Tracks/Crossline/Crossline (Remaster).mp3" id="1_ao6nf"]
+[ext_resource type="Script" uid="uid://bmghgvae3181i" path="res://TracksGenerator/TrackSection.gd" id="2_ao6nf"]
+
+[sub_resource type="Resource" id="Resource_httu2"]
+script = ExtResource("2_ao6nf")
+speed_curve = Vector2(0.18, 0.18)
+density_curve = Vector2(0.6, 0.8)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_dkvul"]
+script = ExtResource("2_ao6nf")
+time = 65.0
+speed_curve = Vector2(0.18, 0.18)
+density_curve = Vector2(0.5, 0.5)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_2t5rl"]
+script = ExtResource("2_ao6nf")
+time = 70.0
+speed_curve = Vector2(0.22, 0.24)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_sm0yk"]
+script = ExtResource("2_ao6nf")
+time = 98.0
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_mgor3"]
+script = ExtResource("2_ao6nf")
+time = 102.0
+density_curve = Vector2(1.1, 1.1)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[resource]
+script = ExtResource("1_2j7ft")
+track_name = "Crossline"
+music = ExtResource("1_ao6nf")
+sections = Array[ExtResource("2_ao6nf")]([SubResource("Resource_httu2"), SubResource("Resource_dkvul"), SubResource("Resource_2t5rl"), SubResource("Resource_sm0yk"), SubResource("Resource_mgor3")])

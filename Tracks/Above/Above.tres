@@ -18,17 +18,17 @@ metadata/_custom_type_script = "uid://bmghgvae3181i"
 [sub_resource type="Resource" id="Resource_q6rga"]
 script = ExtResource("2_eopwt")
 time = 110.0
-speed_curve = Vector2(2, 2)
+speed_curve = Vector2(1, 1)
 density_curve = Vector2(0.3, 0.3)
 difficulty_curve = Vector2(0.2, 0.2)
-radius_curve = Vector2(20, 20)
+radius_curve = Vector2(2, 2)
 metadata/_custom_type_script = "uid://bmghgvae3181i"
 
 [sub_resource type="Resource" id="Resource_eopwt"]
 script = ExtResource("2_eopwt")
 time = 175.0
-speed_curve = Vector2(2, 2)
-radius_curve = Vector2(15, 15)
+speed_curve = Vector2(1, 1)
+radius_curve = Vector2(2, 2)
 metadata/_custom_type_script = "uid://bmghgvae3181i"
 
 [sub_resource type="Resource" id="Resource_5rnje"]
@@ -36,7 +36,6 @@ script = ExtResource("2_eopwt")
 time = 180.0
 density_curve = Vector2(0, 0)
 difficulty_curve = Vector2(0, 0)
-radius_curve = Vector2(2, 2)
 metadata/_custom_type_script = "uid://bmghgvae3181i"
 
 [sub_resource type="Resource" id="Resource_0a815"]

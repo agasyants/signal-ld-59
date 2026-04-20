@@ -3,9 +3,9 @@ class_name TunnelGenerator
 extends Node3D
 
 @export var segment_length: float = 30.0
-@export var curve_strength: float = 0.4
+@export var curve_strength: float = 0.3
 @export var sides: int = 12
-@export var bake_interval: float = 3.0
+@export var bake_interval: float = 2.0
 
 func get_radius_at_t(t: float) -> float:
 	# Просто берём из кеша по индексу
@@ -51,7 +51,8 @@ func _process(delta: float) -> void:
 	_follow.progress += _current_speed * delta
 	if player and curve:
 		var t := _follow.progress / curve.get_baked_length()
-		player.tunnel_radius = get_radius_at_t(t) * 0.8
+		var target_radius = get_radius_at_t(t) * 0.8
+		player.tunnel_radius = lerp(player.tunnel_radius, target_radius, 10.0 * delta)
 
 	if _follow.progress_ratio > 0.99:
 		# timeout 1 sec

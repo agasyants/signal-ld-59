@@ -20,11 +20,11 @@ func build(tunnel_radius: float, params: Dictionary = {}):
 		_build_spike(tunnel_radius, angle, TAU / spike_count)
 
 func _build_spike(tunnel_radius: float, angle: float, width: float):
-	var length = tunnel_radius * 0.34
+	var length = tunnel_radius * 0.43
 	var mesh_instance = MeshInstance3D.new()
 	add_child(mesh_instance)
 	var box = BoxMesh.new()
-	box.size = Vector3(width * tunnel_radius * 2.2, length, 0.4)
+	box.size = Vector3(width * tunnel_radius * 2.5, length, 0.4)
 	mesh_instance.mesh = box
 	mesh_instance.rotation.z = angle
 	mesh_instance.position = Vector3(
