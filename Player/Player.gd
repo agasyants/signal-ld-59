@@ -20,6 +20,10 @@ var is_jumping: bool = false
 @onready var coin_label := $Camera3D/CanvasLayer/CoinLabel
 
 func _ready():
+	# Инициализация параметров из глобального состояния
+	health = GameGraph.health
+	coins = 0 # В начале уровня монеты текущего уровня сброшены (будут добавлены в GameGraph.coins в конце)
+	
 	shader.trigger_hit()
 	add_to_group("player")
 	current_radius = tunnel_radius
@@ -78,6 +82,7 @@ var tween: Tween
 
 func take_damage(delta: int):
 	health += delta
+	GameGraph.health = health # Синхронизируем с глобальным состоянием
 	_update_health_ui()
 	if health <= 0:
 		print('end')
@@ -108,12 +113,14 @@ func _update_health_ui():
 
 func _update_coins_ui():
 	if coin_label:
-		coin_label.text = "COINS: %d" % coins
+		# Показываем ОБЩЕЕ количество монет (уже собранные + текущий уровень)
+		coin_label.text = "COINS: %d" % (GameGraph.coins + coins)
 
 func apply_bonus(type: Bonus.BonusType) -> void:
 	match type:
 		Bonus.BonusType.HEALTH:
 			health = min(health + 1, 5)
+			GameGraph.health = health # Синхронизируем
 			_update_health_ui()
 			# Ускорение — через рут сцену
 			var root = get_tree().current_scene
