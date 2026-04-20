@@ -10,9 +10,6 @@ var track_player: TrackPlayer
 var _rng := RandomNumberGenerator.new()
 var _current_params: Dictionary = {}
 
-# Сколько метров впереди игрока спавним препятствия
-const SPAWN_AHEAD: float = 80.0
-
 func setup(c: Curve3D, p: Node3D, gen: Node3D, tp: TrackPlayer) -> void:
 	curve = c
 	player = p
@@ -42,8 +39,8 @@ func _spawn_all() -> void:
 
 		_current_params = params
 		_try_spawn(progress)
-		if randf() < 0.5:  # ~12% шанс бонуса на точку спавна
-			_try_spawn_bonus(progress + 2.0)
+		if randf() < 0.4:
+			_try_spawn_bonus(progress + interval/2)
 
 		progress += maxf(interval, 3.0)  # минимум 3 метра между препятствиями
 
@@ -86,7 +83,7 @@ func _try_spawn_bonus(progress: float) -> void:
 	var bonus := Bonus.new()
 	add_child(bonus)
 	bonus.global_transform = t
-	bonus.global_position += offset * 0.8  # 0.85 чтобы не впритык к стенке
+	bonus.global_position += offset * 0.8 
 	bonus.build(bonus_type)
 	bonus.collected.connect(_on_bonus_collected)
 
@@ -135,6 +132,11 @@ func _build_params(obstacle: Obstacle, tunnel_radius: float) -> Dictionary:
 		"mode":  mode,
 		"speed": lerpf(0.3, 4.0, difficulty) + _rng.randf_range(-0.2, 0.2),
 	}
+	var base_speed := lerpf(1.5, 3.5, difficulty) + _rng.randf_range(-0.3, 0.3)
+
+	# Случайное направление — просто знак
+	var direction := 1.0 if _rng.randf() < 0.5 else -1.0
+	params["speed"] = base_speed * direction
 
 	# Линейный проход — для Gateway, Bars
 	var passage_width := lerpf(tunnel_radius * 1.2, tunnel_radius * 0.3, difficulty)

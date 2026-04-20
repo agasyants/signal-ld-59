@@ -6,7 +6,6 @@ uniform vec3 wave_color_1 : source_color = vec3(0.0, 0.8, 0.95);
 uniform vec3 wave_color_2 : source_color = vec3(1.0, 0.23, 0.23);
 
 uniform float speed_1 = 2.0;
-uniform float speed_2 = -1.5; // Минус заставит волну бежать в другую сторону
 uniform float density = 30.0;
 uniform float ring_width = 0.1;
 
@@ -21,7 +20,7 @@ void fragment() {
     float mask2 = smoothstep(1.0 - ring_width, 1.0, w2);
     
     // 3. Быстрая "вспышка" или вторая волна
-    float w3 = cos(UV.y * (density * 0.5) - TIME * 5.0);
+    float w3 = cos(UV.y * (density * 0.5) - TIME * 2.0);
     float mask3 = smoothstep(1.0 - ring_width * 0.5, 1.0, w3);
 
     // Комбинируем маски. Используем max(), чтобы они не складывались в белый цвет,

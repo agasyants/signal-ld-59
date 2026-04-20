@@ -1,4 +1,4 @@
-shader_type ;
+shader_type spatial;
 render_mode cull_front, blend_mix, depth_draw_always;
 
 uniform vec3 emission_color : source_color = vec3(1.0, 0.5, 0.0); // Цвет свечения

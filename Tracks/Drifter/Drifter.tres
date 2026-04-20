@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="TrackData" format=3 uid="uid://q0phvadw8vhw"]
+
+[ext_resource type="AudioStream" uid="uid://csk041uqvf4bl" path="res://Tracks/Drifter/Drifter.mp3" id="1_upq32"]
+[ext_resource type="Script" uid="uid://ctnkck34hidh0" path="res://TracksGenerator/TrackData.gd" id="2_2vpkk"]
+[ext_resource type="Script" uid="uid://bmghgvae3181i" path="res://TracksGenerator/TrackSection.gd" id="3_3i8ll"]
+
+[sub_resource type="Resource" id="Resource_cr876"]
+script = ExtResource("3_3i8ll")
+speed_curve = Vector2(0.16, 0.18)
+density_curve = Vector2(0.8, 0.9)
+difficulty_curve = Vector2(0.2, 0.2)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_beh1s"]
+script = ExtResource("3_3i8ll")
+time = 38.0
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[sub_resource type="Resource" id="Resource_duqg7"]
+script = ExtResource("3_3i8ll")
+time = 42.0
+speed_curve = Vector2(0.18, 0.18)
+density_curve = Vector2(1.2, 1.3)
+difficulty_curve = Vector2(0.4, 0.4)
+metadata/_custom_type_script = "uid://bmghgvae3181i"
+
+[resource]
+script = ExtResource("2_2vpkk")
+track_name = "Drifter"
+music = ExtResource("1_upq32")
+sections = Array[ExtResource("3_3i8ll")]([SubResource("Resource_cr876"), SubResource("Resource_beh1s"), SubResource("Resource_duqg7")])

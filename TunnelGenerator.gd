@@ -96,7 +96,7 @@ func generate() -> void:
 
 	var final_curve: Curve3D
 	for i in range(5):
-		final_curve = _get_curve(points, bake_interval)
+		final_curve = _get_curve(points)
 		var current_length = final_curve.get_baked_length()
 		
 		# Находим коэффициент отклонения
@@ -168,7 +168,7 @@ func _get_points(segment_count: int) -> Array[Vector3]:
 	
 	return points
 
-func _get_curve(points: Array[Vector3], bake_interval: float) -> Curve3D:
+func _get_curve(points: Array[Vector3]) -> Curve3D:
 	# Генерация кривой
 	curve = Curve3D.new()
 	curve.bake_interval = bake_interval
@@ -259,10 +259,8 @@ func _build_mesh() -> void:
 
 	var tunnel_shaders = [
 		"res://shaders/tunnel.gdshader",
-		"res://shaders/tunnel2.gdshader",
 		"res://shaders/shader_matrix.gdshader",
 		"res://shaders/shader_lava.gdshader",
-		"res://shaders/shader_glitch.gdshader",
 		"res://shaders/shader_neon.gdshader",
 		"res://shaders/shader_ice.gdshader",
 		"res://shaders/shader_toxic.gdshader",

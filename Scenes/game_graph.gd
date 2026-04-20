@@ -52,7 +52,7 @@ func _init() -> void:
 		current_node = levels[0][0]
 		
 
-var tracks = ['Delux2', 'Waters', 'ToHell', 'Red', 'Shade', 'Above', 'Daft', 'Blizzard', 'Crossline', 'Dust', 'Red', 'Drifting']
+var tracks = ['Delux2', 'Waters', 'ToHell', 'Red', 'Shade', 'Above', 'Daft', 'Blizzard', 'Crossline', 'Dust', 'Red', 'Drifting', 'Drifter']
 
 func generate_planar_graph(num_middle_levels: int):
 	levels.clear()

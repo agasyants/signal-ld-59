@@ -28,8 +28,8 @@ func _build_spike(tunnel_radius: float, angle: float, width: float):
 	mesh_instance.mesh = box
 	mesh_instance.rotation.z = angle
 	mesh_instance.position = Vector3(
-		cos(angle) * (tunnel_radius - length * 0.5),
-		sin(angle) * (tunnel_radius - length * 0.5),
+		cos(angle) * (tunnel_radius - length),
+		sin(angle) * (tunnel_radius - length),
 		0)
 	mesh_instance.material_override = _make_mat(Color(1.0, 0.3, 0.0))
 
