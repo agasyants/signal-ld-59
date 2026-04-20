@@ -148,7 +148,7 @@ func apply_hit_stop(time_scale: float = 0.06, duration: float = 0.1):
 func _update_health_ui():
 	var heart_text = ""
 	for i in range(max(0, health)):
-		heart_text += "❤"
+		heart_text += "♥️"
 	
 	if health >= 5:
 		heart_text += " MAX"

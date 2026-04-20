@@ -44,7 +44,7 @@ func update_graph() -> void:
 
 	var health_label = Label.new()
 	var hearts = ""
-	for i in range(GameGraph.health): hearts += "❤"
+	for i in range(GameGraph.health): hearts += "♥️"
 	if GameGraph.health >= 5:
 		hearts += " MAX"
 	health_label.text = "INTEGRITY: %s" % hearts
