@@ -63,9 +63,22 @@ anchor_bottom = 0.97400004
 offset_left = 35.0
 offset_top = 186.0
 offset_right = -502.0
-offset_bottom = -409.15204
+offset_bottom = -479.28003
 theme_override_font_sizes/font_size = 30
 text = "Control <- arrows ->, Space — jump "
+script = ExtResource("3_geirw")
+
+[node name="Label3" type="Label" parent="." unique_id=289303754]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.97400004
+offset_left = 36.0
+offset_top = 936.0
+offset_right = -1107.0
+offset_bottom = 270.71997
+theme_override_font_sizes/font_size = 30
+text = "Volume"
 script = ExtResource("3_geirw")
 
 [node name="start_btn" type="Button" parent="." unique_id=893268362]
@@ -79,10 +92,10 @@ script = ExtResource("4_hwjxs")
 
 [node name="VolumeSlider" type="HSlider" parent="." unique_id=1020677495]
 layout_mode = 0
-offset_left = 49.0
-offset_top = 523.0
-offset_right = 232.0
-offset_bottom = 543.0
+offset_left = 161.0
+offset_top = 946.0
+offset_right = 344.0
+offset_bottom = 966.0
 max_value = 1.0
 step = 0.05
 value = 1.0
