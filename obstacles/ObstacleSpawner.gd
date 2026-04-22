@@ -69,7 +69,7 @@ func _try_spawn_bonus(progress: float) -> void:
 	if progress >= max_len:
 		return
 
-	var all_types := [Bonus.BonusType.HEALTH, Bonus.BonusType.HEALTH, Bonus.BonusType.HEALTH, Bonus.BonusType.COIN, Bonus.BonusType.COIN, Bonus.BonusType.COIN, Bonus.BonusType.COIN, Bonus.BonusType.COIN, Bonus.BonusType.COIN, Bonus.BonusType.COIN, Bonus.BonusType.COIN, Bonus.BonusType.SLOW]
+	var all_types := [Bonus.BonusType.HEALTH, Bonus.BonusType.HEALTH, Bonus.BonusType.HEALTH, Bonus.BonusType.COIN, Bonus.BonusType.COIN, Bonus.BonusType.COIN, Bonus.BonusType.COIN, Bonus.BonusType.COIN, Bonus.BonusType.COIN, Bonus.BonusType.COIN, Bonus.BonusType.COIN]
 	var bonus_type: Bonus.BonusType = all_types[_rng.randi() % all_types.size()]
 
 	var t := curve.sample_baked_with_rotation(progress, true)

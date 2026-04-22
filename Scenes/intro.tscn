@@ -8,8 +8,8 @@
 [ext_resource type="Script" uid="uid://dosqi48nmva5u" path="res://Scenes/volume_slider.gd" id="5_hwjxs"]
 [ext_resource type="PackedScene" uid="uid://bqug0pcaq7aj8" path="res://Scenes/pc2.tscn" id="7_3bmuq"]
 [ext_resource type="AudioStream" uid="uid://l4i6kblewdt7" path="res://Tracks/Menu.mp3" id="7_nn7w8"]
-[ext_resource type="Script" uid="uid://c6gtgp8nbq5jx" path="res://Scenes/quit_btn.gd" id="quit_btn_scr"]
-[ext_resource type="Script" uid="uid://b5olmc4yihvho" path="res://Scenes/resolution_dropdown.gd" id="res_dropdown"]
+[ext_resource type="Script" path="res://Scenes/quit_btn.gd" id="quit_btn_scr"]
+[ext_resource type="Script" path="res://Scenes/resolution_dropdown.gd" id="res_dropdown"]
 
 [sub_resource type="GDScript" id="GDScript_hwjxs"]
 
@@ -85,6 +85,7 @@ text = "START GAME"
 script = ExtResource("4_hwjxs")
 
 [node name="quit_btn" type="Button" parent="." unique_id=893268363]
+visible = false
 layout_mode = 1
 anchors_preset = -1
 offset_left = 39.0

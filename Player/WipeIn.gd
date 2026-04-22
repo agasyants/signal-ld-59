@@ -11,7 +11,6 @@ func _ready():
 	tween.tween_interval(0.1)
 	
 	# 3. РЕЗКИЙ выход. Длительность 0.4 сек — это стандарт для "удара"
-	# TRANS_EXPO делает выход из гиперпространства агрессивным
 	tween.tween_property(material, "shader_parameter/progress", 0.0, 2.4)\
 		 .set_trans(Tween.TRANS_EXPO)\
 		 .set_ease(Tween.EASE_OUT)

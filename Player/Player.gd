@@ -1,9 +1,9 @@
 extends Node3D
 class_name Player
-@export var rotate_speed: float = 3.8
+@export var rotate_speed: float = 3.6
 @export var tunnel_radius := 1.7
-@export var inertia_friction: float = 10.0
-@export var inertia_strength: float = 4.6
+@export var inertia_friction: float = 8.0
+@export var inertia_strength: float = 3.8
 @export var health: int = 3
 @export var coins: int = 0
 var angular_velocity: float = 0.0
@@ -25,11 +25,11 @@ func _ready():
 	health = GameGraph.health
 	coins = 0
 	
-	if move_sound and move_sound.stream is AudioStreamWAV:
-		move_sound.stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
+	#if move_sound and move_sound.stream is AudioStreamWAV:
+		#move_sound.stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
 	
-	if move_sound:
-		move_sound.play()
+	#if move_sound:
+		#move_sound.play()
 	
 	shader.trigger_hit()
 	add_to_group("player")
@@ -44,7 +44,7 @@ func _ready():
 	shape.shape = sphere
 	area.add_child(shape)
 
-@export var turn_responsiveness: float = 5 # Множитель "резкости" разворота
+@export var turn_responsiveness: float = 6 # Множитель "резкости" разворота
 
 func _process(delta):
 	var input = Input.get_axis("ui_left", "ui_right")
@@ -193,6 +193,7 @@ func _apply_slow(scal: float = 0.6, duration: float = 8.0) -> void:
 		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 func show_popup_info(text: String, color: Color):
+	return
 	var label = Label.new()
 	label.text = text
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
